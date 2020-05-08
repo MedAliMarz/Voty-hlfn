@@ -1,0 +1,70 @@
+<nb-card class="col-6 mx-auto" *ngIf="isSpinner==true" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="primary">
+    <nb-card-body>
+      <h5 class="text-center">Loading election</h5>
+    </nb-card-body>
+  </nb-card>
+<nb-card class="col-8 mx-auto"  *ngIf="isSpinner==false" >
+    <nb-card-header>
+        <h4>{{election.name | titlecase}} </h4>
+    </nb-card-header>
+    <nb-card-body>
+        <div class="form-group">
+            <label for="country" class="label">Country</label>
+            <input nbInput id="country" fullWidth placeholder="country" disabled [value]="election.country" type="text">
+        </div>
+        
+        <div class="form-group">
+            <label for="year" class="label">Year</label>
+            <input nbInput id="year" fullWidth placeholder="year" disabled [value]="election.year" type="number">                </div>
+        
+        <div class="row">
+
+        <div class="col form-group">
+            <label for="candidacy" class="label">Candidacy Phase</label>
+            <nb-calendar-range  id="candidacy" size="small" [range]="candidacy_range" (rangeChange)="handleRangeChange($event)"></nb-calendar-range>
+        </div>
+        <div class="col form-group">
+            <label for="voting" class="label">Voting Phase</label>
+            <nb-calendar-range  id="voting" size="small" [range]="voting_range" (rangeChange)="handleRangeChange($event)"></nb-calendar-range>
+        </div>
+
+    </div>
+        
+    </nb-card-body>
+    <nb-card-footer>
+        <a size="small" nbButton [routerLink]="['/admin']"> Return</a>
+    </nb-card-footer>
+</nb-card>
+<nb-card class="col-6 mx-auto" *ngIf="isSpinnerVoters==true" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="primary">
+    <nb-card-body>
+      <h5 class="text-center">Loading sub voters</h5>
+    </nb-card-body>
+  </nb-card>
+<nb-card class="col-8 mx-auto"  *ngIf="isSpinnerVoters==false" >
+    <nb-card-header>
+        <h5 class="text-center" > The Voters </h5>
+    </nb-card-header>
+    <nb-card-body >
+        <h6 class="text-center"> There is no voters for this election</h6>
+        <table class="table table-striped mb-2" *ngIf="electionVoters.length">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor ="let voter of electionVoters; index as i;">
+                    <th scope="row">{{i+1}}</th>
+                    <td>voter.firstName</td>
+                    <td>voter.lastName</td>
+                    <td>voter.email</td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </nb-card-body>
+   
+</nb-card>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 // election model
 import {Election} from '../models/election.model';
+import { Voter } from '../models/voter.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,6 +12,9 @@ export class ElectionService {
 
   getElection(electionId:string){
     return this.httpClient.get<Election>(`${this.url}/${electionId}`)
+  }
+  getElectionVoters(electionId:string){
+    return this.httpClient.get<Voter[]>(`${this.url}/${electionId}/voters`)
   }
   getElections(){
     return this.httpClient.get<Election[]>(`${this.url}`)

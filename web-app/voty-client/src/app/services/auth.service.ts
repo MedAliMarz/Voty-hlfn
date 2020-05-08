@@ -3,6 +3,7 @@ import {User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 import { VoterService } from './voter.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class AuthService {
   isLogged:boolean;
   loggedUser:any
   constructor(private httpClient:HttpClient,
-    private voterService:VoterService) { }
+    private voterService:VoterService,
+    private router:Router) { }
 
   login(user){
     return this.httpClient.post(this.loginUrl,user).pipe(map(user => {
@@ -27,7 +29,7 @@ export class AuthService {
   }
   logout(){
     localStorage.removeItem('jwt');
-    
+    this.router.navigate(['/login']);
     return this.httpClient.post(this.logoutUrl,{}).pipe(
       tap(response=>{
         this.loggedUser = null;
@@ -38,6 +40,7 @@ export class AuthService {
     this.voterService.getVoter(this.loggedUser.voterId)
       .subscribe(voter=>{
         this.loggedUser= voter;
+        this.loggedUser.token = localStorage.getItem('jwt').replace(/['"]+/g, '');
       })
   }
 }

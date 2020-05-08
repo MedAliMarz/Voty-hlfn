@@ -13,6 +13,7 @@ export class CandidateService {
   constructor(private httpClient:HttpClient) { }
 
   getCandidate(candidateId:string){
+    console.log('candidateId in candidate auth', candidateId)
     return this.httpClient.get<Voter>(`${this.url}/${candidateId}`)
   }
   getCandidates(){

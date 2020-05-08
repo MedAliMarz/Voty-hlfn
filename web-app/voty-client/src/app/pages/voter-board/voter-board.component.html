@@ -11,8 +11,15 @@
     <nb-accordion-item *ngFor="let candidate of candidates">
       <nb-accordion-item-header>{{candidate.firstName | titlecase}} {{candidate.lastName | uppercase}}</nb-accordion-item-header>
       <nb-accordion-item-body>
+        
+
+        
         {{candidate.data | titlecase}}
+        
+        <a class="float-right" nbButton size="small" [routerLink]="['/candidate',candidate.voterId]">More details</a>
+        
       </nb-accordion-item-body>
+      
     </nb-accordion-item>
   
     

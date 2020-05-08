@@ -57,9 +57,9 @@ exports.connectToNetwork = async function (credentials) {
     console.log(password);
 
     console.log('wallet: ');
-    console.log(util.inspect(wallet));
+    //console.log(util.inspect(wallet));
     console.log('ccp: ');
-    console.log(util.inspect(ccp));
+    //console.log(util.inspect(ccp));
     // userId = 'V123412';
 
     // generate credentials
@@ -120,10 +120,10 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
   try {
     console.log('inside invoke');
     console.log(`isQuery: ${isQuery}, func: ${func}, args: ${args}`);
-    console.log(util.inspect(networkObj));
+    //console.log(util.inspect(networkObj));
 
 
-    // console.log(util.inspect(JSON.parse(args[0])));
+    //console.log(util.inspect(JSON.parse(args[0])));
 
     if (isQuery === true) {
       console.log('inside isQuery');
@@ -160,12 +160,12 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
 
         args = JSON.parse(args[0]);
 
-        console.log(util.inspect(args));
+        //console.log(util.inspect(args));
         args = JSON.stringify(args);
-        console.log(util.inspect(args));
+        //console.log(util.inspect(args));
 
         console.log('before submit');
-        console.log(util.inspect(networkObj));
+        //console.log(util.inspect(networkObj));
         let response = await networkObj.contract.submitTransaction(func, args);
         console.log('after submit');
 
