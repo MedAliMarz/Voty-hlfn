@@ -66,14 +66,17 @@
 <nb-accordion *ngIf="elections">
 
 
-  <nb-accordion-item *ngFor="let election of elections">
-    <nb-accordion-item-header>{{election.name}}
-      <a class="float-right" nbButton size="small" [routerLink]="['/election',election.electionId]">More details</a>
+  <nb-accordion-item  *ngFor="let election of elections">
+    <nb-accordion-item-header>
+
+ {{election.name}}
+ 
     </nb-accordion-item-header>
     <nb-accordion-item-body>
       <p>      Candidacy phase : {{election.candidacy_startDate | date:'long'}}  - {{election.candidacy_endDate | date:'long'}}      </p>
       <p>      Voting phase : {{election.voting_startDate | date:'long'}}  -  {{election.voting_endDate | date:'long'}}      </p>
       
+      <a class="float-right" nbButton size="small" [routerLink]="['/election',election.electionId]">details</a>
 
     </nb-accordion-item-body>
   </nb-accordion-item>

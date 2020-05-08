@@ -5,34 +5,47 @@
   </nb-card>
 <nb-card class="col-8 mx-auto"  *ngIf="isSpinner==false" >
     <nb-card-header>
-        <h4>{{election.name | titlecase}} </h4>
+        <h4 class="float-left">Election details </h4>
+        <nb-toggle class="float-right" fullWidth id="toggle" (checkedChange)="toggleModification()" [checked]="isModify" labelPosition="end">modify</nb-toggle>
+
     </nb-card-header>
     <nb-card-body>
+        <form  [formGroup]="electionForm">
+        <div class="form-group">
+            <label for="name" class="label">name</label>
+            <input nbInput id="name" formControlName="name"  fullWidth placeholder="Name"  [value]="election.name" type="text">
+        </div>
         <div class="form-group">
             <label for="country" class="label">Country</label>
-            <input nbInput id="country" fullWidth placeholder="country" disabled [value]="election.country" type="text">
+            <input nbInput id="country" formControlName="country"  fullWidth placeholder="Country"  [value]="election.country" type="text">
         </div>
         
         <div class="form-group">
             <label for="year" class="label">Year</label>
-            <input nbInput id="year" fullWidth placeholder="year" disabled [value]="election.year" type="number">                </div>
-        
+            <input nbInput id="year" formControlName="year"  fullWidth placeholder="Year"  [value]="election.year" type="number">
+        </div>
+        </form>
+        <nb-alert *ngIf="isModify" status="warning" >
+            You canno't change phases duration 
+        </nb-alert>
         <div class="row">
 
-        <div class="col form-group">
-            <label for="candidacy" class="label">Candidacy Phase</label>
-            <nb-calendar-range  id="candidacy" size="small" [range]="candidacy_range" (rangeChange)="handleRangeChange($event)"></nb-calendar-range>
-        </div>
-        <div class="col form-group">
-            <label for="voting" class="label">Voting Phase</label>
-            <nb-calendar-range  id="voting" size="small" [range]="voting_range" (rangeChange)="handleRangeChange($event)"></nb-calendar-range>
-        </div>
+            <div class="col form-group">
+                <label for="candidacy" class="label">Candidacy Phase</label>
+                <nb-calendar-range  id="candidacy" size="small" [range]="candidacy_range" (rangeChange)="handleRangeChange($event)"></nb-calendar-range>
+            </div>
+            <div class="col form-group">
+                <label for="voting" class="label">Voting Phase</label>
+                <nb-calendar-range  id="voting" size="small" [range]="voting_range" (rangeChange)="handleRangeChange($event)"></nb-calendar-range>
+            </div>
 
-    </div>
+        </div>
         
     </nb-card-body>
     <nb-card-footer>
         <a size="small" nbButton [routerLink]="['/admin']"> Return</a>
+        <button size="medium" *ngIf="isModify" status="primary" [disabled]="electionForm.invalid" (click)="modifyElection()" nbButton class="float-right" >Save changes!</button>
+       
     </nb-card-footer>
 </nb-card>
 <nb-card class="col-6 mx-auto" *ngIf="isSpinnerVoters==true" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="primary">
@@ -42,25 +55,25 @@
   </nb-card>
 <nb-card class="col-8 mx-auto"  *ngIf="isSpinnerVoters==false" >
     <nb-card-header>
-        <h5 class="text-center" > The Voters </h5>
+        <h5 class="text-center" >Voters list</h5>
     </nb-card-header>
     <nb-card-body >
-        <h6 class="text-center"> There is no voters for this election</h6>
+        <h6 class="text-center" *ngIf="!electionVoters.length" > There is no voters for this election</h6>
         <table class="table table-striped mb-2" *ngIf="electionVoters.length">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First Name</th>
-                    <th scope="col">Last Name</th>
-                    <th scope="col">Email</th>
+                    <th scope="col"><h6>#</h6></th>
+                    <th scope="col"><h6>First Name</h6></th>
+                    <th scope="col"><h6>Last Name</h6></th>
+                    <th scope="col"><h6>Email</h6></th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor ="let voter of electionVoters; index as i;">
-                    <th scope="row">{{i+1}}</th>
-                    <td>voter.firstName</td>
-                    <td>voter.lastName</td>
-                    <td>voter.email</td>
+                    <th scope="row"><p>{{i+1}}</p></th>
+                    <td><p>{{voter.firstName}}</p></td>
+                    <td><p>{{voter.lastName}}</p></td>
+                    <td><p>{{voter.email}}</p></td>
                 </tr>
             </tbody>
         </table>
@@ -68,3 +81,15 @@
     </nb-card-body>
    
 </nb-card>
+
+<!-- popup template -->
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card>
+      <nb-card-header><h5>Continue ?</h5></nb-card-header>
+      <nb-card-body>{{ data }}</nb-card-body>
+      <nb-card-footer>
+        <button nbButton status="danger" (click)="ref.close(false)" class="mr-5">No</button>
+        <button nbButton status="success" (click)="ref.close(true)">Yes continue</button>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>

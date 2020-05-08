@@ -10,7 +10,7 @@ import { NbThemeModule, NbLayoutModule, NbInputModule,
          NbStepperModule, NbDatepickerModule, NbToggleModule,
          NbSelectModule, NbDialogModule, NbActionsModule,
          NbContextMenuModule, NbUserModule, NbToastrModule,
-         NbSpinnerModule, NbCalendarRangeModule,NbCalendarModule,NbCalendarKitModule } from '@nebular/theme';
+         NbSpinnerModule, NbCalendarRangeModule, NbAlertModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -77,6 +77,7 @@ import {NbCalendarRangeComponent} from '@nebular/theme'
     NbToastrModule.forRoot({preventDuplicates:true,limit:5}),
     NbSpinnerModule,
     NbCardModule,
+    NbAlertModule,
     ChartModule,
     NbUserModule,
     NbAccordionModule,

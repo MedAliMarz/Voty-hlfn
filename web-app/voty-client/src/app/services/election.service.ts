@@ -23,4 +23,7 @@ export class ElectionService {
     console.log("election ser ",newElection)
     return this.httpClient.post<Election>(`${this.url}`,newElection)
   }
+  updateElection(electionId,electionData){
+    return this.httpClient.put<Election>(`${this.url}/${electionId}`,electionData)
+  }
 }

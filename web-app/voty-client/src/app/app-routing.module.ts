@@ -65,6 +65,7 @@ const routes: Routes = [
   {
     path:'election/:id',
     component: ElectionComponent,
+
     
   },
 

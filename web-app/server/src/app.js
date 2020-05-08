@@ -171,6 +171,33 @@ app.post('/election' , authenticateJWT, async (req, res) => {
   
 });
 
+app.put('/election/:id' , authenticateJWT, async (req, res) => {
+
+  if(!req.params.id){
+    return res.status(400).json({error:'Bad request , election id missing'});
+  }else{
+    let {name,country,year} = req.body
+    if(!req.body || (!name && !country && !year) ){
+      return res.status(400).json({error:'You must supply all needed attributs'});
+    }else{
+        let updatedElection = {electionId:req.params.id}
+        
+        if(name) {updatedElection['name']=name}
+        if(country) {updatedElection['country']=country}
+        if(year) {updatedElection['year']=year}
+        console.dir('updating election '+updatedElection)
+        try{
+        let networkObj = await network.connectToNetwork(appAdmin);
+        let response = await network.invoke(networkObj, false, 'updateElection', [JSON.stringify(updatedElection)]);
+        let parsedResponse = await JSON.parse(response);
+        return res.status(200).send(parsedResponse);
+        }catch(e){
+          return res.status(500).json({error:'Problem in transaction execution',e});
+        }
+    }
+  }
+});
+
 // get voter by id
 app.get('/voter/:id', authenticateJWT, async (req, res) => {
   if(!req.params.id){
