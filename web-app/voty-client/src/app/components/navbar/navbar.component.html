@@ -1,0 +1,27 @@
+<div class="navbar-container">
+  <div class="navbar-logo">
+
+    <a class="logo" [routerLink]="['/']"><h5>Voty</h5></a>
+  </div>
+
+  <!--<nb-select size="small" [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
+    <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
+  </nb-select>-->
+  <a class="navbar-link"  [routerLink]="['/about']">
+    About
+  </a>
+  <a class="navbar-link"  [routerLink]="['/faq']">
+    Faq
+  </a>
+  <a class="navbar-link"  [routerLink]="['/contact']">
+    Contact
+  </a>
+  <a class="navbar-link"  [routerLink]="['/admin']">
+    admin
+  </a>
+  <nb-actions size="small" class="navbar-actions">
+    <nb-action class="user-action" icon="person-outline" nbContextMenuTag="navbar_menu" [nbContextMenu]="user_items">
+      
+    </nb-action>
+  </nb-actions>
+</div>

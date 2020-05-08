@@ -1,0 +1,18 @@
+.footer{
+    width: 100vw;
+    padding: none !important;   
+    &-ul{
+        list-style: none;
+        text-align: center;
+    }
+    &-copyright{
+        display:block;
+        text-align: center;
+        &-logo{
+
+        }
+        &-text{
+            
+        }
+    }
+}

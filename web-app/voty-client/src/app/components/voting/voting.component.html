@@ -1,0 +1,32 @@
+<nb-card class="col-6 col-md-4 mx-auto my-auto" *ngIf="!authService.loggedUser.hasVoted" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
+    <nb-card-header>
+        <h4>Choose your candidate</h4>
+    </nb-card-header>
+    <nb-card-body>
+        <form [formGroup]="voteForm">
+            <nb-select fullWidth formControlName="candidateId" placeholder="Who ?" class="mb-3">
+                <nb-option *ngFor="let candidate of candidates" [value]="candidate.voterId">{{candidate.firstName}} {{candidate.lastName}}</nb-option>
+              </nb-select>
+              <input [disabled]="voteForm.invalid" (click)="vote()" status="primary" fullWidth nbButton type="button" value="Vote" >
+        </form>
+    </nb-card-body>
+</nb-card>
+<nb-card class="col-6 col-md-4 mx-auto my-auto" *ngIf="authService.loggedUser.hasVoted" >
+  <nb-card-header>
+      <h4>You have already voted !</h4>
+  </nb-card-header>
+  <nb-card-body>
+      <h5 class="text-center">you can check the result</h5>
+      <a  [routerLink]="['/stats']" status="success" fullWidth nbButton>Check results !</a>
+  </nb-card-body>
+</nb-card>
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card>
+      <nb-card-header><h5>Continue ?</h5></nb-card-header>
+      <nb-card-body>{{ data }}</nb-card-body>
+      <nb-card-footer>
+        <button nbButton status="danger" (click)="ref.close(false)" class="mr-5">No</button>
+        <button nbButton status="success" (click)="ref.close(true)">Yes continue</button>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>

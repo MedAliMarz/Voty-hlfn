@@ -1,0 +1,91 @@
+<div class="col-md-8 mx-auto">
+    <div class="d-flex flex-column align-items-center">
+
+  
+    <h1>Elections List</h1>
+    <button nbButton fullWidth size="giant" (click)="toggleCreation()" status="primary" ><nb-icon icon="plus"></nb-icon></button>
+    </div>
+    <nb-card [ngClass]="{'d-none':isHidden}" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
+        <nb-card-body>
+          <nb-stepper orientation="horizontal"  disableStepNavigation #stepper>
+            <nb-step [label]="labelOne" >
+              <ng-template #labelOne>Election Creation</ng-template>
+              <h4>Please provide the necessary informations</h4>
+              <form [formGroup]="electionForm">
+                <div class="form-group">
+                    <label for="name" class="label">Name</label>
+                    <input nbInput id="name" fullWidth placeholder="name" formControlName="name" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="country" class="label">Country</label>
+                    <input nbInput id="country" fullWidth placeholder="country" formControlName="country" type="text">
+                </div>
+                
+                <div class="form-group">
+                    <label for="year" class="label">Year</label>
+                    <input nbInput id="year" fullWidth placeholder="year" formControlName="year" type="number">                </div>
+                <div class="form-group">
+                    <label for="candidacy" class="label">Candidacy Phase Range</label>
+                    <input nbInput [nbDatepicker]="rangepicker_candidacy" fullWidth id="candidacy" formControlName="candidacy_range" placeholder="range of candidacy phase">
+                    <nb-rangepicker #rangepicker_candidacy></nb-rangepicker>
+                   
+                </div>
+                <div class="form-group">
+                    <label for="voting" class="label">Voting Phase Range</label>
+                    <input nbInput [nbDatepicker]="rangepicker_voting" fullWidth id="voting" formControlName="voting_range" placeholder="range of voting phase">
+                    <nb-rangepicker #rangepicker_voting></nb-rangepicker>
+                </div>
+                
+                
+                
+                <input nbButton size="medium" status="primary" type="button" (click)="createElection()" value="Add Election">
+            </form>
+              
+            </nb-step>
+            <nb-step [label]="labelTwo">
+              <ng-template #labelTwo>Add Voters</ng-template>
+              <h4>Add Voters</h4>
+              
+              <ng2-smart-table [settings]="settings" [source]="votersDataSource" ></ng2-smart-table>
+              
+                <input nbButton size="medium" status="primary" type="button" (click)="createVoters()" value="Add Voters">
+
+         
+            </nb-step>
+            <nb-step [label]="labelThree" >
+                <ng-template #labelThree>Validation</ng-template>
+
+                <h4 class="text-center">You have added an election + voters</h4>
+                
+                <button nbButton status="success"  size="medium" fullWidth (click)="finishCreation()" >Finish</button>
+              </nb-step>
+          </nb-stepper>
+        </nb-card-body>
+    </nb-card>
+
+<nb-accordion *ngIf="elections">
+
+
+  <nb-accordion-item *ngFor="let election of elections">
+    <nb-accordion-item-header>{{election.name}}</nb-accordion-item-header>
+    <nb-accordion-item-body>
+      <p>      Candidacy phase : {{election.candidacy_startDate | date:'long'}}  - {{election.candidacy_endDate | date:'long'}}      </p>
+      <p>      Voting phase : {{election.voting_startDate | date:'long'}}  -  {{election.voting_endDate | date:'long'}}      </p>
+    </nb-accordion-item-body>
+  </nb-accordion-item>
+
+  
+</nb-accordion>
+
+</div>
+
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header><h5>Continue with operation ?</h5></nb-card-header>
+    <nb-card-body>{{ data }}</nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="danger" (click)="ref.close(false)" class="mr-5">No</button>
+      <button nbButton status="success" (click)="ref.close(true)">Yes continue</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

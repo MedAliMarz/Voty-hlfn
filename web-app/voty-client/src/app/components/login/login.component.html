@@ -1,0 +1,22 @@
+<nb-card class="col-6 col-md-4 mx-auto my-auto">
+  <nb-card-header>
+    <h2 class="mx-auto">Login</h2>
+  </nb-card-header>
+  <nb-card-body >
+    
+      <form [formGroup]="loginForm">
+        <div class="form-group mb-3"
+        >
+          <label for="email" label>Email</label>
+          <input id="email" formControlName="voterId" type="text" nbInput fullWidth placeholder="bzX11R5484zdaz" >
+        </div>
+        <div class="form-group mb-3">
+          <label for="password" label>Password</label>
+          <input id="password" formControlName="password" type="password" nbInput fullWidth placeholder="***********" >
+        </div>
+        <input [disabled]="loginForm.invalid" (click)="login()" status="primary" fullWidth nbButton type="button"value="Log in" >
+
+      </form>  
+    
+  </nb-card-body>
+</nb-card>

@@ -1,0 +1,13 @@
+<div class="col-6 mx-auto mb-4">
+
+<h4 class="mx-auto mb-3">Frequently Asked Questions</h4>
+<nb-accordion multi>
+    <nb-accordion-item *ngFor="let q of questions">
+     <nb-accordion-item-header>{{q.question}}</nb-accordion-item-header>
+     <nb-accordion-item-body>
+       {{q.answer}}
+     </nb-accordion-item-body>
+    </nb-accordion-item>
+   
+</nb-accordion>
+</div>
