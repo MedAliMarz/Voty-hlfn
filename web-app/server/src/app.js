@@ -83,7 +83,7 @@ const authenticateJWT = (req, res, next) => {
   }
 };
 
-app.get('/election/:id', authenticateJWT, async (req, res) => {
+app.get('/election/:id', async (req, res) => {
   // Return specific election
   if(!req.params.id){
     return res.status(400).json({error:'Bad request , election id missing'});
@@ -101,6 +101,29 @@ app.get('/election/:id', authenticateJWT, async (req, res) => {
     }
     }catch(e){
       return res.status(500).json(JSON.parse({error:'Problem in transaction'}));
+    }
+  }
+
+})
+app.get('/election/:id/voters', async (req, res) => {
+  // Return specific election
+  if(!req.params.id){
+    return res.status(400).json({error:'Bad request , election id missing'});
+  }else{
+
+   try{
+    let networkObj = await network.connectToNetwork(appAdmin);
+    let check = await network.invoke(networkObj, true, 'myAssetExists', req.params.id);
+    check = JSON.parse(check.toString())
+    if(check){ // all good here!
+      let response = await network.invoke(networkObj, true, 'queryByObjectType', 'voter');
+      let parsedResponse = JSON.parse(response)
+      return res.status(200).json(JSON.parse(parsedResponse).filter(voter=>voter['Record'].electionId==req.params.id));
+    }else{
+      return res.status(404).json({error:'Specified election not found'});
+    }
+    }catch(e){
+      return res.status(500).json({error:'Problem in transaction',e:e});
     }
   }
 
@@ -146,6 +169,33 @@ app.post('/election' , authenticateJWT, async (req, res) => {
     }
   }
   
+});
+
+app.put('/election/:id' , authenticateJWT, async (req, res) => {
+
+  if(!req.params.id){
+    return res.status(400).json({error:'Bad request , election id missing'});
+  }else{
+    let {name,country,year} = req.body
+    if(!req.body || (!name && !country && !year) ){
+      return res.status(400).json({error:'You must supply all needed attributs'});
+    }else{
+        let updatedElection = {electionId:req.params.id}
+        
+        if(name) {updatedElection['name']=name}
+        if(country) {updatedElection['country']=country}
+        if(year) {updatedElection['year']=year}
+        console.dir('updating election '+updatedElection)
+        try{
+        let networkObj = await network.connectToNetwork(appAdmin);
+        let response = await network.invoke(networkObj, false, 'updateElection', [JSON.stringify(updatedElection)]);
+        let parsedResponse = await JSON.parse(response);
+        return res.status(200).send(parsedResponse);
+        }catch(e){
+          return res.status(500).json({error:'Problem in transaction execution',e});
+        }
+    }
+  }
 });
 
 // get voter by id
@@ -291,7 +341,7 @@ app.post('/logout', authenticateJWT, (req, res) => {
 });
 
 //get candidate by ID
-app.get("/candidate/:id", authenticateJWT, async (req, res)=> {
+app.get("/candidate/:id", async (req, res)=> {
   if(!req.params.id){
     return res.status(400).json({error:'Bad request , candidate id missing'});
   }else{
@@ -306,12 +356,19 @@ app.get("/candidate/:id", authenticateJWT, async (req, res)=> {
       if(!answer.isCandidate){
         return res.status(404).json({error:`Entity with id ${req.params.id} is not a candidate`});
       }
-      return res.status(200).json(JSON.parse(response));
+      return res.status(200).json({
+        voterId:answer.voterId,
+        electionId:answer.electionId,
+        firstName:answer.firstName,
+        lastName:answer.lastName,
+        email:answer.email,
+        data:answer.data,
+      });
     }else{
       return res.status(404).json({error:'Requested candidate not found'});
     }
     }catch(e){
-      return res.status(500).json(JSON.parse({error:'Problem in transaction'}));
+      return res.status(500).json({error:'Problem in transaction'});
     }
   }
 });

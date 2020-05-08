@@ -10,7 +10,7 @@ import { NbThemeModule, NbLayoutModule, NbInputModule,
          NbStepperModule, NbDatepickerModule, NbToggleModule,
          NbSelectModule, NbDialogModule, NbActionsModule,
          NbContextMenuModule, NbUserModule, NbToastrModule,
-         NbSpinnerModule } from '@nebular/theme';
+         NbSpinnerModule, NbCalendarRangeModule, NbAlertModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -38,6 +38,8 @@ import { ChartModule } from 'angular2-chartjs';
 //interceptors
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {JwtInterceptor} from './guards/jwt.interceptor';
+// range component
+import {NbCalendarRangeComponent} from '@nebular/theme'
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,7 +58,8 @@ import {JwtInterceptor} from './guards/jwt.interceptor';
     FaqComponent,
     ContactComponent,
     AboutComponent,
-    StatsComponent
+    StatsComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -74,6 +77,7 @@ import {JwtInterceptor} from './guards/jwt.interceptor';
     NbToastrModule.forRoot({preventDuplicates:true,limit:5}),
     NbSpinnerModule,
     NbCardModule,
+    NbAlertModule,
     ChartModule,
     NbUserModule,
     NbAccordionModule,
@@ -81,6 +85,7 @@ import {JwtInterceptor} from './guards/jwt.interceptor';
     NbStepperModule,
     NbToggleModule,
     NbDatepickerModule.forRoot(),
+    NbCalendarRangeModule,
     NbInputModule,
     NbActionsModule,
     NbSelectModule,

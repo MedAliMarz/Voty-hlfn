@@ -189,6 +189,48 @@ class MyAssetContract extends Contract {
 
   /**
    *
+   * updateElection
+   *
+   * update an election in the world state, based on the args given.
+   *  
+   * @param args.candidateId - the election id
+   * @param args.name - the election name
+   * @param args.country - the election country
+   * @param args.year - the election year
+   * @returns - nothing - but updates the world state with a voter
+   */
+
+
+  async updateElection(ctx, args) {
+    args = JSON.parse(args);
+    console.log(ctx);
+    console.log(args);
+    let electionId = args.electionId
+    let electionExists = await this.myAssetExists(ctx, electionId);
+    // check the existance of the election
+    if (electionExists) {
+      let electionAsBytes = await ctx.stub.getState(electionId);
+      let election = await JSON.parse(electionAsBytes);
+      console.log("election before update" ,election)
+      let updatedElection = {
+        ...election,
+        name:args.name,country:args.country,year:args.year
+        }
+      console.log("updatedElection" ,updatedElection)
+      // update state with new election
+      await ctx.stub.putState(updatedElection.electionId, Buffer.from(JSON.stringify(updatedElection)));
+
+      //let response = `A new election with id: ${newElection.electionId} is created (updated in the world state)`;
+      return updatedElection;
+    }else{
+      let response = {
+        error:'Election not found!'
+      }
+      return response
+    }
+  }
+  /**
+   *
    * deleteMyAsset
    *
    * Deletes a key-value pair from the world state, based on the key given.

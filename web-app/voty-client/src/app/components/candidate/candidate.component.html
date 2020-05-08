@@ -1,1 +1,28 @@
-<p>candidate works!</p>
+
+<nb-card class="col-6 mx-auto" *ngIf="isSpinner==true" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="primary">
+    <nb-card-body>
+      <h5 class="text-center">Loading candidate</h5>
+    </nb-card-body>
+  </nb-card>
+<nb-card class="col-6 mx-auto"  *ngIf="isSpinner==false" >
+    <nb-card-header>
+        <h5>Candidate details</h5>
+    </nb-card-header>
+    <nb-card-body>
+        <div class="form-group">
+            <label for="fname" class="label">First Name</label>
+            <input nbInput id="fname" fullWidth placeholder="first name" disabled [value]="candidate.firstName" type="text">
+        </div>
+        <div class="form-group">
+            <label for="lname" class="label">Last Name</label>
+            <input nbInput id="lname" fullWidth placeholder="last name" disabled [value]="candidate.lastName" type="text">
+        </div>
+        <div class="form-group">
+            <label for="data" class="label">Career</label>
+            <textarea nbInput id="data" fullWidth placeholder="name" disabled [value]="candidate.data" type="text"></textarea>
+        </div>
+    </nb-card-body>
+    <nb-card-footer>
+        <a size="small" nbButton [routerLink]="['/voter']"> Return</a>
+    </nb-card-footer>
+</nb-card>

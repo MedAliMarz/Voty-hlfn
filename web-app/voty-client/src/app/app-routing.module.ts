@@ -11,7 +11,10 @@ import { AboutComponent } from './pages/about/about.component';
 import { StatsComponent } from './pages/stats/stats.component';
 // guards
 import {AuthGuard} from './guards/auth.guard'
-import { LogoutGuard } from './guards/logout.guard';
+import {LogoutGuard} from './guards/logout.guard'
+
+import { CandidateComponent } from './components/candidate/candidate.component';
+import { ElectionComponent } from './components/election/election.component';
 const routes: Routes = [
 
   {
@@ -54,6 +57,17 @@ const routes: Routes = [
   {
     path:'stats',
     component: StatsComponent
+  },
+  {
+    path:'candidate/:id',
+    component: CandidateComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'election/:id',
+    component: ElectionComponent,
+
+    
   },
 
   { path: '', redirectTo: 'login', pathMatch: 'full' },
