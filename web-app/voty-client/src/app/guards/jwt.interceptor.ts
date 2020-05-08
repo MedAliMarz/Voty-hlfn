@@ -4,22 +4,22 @@ import { Observable } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class JwtInterceptor implements HttpInterceptor {
     constructor(private authenticationService: AuthService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // add authorization header with jwt token if available
-        let token = localStorage.getItem('jwt').replace(/"/g, "");
-        console.log('token ', token )
+        let token = localStorage.getItem('jwt');
+        console.log('token ', token );
         if (token) {
             request = request.clone({
                 setHeaders: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token.replace(/"/g, "")}`
                 }
             });
         }
-        
+        console.log('request', request);
         return next.handle(request);
     }
 }

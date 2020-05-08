@@ -19,6 +19,7 @@ export class AuthService {
     private router:Router) { }
 
   login(user){
+    console.log("###LOGIN_USER### => " ,user);
     return this.httpClient.post(this.loginUrl,user).pipe(map(user => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
       console.log('login auth ,',JSON.stringify(user['token']),user);

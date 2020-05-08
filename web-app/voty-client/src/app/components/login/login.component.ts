@@ -38,6 +38,7 @@ export class LoginComponent implements OnInit {
 
       });
     }, (err) => {
+      console.log("ERROR => " , err)
       this.toastrService.show("User not found, verify the credentiels", "Incorrect credentiels", {
         status: 'danger'
       })
