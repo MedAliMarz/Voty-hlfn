@@ -28,9 +28,9 @@ export class VoterBoardComponent implements OnInit {
       .subscribe(
         candidates=>{
           console.log(candidates)
-          console.log('loggedUser.electionId ', this.authService.loggedUser.electionId)
+          console.log('loggedUser.electionId ', JSON.parse(localStorage.getItem('loggedUser')).electionId);
           this.candidates = candidates.filter(candidate=>{
-            return (candidate.electionId == this.authService.loggedUser.electionId)
+            return (candidate.electionId == JSON.parse(localStorage.getItem('loggedUser')).electionId)
           })
           console.log(this.candidates)
           this.isSpinner = false

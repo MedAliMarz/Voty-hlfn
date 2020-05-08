@@ -20,13 +20,13 @@ export class CandidacyComponent implements OnInit {
   isCandidate:boolean = true;
   isSpinner:boolean = false;
   submitted:boolean=false;
+  loggedUser = JSON.parse(localStorage.getItem('loggedUser'));
   @ViewChild("dialog") dialog:TemplateRef<any>
   ngOnInit(): void {
     this.candidateForm = new FormGroup({
       data : new FormControl('',[Validators.required]),
     });
-    this.authService.refresh();
-    //this.active = this.authService.loggedUser.isActive;
+    //this.active = JSON.parse(localStorage.getItem('loggedUser')).isActive;
     this.active = JSON.parse(localStorage.getItem('loggedUser')).isActive;
   }
  
@@ -44,8 +44,8 @@ export class CandidacyComponent implements OnInit {
   }
   initCandidate(){
     let newCandidate ={
-      electionId:this.authService.loggedUser.electionId,
-      voterId:this.authService.loggedUser.voterId,
+      electionId:JSON.parse(localStorage.getItem('loggedUser')).electionId,
+      voterId:JSON.parse(localStorage.getItem('loggedUser')).voterId,
     }
     this.candidateService.createCandidate(newCandidate)
       .subscribe(
@@ -65,7 +65,7 @@ export class CandidacyComponent implements OnInit {
   }
   modifyCandidate(){
     console.log("toggling candidacy",this.active);
-    if(this.active == this.authService.loggedUser.isActive){
+    if(this.active == JSON.parse(localStorage.getItem('loggedUser')).isActive){
       this.toastService.show("Modification ","You didn't change anything",{status:"info"})
     }else{
       let ref = this.dialogService.open(this.dialog,{context:"Do you accept the modification ?"});
@@ -82,15 +82,15 @@ export class CandidacyComponent implements OnInit {
   }
   toggleCandidacy(){
     let data ={
-      electionId:this.authService.loggedUser.electionId,
-      voterId:this.authService.loggedUser.voterId,
+      electionId:JSON.parse(localStorage.getItem('loggedUser')).electionId,
+      voterId:JSON.parse(localStorage.getItem('loggedUser')).voterId,
     }
     this.candidateService.toggleCandidacy(data)
       .subscribe(candidate=> {
         this.toastService.show('the changes have been saved','Modification',{duration:3000,status:'success'})
           
         this.isSpinner = false;
-        this.active = !this.authService.loggedUser.isActive;
+        this.active = !JSON.parse(localStorage.getItem('loggedUser')).isActive;
         this.authService.refresh()
         
       },

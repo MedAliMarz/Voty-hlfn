@@ -1,6 +1,6 @@
  
- <h4 *ngIf="authService.loggedUser" class="text-center">hello {{authService.loggedUser?.voterId}} ,{{authService.loggedUser?.firstName}} , {{authService.loggedUser?.email}}</h4>
- <nb-card *ngIf="!authService.loggedUser.isCandidate" class="col-6 col-md-4 mx-auto my-auto" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
+ <h4 class="text-center">hello {{loggedUser.voterId}} ,{{loggedUser.firstName}} , {{loggedUser.email}}</h4>
+ <nb-card *ngIf="!loggedUser.isCandidate" class="col-6 col-md-4 mx-auto my-auto" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
   <nb-card-header>
     <h3 class="mx-auto">Became a candidate !</h3>
   </nb-card-header>
@@ -20,7 +20,7 @@
     </nb-card-body>
   </nb-card>
   
-<nb-card *ngIf="authService.loggedUser.isCandidate" class="col-6 col-md-4 mx-auto my-auto" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
+<nb-card *ngIf="loggedUser.isCandidate" class="col-6 col-md-4 mx-auto my-auto" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
     <nb-card-header>
       <h3 class="mx-auto">You are already a candidate</h3>
     </nb-card-header>
@@ -30,13 +30,13 @@
       <div class="form-group mb-2">
         <label for="data" class="label">You can change your status</label>
         <textarea nbInput id="data" formControlName="data" fullWidth placeholder="3 years Researcher at X" type="text">
-          {{authService.loggedUser.data}}
+          {{loggedUser.data}}
         </textarea>
       </div>
     -->
       <div class="form-group mb-2">
 
-        <label for="toggle" class="label">Switch {{authService.loggedUser.isActive ?'Off ':'On '}}your candidacy</label>
+        <label for="toggle" class="label">Switch {{loggedUser.isActive ?'Off ':'On '}}your candidacy</label>
 
         <nb-toggle fullWidth id="toggle" [(ngModel)]="active" labelPosition="start"> {{' '}}</nb-toggle>
       </div>
