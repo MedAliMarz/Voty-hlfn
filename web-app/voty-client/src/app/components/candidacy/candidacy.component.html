@@ -1,5 +1,5 @@
  
- <h4 class="text-center">hello {{authService.loggedUser.voterId}} ,{{authService.loggedUser.firstName}} , {{authService.loggedUser.email}}</h4>
+ <h4 *ngIf="authService.loggedUser" class="text-center">hello {{authService.loggedUser?.voterId}} ,{{authService.loggedUser?.firstName}} , {{authService.loggedUser?.email}}</h4>
  <nb-card *ngIf="!authService.loggedUser.isCandidate" class="col-6 col-md-4 mx-auto my-auto" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
   <nb-card-header>
     <h3 class="mx-auto">Became a candidate !</h3>

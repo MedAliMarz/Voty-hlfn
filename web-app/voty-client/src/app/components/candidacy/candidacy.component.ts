@@ -24,8 +24,10 @@ export class CandidacyComponent implements OnInit {
   ngOnInit(): void {
     this.candidateForm = new FormGroup({
       data : new FormControl('',[Validators.required]),
-    })
-    this.active = this.authService.loggedUser.isActive;
+    });
+    this.authService.refresh();
+    //this.active = this.authService.loggedUser.isActive;
+    this.active = JSON.parse(localStorage.getItem('loggedUser')).isActive;
   }
  
   createCandidate(){

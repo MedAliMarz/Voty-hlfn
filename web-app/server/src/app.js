@@ -42,7 +42,7 @@ let blackListedTokens = [];
 function cleanBlackList() {
   if(blackListedTokens.length > 0) {
     // keep only the tokens that didn't surpass 20 mins since their push time
-    blackListedTokens = blackListedTokens.filter(element => (Date.now() - JSON.parse(element)["push_time"]) < 1200000);
+    blackListedTokens = blackListedTokens.filter(element => (Date.now() - JSON.parse(element)["push_time"]) < 2400000);
   }
 }
 
@@ -259,7 +259,7 @@ app.post('/login', async (req, res) => {
       const accessToken = jwt.sign(
         { username: voterId,  role: role }, 
           accessTokenSecret, 
-        { expiresIn: '20m' }
+        { expiresIn: '40m' }
         );
       // we send the accessToken as a response
       return res.status(200).json({

@@ -11,11 +11,13 @@ import { AboutComponent } from './pages/about/about.component';
 import { StatsComponent } from './pages/stats/stats.component';
 // guards
 import {AuthGuard} from './guards/auth.guard'
+import { LogoutGuard } from './guards/logout.guard';
 const routes: Routes = [
 
   {
     path: 'login',
     component: LoginComponent,
+    canActivate: [LogoutGuard]
   },
   {
     path: 'admin',
