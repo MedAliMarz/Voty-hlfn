@@ -20,14 +20,15 @@ export class VotingComponent implements OnInit {
     private toastService:NbToastrService) { }
   voteForm:FormGroup
   isSpinner:boolean = false
-  candidates:Voter[]
+  candidates:Voter[];
+  loggedUser = JSON.parse(localStorage.getItem('loggedUser'));
   ngOnInit(): void {
     this.voteForm = new FormGroup({
       candidateId: new FormControl('',[Validators.required]),
 
     })
     this.isSpinner = true
-    this.loadCandidates()
+    this.loadCandidates();
   }
   vote(){
     console.log("voting for ", this.voteForm.value)
@@ -43,11 +44,11 @@ export class VotingComponent implements OnInit {
     })
   }
   initVote(){
-    this.isSpinner = false
+    this.isSpinner = false;
     let voteData ={
-      voterId:this.authService.loggedUser.voterId,
+      voterId:this.loggedUser.voterId,
       candidateId:this.voteForm.value.candidateId,
-      electionId:this.authService.loggedUser.electionId
+      electionId:this.loggedUser.electionId
     }
     console.log('voteData', voteData)
     this.voterService.vote(voteData)
@@ -73,9 +74,9 @@ export class VotingComponent implements OnInit {
       .subscribe(
         candidates=>{
           console.log(candidates)
-          console.log('loggedUser.electionId ', this.authService.loggedUser.electionId)
+          console.log('loggedUser.electionId ', this.loggedUser.electionId)
           this.candidates = candidates.filter(candidate=>{
-            return (candidate.electionId == this.authService.loggedUser.electionId)
+            return (candidate.electionId == this.loggedUser.electionId)
           })
           console.log(this.candidates)
           this.isSpinner = false

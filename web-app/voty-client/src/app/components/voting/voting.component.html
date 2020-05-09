@@ -1,4 +1,4 @@
-<nb-card class="col-6 col-md-4 mx-auto my-auto" *ngIf="!authService.loggedUser.hasVoted" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
+<nb-card class="col-6 col-md-4 mx-auto my-auto" *ngIf="!loggedUser.hasVoted" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
     <nb-card-header>
         <h4>Choose your candidate</h4>
     </nb-card-header>
@@ -11,7 +11,7 @@
         </form>
     </nb-card-body>
 </nb-card>
-<nb-card class="col-6 col-md-4 mx-auto my-auto" *ngIf="authService.loggedUser.hasVoted" >
+<nb-card class="col-6 col-md-4 mx-auto my-auto" *ngIf="loggedUser.hasVoted" >
   <nb-card-header>
       <h4>You have already voted !</h4>
   </nb-card-header>
