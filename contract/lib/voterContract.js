@@ -138,10 +138,13 @@ class MyAssetContract extends Contract {
     let check = await this.myAssetExists(ctx, args.electionId);
     //create a new voter
     if(check){
+      let electionAsBytes = await ctx.stub.getState(args.electionId);
+      let election = await JSON.parse(electionAsBytes);
       let newVoter = await new Voter(args.electionId, args.firstName, args.lastName,args.email,args.data);
-      
       // update the world state
       await ctx.stub.putState(newVoter.voterId, Buffer.from(JSON.stringify(newVoter)));
+      election.votersNumber +=1
+      await ctx.stub.putState(election.electionId,Buffer.from(JSON.stringify(election)));
       // let response = `voter with voterId ${newVoter.voterId} is added (updated in the world state)`;
       return newVoter;
     }else{
@@ -160,8 +163,8 @@ class MyAssetContract extends Contract {
    * Creates a voter in the world state, based on the args given.
    *  
    * @param args.name - the election name
-   * @param args.country - the election country
-   * @param args.year - the election year
+   * @param args.description - the election description
+   * @param args.organisation - the organisation that create the election
    * @param args.candidacy_startDate - the candidancy phase starting date
    * @param args.candidacy_endDate - the candidancy phase ending date
    * @param args.voting_startDate - the voting phase starting date
@@ -178,7 +181,7 @@ class MyAssetContract extends Contract {
     
     // create the election
 
-    let newElection = await new Election(args.name, args.country, args.year,args.candidacy_startDate,args.candidacy_endDate,args.voting_startDate,args.voting_endDate);
+    let newElection = await new Election(args.name, args.description, args.organisation,args.candidacy_startDate,args.candidacy_endDate,args.voting_startDate,args.voting_endDate);
     
     // update state with new election
     await ctx.stub.putState(newElection.electionId, Buffer.from(JSON.stringify(newElection)));
@@ -194,9 +197,8 @@ class MyAssetContract extends Contract {
    * update an election in the world state, based on the args given.
    *  
    * @param args.candidateId - the election id
-   * @param args.name - the election name
-   * @param args.country - the election country
-   * @param args.year - the election year
+   * @param args.description - the election country
+   * @param args.organisation - the election year
    * @returns - nothing - but updates the world state with a voter
    */
 
@@ -214,7 +216,7 @@ class MyAssetContract extends Contract {
       console.log("election before update" ,election)
       let updatedElection = {
         ...election,
-        name:args.name,country:args.country,year:args.year
+        description:args.description,organisation:args.organisation
         }
       console.log("updatedElection" ,updatedElection)
       // update state with new election
@@ -459,6 +461,11 @@ class MyAssetContract extends Contract {
       candidate.votes += 1
       // update candidate state
       await ctx.stub.putState(candidate.voterId, Buffer.from(JSON.stringify(candidate)));
+      // add the vote to the election
+      election.votes +=1
+      // update the election state
+      await ctx.stub.putState(election.electionId, Buffer.from(JSON.stringify(election)));
+
       let response  = 'A vote has been updated in world state';
       return response
       } else {

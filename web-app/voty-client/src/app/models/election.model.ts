@@ -1,8 +1,9 @@
 export class Election{
     electionId:string;
     name : string;
-    country : string;
-    year : string;      
+    description : string;
+    organisation : string; 
+    votersNumber : number;     
     candidacy_startDate : Date | string;
     candidacy_endDate : Date | string;
     voting_startDate : Date | string;

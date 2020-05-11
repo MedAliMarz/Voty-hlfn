@@ -10,7 +10,8 @@ import { NbThemeModule, NbLayoutModule, NbInputModule,
          NbStepperModule, NbDatepickerModule, NbToggleModule,
          NbSelectModule, NbDialogModule, NbActionsModule,
          NbContextMenuModule, NbUserModule, NbToastrModule,
-         NbSpinnerModule, NbCalendarRangeModule, NbAlertModule } from '@nebular/theme';
+         NbSpinnerModule, NbCalendarRangeModule, NbAlertModule,
+         NbListModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -90,6 +91,7 @@ import {NbCalendarRangeComponent} from '@nebular/theme'
     NbActionsModule,
     NbSelectModule,
     NbEvaIconsModule,
+    NbListModule,
     NbIconModule,
     Ng2SmartTableModule
   ],

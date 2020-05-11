@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NbThemeService, NbColorHelper } from '@nebular/theme';
+import { ElectionService } from 'src/app/services/election.service';
 
 @Component({
   selector: 'app-stats',
@@ -10,8 +11,10 @@ export class StatsComponent implements OnInit,OnDestroy {
   themeSubscription:any;
   data:any;
   options:any;
-  isAdmin:boolean = false;
-  timerData:string='oupa ';
+  ended:boolean = false;
+  timerData:string='loading';
+  timerMessage:string ='';
+  // charts data and options
   dataPie:any;optionsPie:any;
   dataBar:any;optionsBar:any;
   dataLine:any;optionsLine:any;
@@ -19,31 +22,26 @@ export class StatsComponent implements OnInit,OnDestroy {
   dataBarHorizontal:any;optionsBarHorizontal:any;
   dataRadar:any;optionsRadar:any;
 
-  constructor(private theme:NbThemeService) { }
+  constructor(private theme:NbThemeService,
+    private electionService:ElectionService,) { }
 
   ngOnInit(): void {
-    this.initTimer();
-    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-      console.log(config)
-      this.initPie(config)
-      this.initBar(config)
-      this.initLine(config)
-      this.initMultiple(config)
-      this.initBarHorizontal(config)
-      this.initRadar(config)
-      
-    });
+    this.loadResult()
+    
   }
   ngOnDestroy(): void {
     this.themeSubscription.unsubscribe();
   }
-  initPie(config):void{
-    const colors: any = config.variables;
+ 
+  initPie(labels,data):void{
+    console.log('labels,data', labels,data)
+    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
+      const colors: any = config.variables;
     const chartjs: any = config.variables.chartjs;
     this.dataPie = {
-      labels: ['Download Sales', 'In-Store Sales', 'Mail Sales'],
+      labels: labels,
       datasets: [{
-        data: [300, 500, 100],
+        data: data,
         backgroundColor: [colors.primaryLight, colors.infoLight, colors.successLight],
       }],
     };
@@ -68,8 +66,11 @@ export class StatsComponent implements OnInit,OnDestroy {
         },
       },
     };
+    });
+    
   }
-  initBar(config):void{
+  initBar():void{
+    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
     const colors: any = config.variables;
     const chartjs: any = config.variables.chartjs;
     this.dataBar = {
@@ -118,8 +119,9 @@ export class StatsComponent implements OnInit,OnDestroy {
         ],
       },
     };
-  }
-  initLine(config):void{
+  })}
+  initLine():void{
+    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
     const colors: any = config.variables;
     const chartjs: any = config.variables.chartjs;
     this.dataLine = {
@@ -166,8 +168,9 @@ export class StatsComponent implements OnInit,OnDestroy {
         },
       },
     };
-  }
-  initMultiple(config):void{
+  })}
+  initMultiple():void{
+    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
     const colors: any = config.variables;
     const chartjs: any = config.variables.chartjs;
     this.dataMultiple = {
@@ -256,8 +259,9 @@ export class StatsComponent implements OnInit,OnDestroy {
         ],
       },
     };
-  }
-  initBarHorizontal(config):void{
+  })}
+  initBarHorizontal():void{
+    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
     const colors: any = config.variables;
       const chartjs: any = config.variables.chartjs;
     this.dataBarHorizontal = {
@@ -310,8 +314,9 @@ export class StatsComponent implements OnInit,OnDestroy {
         },
       },
     };
-  }
-  initRadar(config):void{
+  })}
+  initRadar():void{
+    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
     const colors: any = config.variables;
     const chartjs: any = config.variables.chartjs;
     this.dataRadar = {
@@ -350,14 +355,13 @@ export class StatsComponent implements OnInit,OnDestroy {
           color: colors.separator
         },
       },
-    };
+    };})
   }
   private random() {
     return Math.round(Math.random() * 100);
   }
-  initTimer(){
-    console.log('in timer init')
-    var countDownDate = new Date("May 6, 2020 19:15:00").getTime();
+  initTimer(date){
+    var countDownDate = new Date(date).getTime();
 
 // Update the count down every 1 second
     var x = setInterval(() => {
@@ -372,15 +376,42 @@ export class StatsComponent implements OnInit,OnDestroy {
       var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    // Display the result in the element with id="demo"
-    this.timerData =  days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-
-    // If the count down is finished, write some text
     if (distance < 0) {
         clearInterval(x);
-        this.timerData = "Has Ended!";
-      }
+        this.timerData = "Election Phase Has Ended!";
+        this.timerMessage ='';
+        this.ended = true;
+    }
+    // Display the result in the element with id="demo"
+    this.timerData =  days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+    // If the count down is finished, write some text
+    
     }, 1000);
+  }
+
+  loadResult(){
+    let electionId = JSON.parse(localStorage.getItem('loggedUser')).electionId
+    this.electionService.getElection(electionId)
+      .subscribe(election=>{
+        this.initTimer(election.voting_endDate)
+        this.electionService.getElectionVoters(election.electionId)
+          .subscribe(voters=>{
+            let candidates = voters.filter(voter=>(voter.isCandidate && voter.isActive)).sort((v1,v2)=> v1.votes - v2.votes)
+            let votes_number =candidates.map(voter=>voter.votes).reduce((a,b)=>a+b,0)
+            let voters_number = voters.length
+            this.timerMessage = `${votes_number} / ${voters_number} Have voted !`
+            this.initPie(
+              candidates.map(voter=>`${voter.firstName} ${voter.lastName}`),
+              candidates.map(candidate=>candidate.votes),
+              )
+          },
+          err=>{
+            console.log("Error in loading candidates")
+          })
+          
+      },
+      error=>{
+        console.log("Error in loading election")
+      })
   }
 }

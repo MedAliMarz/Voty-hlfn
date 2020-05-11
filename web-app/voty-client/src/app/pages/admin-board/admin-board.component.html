@@ -14,16 +14,17 @@
               <form [formGroup]="electionForm">
                 <div class="form-group">
                     <label for="name" class="label">Name</label>
-                    <input nbInput id="name" fullWidth placeholder="name" formControlName="name" type="text">
+                    <input nbInput id="name"  fullWidth placeholder="name" formControlName="name" type="text">
                 </div>
                 <div class="form-group">
-                    <label for="country" class="label">Country</label>
-                    <input nbInput id="country" fullWidth placeholder="country" formControlName="country" type="text">
+                    <label for="organisation" class="label">Organisation</label>
+                    <input nbInput id="organisation" fullWidth placeholder="Which organisation?" formControlName="organisation" type="text">
                 </div>
                 
                 <div class="form-group">
-                    <label for="year" class="label">Year</label>
-                    <input nbInput id="year" fullWidth placeholder="year" formControlName="year" type="number">                </div>
+                    <label for="description" class="label">description</label>
+                    <textarea nbInput id="description" fullWidth placeholder="Describe the election" formControlName="description" ></textarea>
+                    </div>
                 <div class="form-group">
                     <label for="candidacy" class="label">Candidacy Phase Range</label>
                     <input nbInput [nbDatepicker]="rangepicker_candidacy" fullWidth id="candidacy" formControlName="candidacy_range" placeholder="range of candidacy phase">
@@ -63,27 +64,46 @@
         </nb-card-body>
     </nb-card>
 
-<nb-accordion *ngIf="elections">
-
-
-  <nb-accordion-item  *ngFor="let election of elections">
-    <nb-accordion-item-header>
-
- {{election.name}}
- 
-    </nb-accordion-item-header>
-    <nb-accordion-item-body>
-      <p>      Candidacy phase : {{election.candidacy_startDate | date:'long'}}  - {{election.candidacy_endDate | date:'long'}}      </p>
-      <p>      Voting phase : {{election.voting_startDate | date:'long'}}  -  {{election.voting_endDate | date:'long'}}      </p>
+    <nb-card [size]="'medium'">
+      <nb-card-body>
+        <nb-list *ngIf="elections">
+          <nb-list-item *ngFor="let election of elections" class="d-inline-block">          
+          <span>
+            {{election.name}}
+          </span>  
+          <a class="float-right d-inline"  size="small" [routerLink]="['/election',election.electionId]"><nb-icon icon="chevron-right-outline"></nb-icon></a>
       
-      <a class="float-right" nbButton size="small" [routerLink]="['/election',election.electionId]">details</a>
+        </nb-list-item>
+          
+        </nb-list>
+      </nb-card-body>
+      
+    </nb-card>
+  
+    <!--
+      
+    
+  <nb-accordion *ngIf="elections">
 
-    </nb-accordion-item-body>
-  </nb-accordion-item>
+
+    <nb-accordion-item  *ngFor="let election of elections">
+      <nb-accordion-item-header>
+
+      {{election.name}}
+  
+      </nb-accordion-item-header>
+      <nb-accordion-item-body>
+        <p>      Candidacy phase : {{election.candidacy_startDate | date:'long'}}  - {{election.candidacy_endDate | date:'long'}}      </p>
+        <p>      Voting phase : {{election.voting_startDate | date:'long'}}  -  {{election.voting_endDate | date:'long'}}      </p>
+        
+        <a class="float-right" nbButton size="small" [routerLink]="['/election',election.electionId]">details</a>
+
+      </nb-accordion-item-body>
+    </nb-accordion-item>
 
   
-</nb-accordion>
-
+  </nb-accordion>
+-->
 </div>
 
 <ng-template #dialog let-data let-ref="dialogRef">

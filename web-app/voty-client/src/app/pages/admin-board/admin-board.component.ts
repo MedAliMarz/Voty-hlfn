@@ -73,8 +73,8 @@ export class AdminBoardComponent implements OnInit {
     this.loadElections()
     this.electionForm = new FormGroup({
       name : new FormControl('',[Validators.required]),
-      country : new FormControl('',[Validators.required]),
-      year : new FormControl('',[Validators.required]),
+      description : new FormControl('',[Validators.required]),
+      organisation : new FormControl('',[Validators.required]),
       candidacy_range : new FormControl('',[Validators.required]),
       voting_range : new FormControl('',[Validators.required])
     })

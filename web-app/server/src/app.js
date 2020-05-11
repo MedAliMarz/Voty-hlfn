@@ -93,12 +93,12 @@ app.get('/election/:id', async (req, res) => {
     let networkObj = await network.connectToNetwork(appAdmin);
     let check = await network.invoke(networkObj, true, 'myAssetExists', req.params.id);
     check = JSON.parse(check.toString())
-    if(check){ // all good here!
-      let response = await network.invoke(networkObj, true, 'readMyAsset', req.params.id);
-      return res.status(200).json(JSON.parse(response));
-    }else{
-      return res.status(404).json({error:'Requested election not found'});
-    }
+      if(check){ // all good here!
+        let response = await network.invoke(networkObj, true, 'readMyAsset', req.params.id);
+        return res.status(200).json(JSON.parse(response));
+      }else{
+        return res.status(404).json({error:'Requested election not found'});
+      }
     }catch(e){
       return res.status(500).json(JSON.parse({error:'Problem in transaction'}));
     }
@@ -118,7 +118,7 @@ app.get('/election/:id/voters', async (req, res) => {
     if(check){ // all good here!
       let response = await network.invoke(networkObj, true, 'queryByObjectType', 'voter');
       let parsedResponse = JSON.parse(response)
-      return res.status(200).json(JSON.parse(parsedResponse).filter(voter=>voter['Record'].electionId==req.params.id));
+      return res.status(200).json(JSON.parse(parsedResponse).filter(voter=>voter['Record'].electionId==req.params.id).map(voter=>voter['Record']));
     }else{
       return res.status(404).json({error:'Specified election not found'});
     }
@@ -149,8 +149,8 @@ app.get('/election', async (req, res) => {
 app.post('/election' , authenticateJWT, async (req, res) => {
 
 
-  let {name,country,year,candidacy_startDate,candidacy_endDate,voting_startDate,voting_endDate} = req.body
-  if(!req.body || !name || !country || !year || !candidacy_startDate || !candidacy_endDate || !voting_startDate || !voting_endDate){
+  let {name,description,organisation,candidacy_startDate,candidacy_endDate,voting_startDate,voting_endDate} = req.body
+  if(!req.body || !name || !description || !organisation || !candidacy_startDate || !candidacy_endDate || !voting_startDate || !voting_endDate){
     return res.status(400).json({error:'You must supply all needed attributs'});
   }else{
     
@@ -160,7 +160,7 @@ app.post('/election' , authenticateJWT, async (req, res) => {
       try{
 
       let networkObj = await network.connectToNetwork(appAdmin);
-      let response = await network.invoke(networkObj, false, 'createElection', [JSON.stringify({name,country,year,candidacy_startDate,candidacy_endDate,voting_startDate,voting_endDate})]);
+      let response = await network.invoke(networkObj, false, 'createElection', [JSON.stringify({name,description,organisation,candidacy_startDate,candidacy_endDate,voting_startDate,voting_endDate})]);
       let parsedResponse = await JSON.parse(response);
       return res.status(200).send(parsedResponse);
       }catch(e ){
@@ -176,15 +176,13 @@ app.put('/election/:id' , authenticateJWT, async (req, res) => {
   if(!req.params.id){
     return res.status(400).json({error:'Bad request , election id missing'});
   }else{
-    let {name,country,year} = req.body
-    if(!req.body || (!name && !country && !year) ){
-      return res.status(400).json({error:'You must supply all needed attributs'});
+    let {description,organisation} = req.body
+    if(!req.body || ( !description && !organisation) ){
+      return res.status(400).json({error:'No attributs to change'});
     }else{
         let updatedElection = {electionId:req.params.id}
-        
-        if(name) {updatedElection['name']=name}
-        if(country) {updatedElection['country']=country}
-        if(year) {updatedElection['year']=year}
+        if(description) {updatedElection['description']=description}
+        if(organisation) {updatedElection['organisation']=organisation}
         console.dir('updating election '+updatedElection)
         try{
         let networkObj = await network.connectToNetwork(appAdmin);

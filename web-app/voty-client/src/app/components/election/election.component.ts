@@ -40,9 +40,9 @@ export class ElectionComponent implements OnInit {
     console.log('electionId', this.electionId)
     this.isSpinner = true;
     this.electionForm = new FormGroup({
-      name : new FormControl({value:'',disabled:!this.isModify},[Validators.required]),
-      country : new FormControl({value:'',disabled:!this.isModify},[Validators.required]),
-      year : new FormControl({value:'',disabled:!this.isModify},[Validators.required]),
+      name : new FormControl({value:'',disabled:true},[]),
+      description : new FormControl({value:'',disabled:!this.isModify},[Validators.required]),
+      organisation : new FormControl({value:'',disabled:!this.isModify},[Validators.required]),
     })
     this.loadElection()
   }
@@ -58,8 +58,8 @@ export class ElectionComponent implements OnInit {
         this.election = election;
         this.electionForm.setValue({
           'name':this.election.name,
-          'country':this.election.country,
-          'year':this.election.year,
+          'description':this.election.description,
+          'organisation':this.election.organisation,
         })
         this.candidacy_range={
           start:new Date(this.election.candidacy_startDate.toString()),
@@ -130,13 +130,25 @@ export class ElectionComponent implements OnInit {
           this.toastService.show('Election patched failed','Election',{status:'warning'})
           this.electionForm.setValue({
             'name':this.election.name,
-            'country':this.election.country,
-            'year':this.election.year,
+            'description':this.election.description,
+            'organisation':this.election.organisation,
           })
         }
       )
   }
-  handleRangeChange(data){
+  handleCandidacyRangeChange(data){
     console.log(data)
+    this.candidacy_range={
+      start:new Date(this.election.candidacy_startDate.toString()),
+      end:new Date(this.election.candidacy_endDate.toString())
+    }
+    
+  }
+  handleVotingRangeChange(data){
+    console.log(data)
+    this.voting_range={
+      start:new Date(this.election.voting_startDate.toString()),
+      end:new Date(this.election.voting_endDate.toString())
+    }
   }
 }
