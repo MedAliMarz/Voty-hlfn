@@ -7,7 +7,8 @@ import { Voter } from '../../models/voter.model';
   styleUrls: ['./candidates-list.component.scss']
 })
 export class CandidatesListComponent implements OnInit {
-  @Input() candidates : Voter[]
+  @Input() candidates : Voter[];
+  @Input() isSpinner : boolean;
   constructor() { }
 
   ngOnInit(): void {

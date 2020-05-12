@@ -1,1 +1,18 @@
-<p>candidates-list works!</p>
+<nb-card [size]="'medium'" [nbSpinner]="isSpinner"  nbSpinnerSize="giant" nbSpinnerStatus="warning">
+    <nb-card-body *ngIf="candidates && candidates.length">
+      <nb-list >
+        <nb-list-item *ngFor="let candidate of candidates" class="d-inline-block">          
+        <span>
+          {{candidate.firstName + ' ' + candidate.lastName}}
+        </span>  
+        <a class="float-right d-inline"  size="small" [routerLink]="['/candidate',candidate.voterId]"><nb-icon icon="chevron-right-outline"></nb-icon></a>
+      </nb-list-item>
+      </nb-list>
+    </nb-card-body>
+    <ng-template   *ngIf="!isSpinner && !candidates" >
+        <nb-alert status="warning" class="mt-2">
+      <h6 class="text-center" >There is no candidates </h6>
+    </nb-alert>
+  </ng-template>
+  </nb-card>
+

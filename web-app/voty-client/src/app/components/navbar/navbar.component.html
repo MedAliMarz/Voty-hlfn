@@ -16,11 +16,14 @@
   <a class="navbar-link"  [routerLink]="['/contact']">
     Contact
   </a>
-  <a class="navbar-link"  [routerLink]="['/admin']">
+  <a class="navbar-link"  *ngIf="isAdmin" [routerLink]="['/admin']">
     admin
   </a>
   <nb-actions size="small" class="navbar-actions">
-    <nb-action class="user-action" icon="person-outline" nbContextMenuTag="navbar_menu" [nbContextMenu]="user_items">
+    <nb-action *ngIf="!isAdmin" class="user-action" icon="person-outline" nbContextMenuTag="navbar_menu" [nbContextMenu]="user_items">
+      
+    </nb-action>
+    <nb-action *ngIf="isAdmin" class="user-action" icon="person-outline" nbContextMenuTag="navbar_menu" [nbContextMenu]="admin_items">
       
     </nb-action>
   </nb-actions>

@@ -21,6 +21,7 @@ export class AdminBoardComponent implements OnInit {
   elections:Election[]
   isHidden:boolean=true;
   isSpinner:boolean=false;
+  isLoading : boolean= true;
   rangeCandidacy='';
   rangeVoting='';
 
@@ -70,13 +71,18 @@ export class AdminBoardComponent implements OnInit {
   
   ngOnInit(): void {
     this.themeService.changeTheme("dark");
+
     this.loadElections()
     this.electionForm = new FormGroup({
       name : new FormControl('',[Validators.required]),
       description : new FormControl('',[Validators.required]),
       organisation : new FormControl('',[Validators.required]),
       candidacy_range : new FormControl('',[Validators.required]),
-      voting_range : new FormControl('',[Validators.required])
+      voting_range : new FormControl('',[Validators.required]),
+      candidacy_start_hour : new FormControl('',[Validators.required,]),
+      candidacy_end_hour : new FormControl('',[Validators.required,]),
+      voting_start_hour : new FormControl('',[Validators.required,]),
+      voting_end_hour : new FormControl('',[Validators.required,]),
     })
     this.votersDataSource = new LocalDataSource()
     this.votersForm = new FormGroup({
@@ -98,10 +104,10 @@ export class AdminBoardComponent implements OnInit {
     if(!this.electionForm.invalid && !this.electionSubmitted){
       this.electionSubmitted = true
       let newElection = this.electionForm.value
-      newElection.candidacy_startDate = newElection.candidacy_range.start
-      newElection.candidacy_endDate = newElection.candidacy_range.end
-      newElection.voting_startDate = newElection.voting_range.start
-      newElection.voting_endDate = newElection.voting_range.end
+      newElection.candidacy_startDate = this.modifDate(newElection.candidacy_range.start,newElection.candidacy_start_hour).toString()
+      newElection.candidacy_endDate = this.modifDate(newElection.candidacy_range.end,newElection.candidacy_end_hour).toString()
+      newElection.voting_startDate = this.modifDate(newElection.voting_range.start,newElection.voting_start_hour).toString()
+      newElection.voting_endDate = this.modifDate(newElection.voting_range.end,newElection.voting_end_hour).toString()
 
       this.electionService.createElection(newElection)
         .subscribe(election=>{
@@ -182,13 +188,15 @@ export class AdminBoardComponent implements OnInit {
     this.isHidden = !this.isHidden;
   }
   loadElections(){
+    this.isLoading=true;
     this.electionService.getElections()
       .subscribe(elections=>{
         this.elections = elections.map(obj=>obj['Record'])
+        this.isLoading=false;
         console.log('elections', this.elections)
       },
       (err)=>{
-
+        this.isLoading=false;
       })
   }
 
@@ -196,6 +204,12 @@ export class AdminBoardComponent implements OnInit {
   finishCreation(){
     this.stepper.reset();
     this.isHidden = true;
+  }
+  modifDate(date,hours){
+    let s = hours.split(':')
+    let d = new Date(date)
+    d.setHours(parseInt(s[0]),parseInt(s[1]))
+    return d
   }
   ngOnDestroy(){
     this.themeService.changeTheme("default");

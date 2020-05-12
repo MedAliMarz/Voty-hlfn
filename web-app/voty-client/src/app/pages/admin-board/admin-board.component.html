@@ -1,86 +1,116 @@
 <div class="col-md-8 mx-auto">
-    <div class="d-flex flex-column align-items-center">
+  <div class="d-flex flex-column align-items-center">
 
-  
+
     <h1>Elections List</h1>
-    <button nbButton fullWidth size="giant" (click)="toggleCreation()" status="primary" ><nb-icon icon="plus"></nb-icon></button>
-    </div>
-    <nb-card [ngClass]="{'d-none':isHidden}" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
-        <nb-card-body>
-          <nb-stepper orientation="horizontal"  disableStepNavigation #stepper>
-            <nb-step [label]="labelOne" >
-              <ng-template #labelOne>Election Creation</ng-template>
-              <h4>Please provide the necessary informations</h4>
-              <form [formGroup]="electionForm">
-                <div class="form-group">
-                    <label for="name" class="label">Name</label>
-                    <input nbInput id="name"  fullWidth placeholder="name" formControlName="name" type="text">
-                </div>
-                <div class="form-group">
-                    <label for="organisation" class="label">Organisation</label>
-                    <input nbInput id="organisation" fullWidth placeholder="Which organisation?" formControlName="organisation" type="text">
-                </div>
-                
-                <div class="form-group">
-                    <label for="description" class="label">description</label>
-                    <textarea nbInput id="description" fullWidth placeholder="Describe the election" formControlName="description" ></textarea>
-                    </div>
-                <div class="form-group">
-                    <label for="candidacy" class="label">Candidacy Phase Range</label>
-                    <input nbInput [nbDatepicker]="rangepicker_candidacy" fullWidth id="candidacy" formControlName="candidacy_range" placeholder="range of candidacy phase">
-                    <nb-rangepicker #rangepicker_candidacy></nb-rangepicker>
-                   
-                </div>
-                <div class="form-group">
-                    <label for="voting" class="label">Voting Phase Range</label>
-                    <input nbInput [nbDatepicker]="rangepicker_voting" fullWidth id="voting" formControlName="voting_range" placeholder="range of voting phase">
-                    <nb-rangepicker #rangepicker_voting></nb-rangepicker>
-                </div>
-                
-                
-                
-                <input nbButton size="medium" status="primary" type="button" (click)="createElection()" value="Add Election">
-            </form>
-              
-            </nb-step>
-            <nb-step [label]="labelTwo">
-              <ng-template #labelTwo>Add Voters</ng-template>
-              <h4>Add Voters</h4>
-              
-              <ng2-smart-table [settings]="settings" [source]="votersDataSource" ></ng2-smart-table>
-              
-                <input nbButton size="medium" status="primary" type="button" (click)="createVoters()" value="Add Voters">
+    <button nbButton fullWidth size="giant" (click)="toggleCreation()" status="primary">
+      <nb-icon icon="plus"></nb-icon>
+    </button>
+  </div>
+  <nb-card [ngClass]="{'d-none':isHidden}" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
+    <nb-card-body>
+      <nb-stepper orientation="horizontal" disableStepNavigation #stepper>
+        <nb-step [label]="labelOne">
+          <ng-template #labelOne>Election Creation</ng-template>
+          <h4>Please provide the necessary informations</h4>
+          <form [formGroup]="electionForm">
+            <div class="form-group">
+              <label for="name" class="label">Name</label>
+              <input nbInput id="name" fullWidth placeholder="name" formControlName="name" type="text">
+            </div>
+            <div class="form-group">
+              <label for="organisation" class="label">Organisation</label>
+              <input nbInput id="organisation" fullWidth placeholder="Which organisation?"
+                formControlName="organisation" type="text">
+            </div>
 
-         
-            </nb-step>
-            <nb-step [label]="labelThree" >
-                <ng-template #labelThree>Validation</ng-template>
+            <div class="form-group">
+              <label for="description" class="label">description</label>
+              <textarea nbInput id="description" fullWidth placeholder="Describe the election"
+                formControlName="description"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="candidacy" class="label">Candidacy Phase Range</label>
+              <input nbInput [nbDatepicker]="rangepicker_candidacy" fullWidth id="candidacy"
+                formControlName="candidacy_range" placeholder="range of candidacy phase">
+              <nb-rangepicker #rangepicker_candidacy></nb-rangepicker>
+            </div>
+            <div class="row">
 
-                <h4 class="text-center">You have added an election + voters</h4>
-                
-                <button nbButton status="success"  size="medium" fullWidth (click)="finishCreation()" >Finish</button>
-              </nb-step>
-          </nb-stepper>
-        </nb-card-body>
-    </nb-card>
+              <div class="col" >
+                <label for="startHourC" class="label d-inline-block ">Candidacy Starting Hour</label>
+                <input list="time" placeholder='time' formControlName="candidacy_start_hour" fullWidth step="1,30,5" nbInput type="time" id="startHourC" name="startHour">
+              </div>
+              <div class="col" >
+                <label for="endHourC" class="label d-inline-block ">Candidacy Ending Hour</label>
+                <input list="time" placeholder='time' formControlName="candidacy_end_hour" fullWidth step="1,30,5" nbInput type="time" id="endHourC" name="startHour">
+              </div>
+            </div>
+            
+            <datalist id="time">
+              
+              <option value="08:00">
+              <option value="09:00">
+              <option value="10:00">
+              <option value="11:00">
+              <option value="12:00">
+              <option value="13:00">
+              <option value="14:00">
+              <option value="15:00">
+              <option value="16:00">
+              <option value="17:00">
+              <option value="18:00">
+              <option value="19:00">
+            </datalist>
+            <div class="form-group">
+              <label for="voting" class="label">Voting Phase Range</label>
+              <input nbInput [nbDatepicker]="rangepicker_voting" fullWidth id="voting" formControlName="voting_range"
+                placeholder="range of voting phase">
+              <nb-rangepicker #rangepicker_voting></nb-rangepicker>
+            </div>
+            <div class="row">
+              <div class="col" >
+                <label for="startHourV" class="label d-inline-block ">Voting Starting Hour</label>
+                <input list="time" placeholder='time' formControlName="voting_start_hour" fullWidth step="1,30,5" nbInput type="time" id="startHourV" name="startHour">
+              </div>
+              <div class="col" >
+                <label for="endHourV" class="label d-inline-block ">Voting Ending Hour</label>
+                <input list="time" placeholder='time' formControlName="voting_end_hour" fullWidth step="1,30,5" nbInput type="time" id="endHourV" name="startHour">
+              </div>
+            </div>
 
-    <nb-card [size]="'medium'">
-      <nb-card-body>
-        <nb-list *ngIf="elections">
-          <nb-list-item *ngFor="let election of elections" class="d-inline-block">          
-          <span>
-            {{election.name}}
-          </span>  
-          <a class="float-right d-inline"  size="small" [routerLink]="['/election',election.electionId]"><nb-icon icon="chevron-right-outline"></nb-icon></a>
-      
-        </nb-list-item>
-          
-        </nb-list>
-      </nb-card-body>
-      
-    </nb-card>
-  
-    <!--
+
+            <input nbButton class="mt-4 float-right" size="medium" [disabled]="electionForm.invalid" status="primary" type="button" (click)="createElection()"
+              value="Add Election">
+          </form>
+
+        </nb-step>
+        <nb-step [label]="labelTwo">
+          <ng-template #labelTwo>Add Voters</ng-template>
+          <h4>Add Voters</h4>
+
+          <ng2-smart-table [settings]="settings" [source]="votersDataSource"></ng2-smart-table>
+
+          <input nbButton size="medium" status="primary" type="button" (click)="createVoters()" value="Add Voters">
+
+
+        </nb-step>
+        <nb-step [label]="labelThree">
+          <ng-template #labelThree>Validation</ng-template>
+
+          <h4 class="text-center">You have added an election + voters</h4>
+
+          <button nbButton status="success" size="medium" fullWidth (click)="finishCreation()">Finish</button>
+        </nb-step>
+      </nb-stepper>
+    </nb-card-body>
+  </nb-card>
+
+  <app-elections-list [elections]="elections" [isSpinner]="isLoading">
+
+  </app-elections-list>
+
+  <!--
       
     
   <nb-accordion *ngIf="elections">
@@ -108,7 +138,9 @@
 
 <ng-template #dialog let-data let-ref="dialogRef">
   <nb-card>
-    <nb-card-header><h5>Continue with operation ?</h5></nb-card-header>
+    <nb-card-header>
+      <h5>Continue with operation ?</h5>
+    </nb-card-header>
     <nb-card-body>{{ data }}</nb-card-body>
     <nb-card-footer>
       <button nbButton status="danger" (click)="ref.close(false)" class="mr-5">No</button>

@@ -14,7 +14,8 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnInit {
   currentTheme = 'default';
   private destroy$: Subject<void> = new Subject<void>();
-
+  isAdmin:boolean = null;
+  isLogged:boolean;
   themes = [
     {
       value: 'default',
@@ -55,9 +56,28 @@ export class NavbarComponent implements OnInit {
       icon: 'unlock-outline',
     },
   ];
+  admin_items: NbMenuItem[] =[
+    {
+      title: 'Election List',
+      icon: 'bookmark-outline',
+      link:'admin'
+    },
+    {
+      title: 'Logout',
+      icon: 'unlock-outline',
+    },
+  ]
+  
   constructor(private router:Router,private toastService:NbToastrService ,private themeService:NbThemeService,private authService:AuthService,private menuService:NbMenuService) { }
 
   ngOnInit(): void {
+    if(localStorage.getItem('jwt') && localStorage.getItem('loggedUser')){
+      this.isLogged = true;
+      let role =  localStorage.getItem('role')
+      console.log('role', role)
+      this.isAdmin = role==='admin'
+    }
+    
     this.menuService.onItemClick()
     .pipe(
       filter((bag) => (bag.tag === 'navbar_menu'&& bag.item.title==='Logout')),

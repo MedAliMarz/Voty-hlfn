@@ -25,6 +25,11 @@ export class ElectionComponent implements OnInit {
   candidacy_range: NbCalendarRange<Date>;;
   voting_range: NbCalendarRange<Date>;;
 
+  candidacy_start_hour:string;
+  candidacy_end_hour:string;
+  voting_start_hour:string;
+  voting_end_hour:string;
+
   electionForm:FormGroup;
   constructor(private router:Router,
     private toastService:NbToastrService,
@@ -61,14 +66,23 @@ export class ElectionComponent implements OnInit {
           'description':this.election.description,
           'organisation':this.election.organisation,
         })
+        let candidacy_startDate = new Date(this.election.candidacy_startDate.toString())
+        let candidacy_endDate = new Date(this.election.candidacy_endDate.toString())
+        let voting_startDate = new Date(this.election.voting_startDate.toString())
+        let voting_endDate = new Date(this.election.voting_endDate.toString())
         this.candidacy_range={
-          start:new Date(this.election.candidacy_startDate.toString()),
-          end:new Date(this.election.candidacy_endDate.toString())
+          start:candidacy_startDate,
+          end:candidacy_endDate
         }
         this.voting_range={
-          start:new Date(this.election.voting_startDate.toString()),
-          end:new Date(this.election.voting_endDate.toString())
+          start:voting_startDate,
+          end:voting_endDate
         }
+        this.candidacy_start_hour = [candidacy_startDate.getHours().toString().padStart(2,'0'),candidacy_startDate.getMinutes().toString().padStart(2,'0')].join(':') 
+        this.candidacy_end_hour = [candidacy_endDate.getHours().toString().padStart(2,'0'),candidacy_endDate.getMinutes().toString().padStart(2,'0')].join(':') 
+        this.voting_start_hour = [voting_startDate.getHours().toString().padStart(2,'0'),voting_startDate.getMinutes().toString().padStart(2,'0')].join(':') 
+        this.voting_end_hour = [voting_endDate.getHours().toString().padStart(2,'0'),voting_endDate.getMinutes().toString().padStart(2,'0')].join(':') 
+
         this.toastService.show('Election loaded successfully','Election',{status:'success'})
         this.isSpinner = false;
         this.isSpinnerVoters = true;

@@ -33,14 +33,37 @@
             You canno't change phases duration 
         </nb-alert>
         <div class="row">
-
-            <div class="col form-group">
+            
+                
+                
+              
+            <div class="col">
+                <div class="form-group" >
+                    <label for="startHourC" class="label d-inline-block ">Candidacy Starting Hour</label>
+                    <input list="time" placeholder='time' [disabled]="true" [value]="candidacy_start_hour" fullWidth step="1,30,5" nbInput type="time" id="startHourC" name="startHour">
+                  </div>
+                  <div class="form-group" >
+                    <label for="endHourC" class="label d-inline-block ">Candidacy Ending Hour</label>
+                    <input list="time" placeholder='time' [disabled]="true" [value]="candidacy_end_hour" fullWidth step="1,30,5" nbInput type="time" id="endHourC" name="startHour">
+                  </div>
+                <div class="form-group">
                 <label for="candidacy" class="label">Candidacy Phase</label>
-                <nb-calendar-range  id="candidacy" size="small" [range]="candidacy_range" (rangeChange)="handleCandidacyRangeChange($event)"></nb-calendar-range>
+                <nb-calendar-range  id="candidacy" size="large" [range]="candidacy_range" (rangeChange)="handleCandidacyRangeChange($event)"></nb-calendar-range>
+                </div>
             </div>
-            <div class="col form-group">
+            <div class="col">
+                <div class="form-group" >
+                    <label for="startHourV" class="label d-inline-block ">Voting Starting Hour</label>
+                    <input list="time" placeholder='time' [disabled]="true" [value]="voting_start_hour" fullWidth step="1,30,5" nbInput type="time" id="startHourV" name="startHour">
+                  </div>
+                  <div class="form-group" >
+                    <label for="endHourV" class="label d-inline-block ">Voting Ending Hour</label>
+                    <input list="time" placeholder='time' [disabled]="true" [value]="voting_end_hour" fullWidth step="1,30,5" nbInput type="time" id="endHourV" name="startHour">
+                  </div>
+                <div class="form-group">
                 <label for="voting" class="label">Voting Phase</label>
-                <nb-calendar-range  id="voting" size="small" [range]="voting_range" (rangeChange)="handleVotingRangeChange($event)"></nb-calendar-range>
+                <nb-calendar-range  id="voting" size="large" [range]="voting_range" (rangeChange)="handleVotingRangeChange($event)"></nb-calendar-range>
+                </div>
             </div>
 
         </div>

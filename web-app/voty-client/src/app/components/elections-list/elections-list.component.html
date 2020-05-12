@@ -1,0 +1,19 @@
+<nb-card [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning"  [size]="'medium'"  >
+    <nb-card-body *ngIf="elections && elections.length">
+      <nb-list >
+        <nb-list-item *ngFor="let election of elections" class="d-inline-block">          
+        <span>
+          {{election.name}}
+        </span>  
+        <a class="float-right d-inline"  size="small" [routerLink]="['/election',election.electionId]"><nb-icon icon="chevron-right-outline"></nb-icon></a>
+      </nb-list-item>
+      </nb-list>
+    </nb-card-body>
+  </nb-card>
+  <ng-template *ngIf="!isSpinner && !elections" >
+      <nb-alert status="warning"  class="mt-2">
+    <h6 class="text-center" >There is no elections </h6>
+  </nb-alert>
+</ng-template>
+
+ 
