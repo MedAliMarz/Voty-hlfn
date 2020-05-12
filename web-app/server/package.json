@@ -9,7 +9,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "nodemonConfig": {
-    "ignore": ["node_modules/*", "wallet/*"],
+    "ignore": [
+      "node_modules/*",
+      "wallet/*"
+    ],
     "delay": "2500"
   },
   "dependencies": {

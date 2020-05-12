@@ -15,15 +15,10 @@ const configJSON = fs.readFileSync(configPath, 'utf8');
 const config = JSON.parse(configJSON);
 
 // let connection_file = config.connection_file;
-let appAdmin = config.appAdmin;
-let appAdminSecret = config.appAdminSecret;
+let appSuperAdmin = config.appSuperAdmin;
+let appSuperAdminSecret = config.appSuperAdminSecret;
 let orgMSPID = config.orgMSPID;
 let caName = config.caName;
-
-// const ccpPath = path.join(process.cwd(), './www/blockchain/ibpConnection.json');
-// const ccpPath = path.join(process.cwd(), './ibpConnection.json');
-// const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
-// const ccp = JSON.parse(ccpJSON);
 
 async function main() {
   try {
@@ -38,20 +33,20 @@ async function main() {
     console.log(`Wallet path: ${walletPath}`);
 
     // Check to see if we've already enrolled the admin user.
-    const adminExists = await wallet.exists(appAdmin);
-    if (adminExists) {
-      console.log(`An identity for the admin user "${appAdmin}" already exists in the wallet`);
+    const SuperAdminExists = await wallet.exists(appSuperAdmin);
+    if (SuperAdminExists) {
+      console.log(`An identity for the super admin "${appSuperAdmin}" already exists in the wallet`);
       return;
     }
 
-    // Enroll the admin user, and import the new identity into the wallet.
-    const enrollment = await ca.enroll({ enrollmentID: appAdmin, enrollmentSecret: appAdminSecret });
+    // Enroll super admin, and import the new identity into the wallet.
+    const enrollment = await ca.enroll({ enrollmentID: appSuperAdmin, enrollmentSecret: appSuperAdminSecret });
     const identity = X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
-    wallet.import(appAdmin, identity);
-    console.log('msg: Successfully enrolled admin user ' + appAdmin + ' and imported it into the wallet');
+    wallet.import(appSuperAdmin, identity);
+    console.log(`msg: Successfully enrolled super admin "${appSuperAdmin}" and imported it into the wallet`);
 
   } catch (error) {
-    console.error(`Failed to enroll admin user ' + ${appAdmin} + : ${error}`);
+    console.error(`Failed to enroll super admin ' ${appSuperAdmin} : ${error}`);
     process.exit(1);
   }
 }

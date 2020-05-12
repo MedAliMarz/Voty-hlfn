@@ -103,7 +103,10 @@ export class AdminBoardComponent implements OnInit {
   initElection(){
     if(!this.electionForm.invalid && !this.electionSubmitted){
       this.electionSubmitted = true
-      let newElection = this.electionForm.value
+      let admin_email = localStorage.getItem('email').replace(/"/g, "");
+      let newElection = this.electionForm.value;
+      // add the admin's email, we need it to verify that he's allowed to create the election
+      newElection.admin_email = admin_email;
       newElection.candidacy_startDate = this.modifDate(newElection.candidacy_range.start,newElection.candidacy_start_hour).toString()
       newElection.candidacy_endDate = this.modifDate(newElection.candidacy_range.end,newElection.candidacy_end_hour).toString()
       newElection.voting_startDate = this.modifDate(newElection.voting_range.start,newElection.voting_start_hour).toString()
@@ -145,12 +148,13 @@ export class AdminBoardComponent implements OnInit {
     {
       let voters =  this.votersDataSource['data']
         .map(voter=>{
-        voter['electionId'] = this.createdElection['electionId']
-        return voter
+        voter['electionId'] = this.createdElection['electionId'];
+        voter['admin_email'] = localStorage.getItem('email').replace(/"/g, "");
+        return voter;
         })
-        async.each(voters, (voter, callback)=> {
+        async.eachOfSeries(voters, (voter, index, callback)=> {
 
-          // Perform voter creation
+          // Perform creation of each voter
           
           this.voterService.createVoter(voter)
             .subscribe(
@@ -171,7 +175,7 @@ export class AdminBoardComponent implements OnInit {
           this.isSpinner=false;
 
           if( err ) {
-            console.log('One of the voter wasn\'t registred ',err);
+            console.log('One of the voter wasn\'t registered ',err);
             this.toastService.show(`Problem in adding voters`,"Adding Voters",{status:'warning'})
           } else {
             this.toastService.show(`All voter have been added`,"Adding Voters",{status:'success'})

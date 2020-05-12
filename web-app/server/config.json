@@ -2,6 +2,8 @@
   "connection_file": "fabric_connection.json",
   "appAdmin": "admin",
   "appAdminSecret": "adminpw",
+  "appSuperAdmin": "admin",
+  "appSuperAdminSecret": "adminpw",
   "orgMSPID": "Org1MSP",
   "caName": "http://localhost:17050",
   "userName": "V1",

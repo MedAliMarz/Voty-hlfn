@@ -45,7 +45,7 @@ export class CandidacyComponent implements OnInit {
   initCandidate(){
     let newCandidate ={
       electionId:JSON.parse(localStorage.getItem('loggedUser')).electionId,
-      voterId:JSON.parse(localStorage.getItem('loggedUser')).voterId,
+      email:JSON.parse(localStorage.getItem('loggedUser')).email,
     }
     this.candidateService.createCandidate(newCandidate)
       .subscribe(
@@ -83,7 +83,7 @@ export class CandidacyComponent implements OnInit {
   toggleCandidacy(){
     let data ={
       electionId:JSON.parse(localStorage.getItem('loggedUser')).electionId,
-      voterId:JSON.parse(localStorage.getItem('loggedUser')).voterId,
+      email:JSON.parse(localStorage.getItem('loggedUser')).email,
     }
     this.candidateService.toggleCandidacy(data)
       .subscribe(candidate=> {

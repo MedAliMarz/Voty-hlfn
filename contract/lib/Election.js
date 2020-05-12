@@ -9,7 +9,7 @@ class Election {
    * check for valid election, cross check with government. Don't want duplicate
    * elections.
    *  
-   * @param electionId - an array of choices 
+   * @param electionId - id of the election
    * @returns - yes if valid Voter, no if invalid
    */
   async validateElection(electionId) {

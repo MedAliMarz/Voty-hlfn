@@ -16,15 +16,15 @@ export class LoginComponent implements OnInit {
     private toastrService: NbToastrService) { }
   loginForm: FormGroup
   user = {
-    voterId: '',
+    email: '',
     password: '',
 
   }
   submitted = false;
   ngOnInit(): void {
     this.loginForm = new FormGroup({
-      'voterId': new FormControl('', [Validators.required]),
-      'password': new FormControl('', [])
+      'email': new FormControl('', [Validators.required]),
+      'password': new FormControl('', [Validators.required])
     })
   }
   login() {
@@ -32,14 +32,14 @@ export class LoginComponent implements OnInit {
     console.log("Logging ", this.loginForm.value);
     this.authService.login(this.loginForm.value).subscribe((res) => {
 
-      this.router.navigateByUrl('/voter');
+      //this.router.navigateByUrl('/voter');
       this.toastrService.show("You logged in successfully", "Login", {
         status: 'success'
 
       });
     }, (err) => {
       console.log("ERROR => " , err)
-      this.toastrService.show("User not found, verify the credentiels", "Incorrect credentiels", {
+      this.toastrService.show("User not found, verify the credentials", "Incorrect credentials", {
         status: 'danger'
       })
     })

@@ -12,8 +12,8 @@ const config = JSON.parse(configJSON);
 let connection_file = config.connection_file;
 // let userName = config.userName;
 let gatewayDiscovery = config.gatewayDiscovery;
-let appAdmin = config.appAdmin;
 let orgMSPID = config.orgMSPID;
+let appSuperAdmin = config.appSuperAdmin;
 
 // connect to the connection file
 const ccpPath = path.join(process.cwd(), connection_file);
@@ -37,30 +37,25 @@ exports.connectToNetwork = async function (credentials) {
     const wallet = new FileSystemWallet(walletPath);
     console.log(`Wallet path: ${walletPath}`);
 
-    //we need to retrieve userId and password
-    if(String(credentials).includes('@')) {
-      const id_and_password = String(credentials).split('@');
-      var userId = id_and_password[0];
-      var password = id_and_password[1];
+    //we need to retrieve email and password
+    if(String(credentials).includes('|')) {
+      const email_and_password = String(credentials).split('|');
+      var email = email_and_password[0];
+      var password = email_and_password[1];
     }
     else {
-      var userId = credentials;
+      var email = credentials;
       var password = "";
     }
 
-    
     //testing..
-    console.log('userId: ');
-    console.log(userId);
+    console.log(`email = ${email}`);
+    console.log(`hashed_password = ${password}`);
 
-    console.log('password: ');
-    console.log(password);
-
-    console.log('wallet: ');
+    //console.log('wallet: ');
     //console.log(util.inspect(wallet));
-    console.log('ccp: ');
+    //console.log('ccp: ');
     //console.log(util.inspect(ccp));
-    // userId = 'V123412';
 
     // generate credentials
     if(password != "") // a regular user that provided a password
@@ -68,8 +63,8 @@ exports.connectToNetwork = async function (credentials) {
       //set his credentials in the correct format
       var user_credentials = credentials;
     }
-    else if(userId == appAdmin){ // an admin
-      var user_credentials = userId;
+    else if(email == appSuperAdmin){ // super admin
+      var user_credentials = email;
     }
     else { // a regular user that did not provide a password, he'll be rejected
       var user_credentials = "";
@@ -77,10 +72,10 @@ exports.connectToNetwork = async function (credentials) {
 
     const userExists = await wallet.exists(user_credentials);
     if (!userExists) {
-      console.log('An identity for the user ' + userId + ' does not exist in the wallet');
+      console.log('An identity for the user ' + email + ' does not exist in the wallet');
       console.log('Run the registerUser.js application before retrying');
       let response = {};
-      response.error = 'An identity for the user ' + userId + ' does not exist in the wallet. Register ' + userId + ' first';
+      response.error = 'An identity for the user ' + email + ' does not exist in the wallet. Register ' + email + ' first';
       return response;
     }
 
@@ -153,19 +148,19 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
       console.log('notQuery');
       if (args) {
         console.log('notQuery, args');
-        console.log('$$$$$$$$$$$$$ args: ');
         console.log(args);
         console.log(func);
-        console.log(typeof args);
 
         args = JSON.parse(args[0]);
 
         //console.log(util.inspect(args));
         args = JSON.stringify(args);
+        console.log("**args** => " + args);
         //console.log(util.inspect(args));
 
         console.log('before submit');
         //console.log(util.inspect(networkObj));
+        //console.log("networkObj.contract => ", networkObj.contract);
         let response = await networkObj.contract.submitTransaction(func, args);
         console.log('after submit');
 
@@ -194,15 +189,9 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
   }
 };
 
-exports.registerVoter = async function (voterId, electionId, firstName, lastName, email, password, data) {
+exports.registerVoter = async function (admin_credentials, electionId, firstName, lastName, email, password, data) {
 
-  console.log('electionId');
-  console.log(electionId);
-
-  console.log('voterId ');
-  console.log(voterId);
-
-  if (!electionId || !voterId || !firstName || !lastName || !email || !password || !data) {
+  if (!admin_credentials || !electionId || !firstName || !lastName || !email || !password || !data) {
     let response = {};
     response.error = 'Error! You need to fill all fields before you can register!';
     return response;
@@ -217,57 +206,55 @@ exports.registerVoter = async function (voterId, electionId, firstName, lastName
     console.log(wallet);
 
     // Check to see if we've already enrolled the user.
-    const credentials = voterId + '@' + password;
-    const userExists = await wallet.exists(credentials);
+    let user_hashed_pw = crypto.pbkdf2Sync(password, "iC!T+1=*nHQ3", 5000, 20, 'sha1').toString('hex');
+    const user_credentials = email + '|' + user_hashed_pw;
+    const userExists = await wallet.exists(user_credentials);
     if (userExists) {
       let response = {};
-      console.log(`An identity for the user ${voterId} already exists in the wallet`);
-      response.error = `Error! An identity for the user ${voterId} already exists in the wallet. Please enter
+      console.log(`An identity for the user ${email} already exists in the wallet`);
+      response.error = `Error! An identity for the user ${email} already exists in the wallet. Please enter
         a different license number.`;
       return response;
     }
 
-    // Check to see if we've already enrolled the admin user.
-    const adminExists = await wallet.exists(appAdmin);
+    // Check to see if we've already enrolled the admin.
+    const adminExists = await wallet.exists(admin_credentials);
     if (!adminExists) {
-      console.log(`An identity for the admin user ${appAdmin} does not exist in the wallet`);
+      let admin_email = String(admin_credentials).split('|')[0];
+      console.log(`An identity for the admin user ${admin_email} does not exist in the wallet`);
       console.log('Run the enrollAdmin.js application before retrying');
       let response = {};
-      response.error = `An identity for the admin user ${appAdmin} does not exist in the wallet. 
+      response.error = `An identity for the admin user ${admin_email} does not exist in the wallet. 
         Run the enrollAdmin.js application before retrying`;
       return response;
     }
 
     // Create a new gateway for connecting to our peer node.
     const gateway = new Gateway();
-    await gateway.connect(ccp, { wallet, identity: appAdmin, discovery: gatewayDiscovery });
+    await gateway.connect(ccp, { wallet, identity: appSuperAdmin, discovery: gatewayDiscovery });
+    console.log("Inside Register Voter, connected to the gateway!");
 
     // Get the CA client object from the gateway for interacting with the CA.
     const ca = gateway.getClient().getCertificateAuthority();
-    const adminIdentity = gateway.getCurrentIdentity();
-    console.log(`AdminIdentity: ${adminIdentity}`);
-
-    //hash the user's password, so far no salt is supported since we can't store each user's salt in the wallet
-    //const hashed_password = crypto.pbkdf2Sync(password, '', 10000, 0, 'sha256').toString('hex');
-    var hashed_password = crypto.pbkdf2Sync(password, "iC!T+1=*nHQ3", 5000, 20, 'sha1').toString('hex');
+    const adminIdentity = gateway.getCurrentIdentity(); // HERE, adminIdentity == appSuperAdmin identity
+    console.log(`AdminIdentity connected to the gateway: ${adminIdentity}`);
 
     //testing password and hash
     console.log("Password: " + password);
-    console.log("Hashed password: " + hashed_password);
+    console.log("Hashed password: " + user_hashed_pw);
 
-    //we'll store each user's credentials as the key value in the wallet
-    const user_credentials = voterId + '@' + hashed_password;
-
-    // Register the user, enroll the user, and import the new identity into the wallet.
-    const secret = await ca.register({ affiliation: '', enrollmentID: voterId, role: 'client' }, adminIdentity);
+    // Register the user
+    const secret = await ca.register({ affiliation: '', enrollmentID: email, role: 'voter' }, adminIdentity);
     console.log(`###SECRET### =>  ${secret}`);
-    const enrollment = await ca.enroll({ enrollmentID: voterId, enrollmentSecret: secret });
+    // Enroll user
+    const enrollment = await ca.enroll({ enrollmentID: email, enrollmentSecret: secret });
     console.log(`###ENROLLMENT### =>  ${enrollment}`);
+    // Create User Identity
     const userIdentity = await X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
     console.log(`###USER_IDENTITY### =>  ${userIdentity}`);
-
+    // Import user credentials & identity to wallet
     await wallet.import(user_credentials, userIdentity);
-    console.log(`Successfully registered voter ${firstName} ${lastName}. Use voterId ${voterId} to login above.`);
+    console.log(`Successfully registered voter ${firstName} ${lastName}. Use your email: ${email} to login above.`);
     
     // send the password to the user/voter through email
     // 1 - configuration of the transport object, here we're using mailtrap to test with fake emails
@@ -285,7 +272,7 @@ exports.registerVoter = async function (voterId, electionId, firstName, lastName
       from: 'admin@voty.com', // Sender address
       to: email,         // List of recipients
       subject: 'Voty - Election Credentials', // Subject line
-      html: `<h1>Welcome to VOTY!</h1><p>Hey <b>${firstName} ${lastName}</b> <b>ID</b>: ${voterId}<br><br><p>Here's your <b>password</b>: ${password} <br>Keep it somewhere safe!` // HTML message
+      html: `<h1>Welcome to VOTY!</h1><p>Hey <b>${firstName} ${lastName}</b><br><p>Here's your <b>password</b>: ${password} <br>Keep it somewhere safe!` // HTML message
     };
 
     // 3 - Send the email
@@ -297,10 +284,109 @@ exports.registerVoter = async function (voterId, electionId, firstName, lastName
       }
     });
 
-    let response = `Successfully registered voter ${firstName} ${lastName}. Use voterId ${voterId} to login above.`;
+    let response = `Successfully registered voter ${firstName} ${lastName}. Use your email: ${email} to login above.`;
     return response;
   } catch (error) {
-    console.error(`Failed to register user + ${voterId} + : ${error}`);
+    console.error(`Failed to register user + ${email} + : ${error}`);
+    let response = {};
+    response.error = error;
+    return response;
+  }
+};
+
+
+exports.registerAdmin = async function (firstName, lastName, email, password) {
+
+  if (!firstName || !lastName || !email || !password) {
+    let response = {};
+    response.error = 'Error! You need to fill all fields before you can register!';
+    return response;
+  }
+
+  try {
+
+    // Create a new file system based wallet for managing identities.
+    const walletPath = path.join(process.cwd(), 'wallet');
+    const wallet = new FileSystemWallet(walletPath);
+    console.log(`Wallet path: ${walletPath}`);
+    console.log(wallet);
+
+    // Set up our admin's credentials in the correct format stored in the wallet
+    var admin_hashed_pw = crypto.pbkdf2Sync(password, "iC!T+1=*nHQ3", 5000, 20, 'sha1').toString('hex');
+    const admin_credentials = email + '|' + admin_hashed_pw;
+
+    // Check to see if we've already enrolled the admin.
+    const adminExists = await wallet.exists(admin_credentials);
+    if (adminExists) {
+      let response = {};
+      console.log(`An identity for the user ${email} already exists in the wallet`);
+      response.error = `Error! An identity for the user ${email} already exists in the wallet. Please enter
+        a different license number.`;
+      return response;
+    }
+
+    // Check to see if we've already enrolled the super admin.
+    const superAdminExists = await wallet.exists(appSuperAdmin);
+    if (!superAdminExists) {
+      console.log(`An identity for the super admin ${appSuperAdmin} does not exist in the wallet`);
+      console.log('Run the enrollAdmin.js application before retrying');
+      let response = {};
+      response.error = `An identity for the super admin ${appSuperAdmin} does not exist in the wallet. 
+        Run the enrollSuperAdmin.js application before retrying`;
+      return response;
+    }
+
+    // Create a new gateway for connecting to our peer node.
+    const gateway = new Gateway();
+    await gateway.connect(ccp, { wallet, identity: appSuperAdmin, discovery: gatewayDiscovery });
+
+    // Get the CA client object from the gateway to interact with the CA.
+    const ca = gateway.getClient().getCertificateAuthority();
+    const currentIdentity = gateway.getCurrentIdentity(); // HERE, currentIdentity == appSuperAdmin identity
+    console.log(`Current identity connected to the gateway: ${currentIdentity}`);
+
+    // Register the admin
+    const secret = await ca.register({ affiliation: '', enrollmentID: email, role: 'admin' }, currentIdentity);
+    // Enroll the admin
+    const enrollment = await ca.enroll({ enrollmentID: email, enrollmentSecret: secret });
+    // Create his identity
+    const identity = await X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
+    // import him to the wallet
+    await wallet.import(admin_credentials, identity);
+    console.log(`Successfully registered admin ${firstName} ${lastName}. Use your email: ${email} to login above.`);
+    
+    // send the password to the admin through email
+    // 1 - configuration of the transport object, here we're using mailtrap to test with fake emails
+    let transport = nodemailer.createTransport({
+      host: 'smtp.mailtrap.io',
+      port: 2525,
+      auth: {
+         user: 'fed21155c52ed5',
+         pass: '29f135d029a046'
+      }
+    });
+
+    // 2 - Now we'll set up our message
+    const message = {
+      from: 'admin@voty.com', // Sender address
+      to: email,         // List of recipients
+      subject: 'Voty - Election Credentials', // Subject line
+      html: `<h1>Welcome to VOTY!</h1><p>Hey <b>${firstName} ${lastName}</b><br><p>Here's your <b>password</b>: ${password} <br>Keep it somewhere safe!` // HTML message
+    };
+
+    // 3 - Send the email
+    transport.sendMail(message, function(err, info) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(info);
+      }
+    });
+
+    let response = `Successfully registered admin ${firstName} ${lastName}. Use your email: ${email} to login above.`;
+    return response;
+  } catch (error) {
+    console.error(`Failed to register admin + ${email} + : ${error}`);
     let response = {};
     response.error = error;
     return response;

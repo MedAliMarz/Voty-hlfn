@@ -24,7 +24,7 @@ export class VotingComponent implements OnInit {
   loggedUser = JSON.parse(localStorage.getItem('loggedUser'));
   ngOnInit(): void {
     this.voteForm = new FormGroup({
-      candidateId: new FormControl('',[Validators.required]),
+      candidateEmail: new FormControl('',[Validators.required]),
 
     })
     this.isSpinner = true
@@ -46,8 +46,8 @@ export class VotingComponent implements OnInit {
   initVote(){
     this.isSpinner = false;
     let voteData ={
-      voterId:this.loggedUser.voterId,
-      candidateId:this.voteForm.value.candidateId,
+      voter_email:this.loggedUser.email,
+      candidate_email:this.voteForm.value.candidateEmail,
       electionId:this.loggedUser.electionId
     }
     console.log('voteData', voteData)

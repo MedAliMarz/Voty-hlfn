@@ -32,6 +32,7 @@ export class JwtInterceptor implements HttpInterceptor {
             localStorage.removeItem('jwt');
             localStorage.removeItem('loggedUser');
             localStorage.removeItem('role');
+            localStorage.removeItem('email');
             this.router.navigateByUrl(`/login`);
         }
         console.error(errorMsg);

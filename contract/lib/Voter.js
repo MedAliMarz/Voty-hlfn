@@ -9,14 +9,11 @@ class Voter {
    * voter is . 
    *  
    * @param items - an array of choices 
-   * @param election - what election you are making ballots for 
-   * @param voterId - the unique Id which corresponds to a registered voter
-   * @returns - registrar object
+   * @param electionId - what election you are joining
+   * @returns - voter object
    */
-  constructor( electionId, firstName, lastName, email, data) {
+  constructor(electionId, firstName, lastName, email, data) {
 
-
-      this.voterId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);;
       this.electionId = electionId;
       this.firstName = firstName;
       this.lastName = lastName;
@@ -42,12 +39,12 @@ class Voter {
    *
    * check for valid ID card - stateID or drivers License.
    *  
-   * @param voterId - an array of choices 
+   * @param email - voter's email 
    * @returns - yes if valid Voter, no if invalid
    */
-  async validateVoter(voterId) {
-    //VoterId error checking here, i.e. check if valid drivers License, or state ID
-    if (voterId) {
+  async validateVoter(email) {
+    //email error checking here, i.e. check if valid drivers License, or state ID
+    if (email) {
       return true;
     } else {
       return false;

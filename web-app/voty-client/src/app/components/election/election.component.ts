@@ -100,8 +100,8 @@ export class ElectionComponent implements OnInit {
   loadVoters(){
     this.electionService.getElectionVoters(this.election.electionId)
       .subscribe(voters=>{
-        this.electionVoters = voters.map(voter=>voter['Record'])
-        console.log('this.electionVoters', this.electionVoters)
+        this.electionVoters = voters;
+        console.log('this.electionVoters', this.electionVoters);
         this.toastService.show('Voters loaded successfully','Election voters',{status:'success'})
 
         

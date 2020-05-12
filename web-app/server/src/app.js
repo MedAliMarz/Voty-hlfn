@@ -23,7 +23,7 @@ const configJSON = fs.readFileSync(configPath, 'utf8');
 const config = JSON.parse(configJSON);
 
 //use this identity to query
-const appAdmin = config.appAdmin;
+const appSuperAdmin = config.appSuperAdmin;
 
 // get crypto tools for password hashing
 const crypto = require('crypto');
@@ -90,7 +90,7 @@ app.get('/election/:id', async (req, res) => {
   }else{
 
    try{
-    let networkObj = await network.connectToNetwork(appAdmin);
+    let networkObj = await network.connectToNetwork(appSuperAdmin);
     let check = await network.invoke(networkObj, true, 'myAssetExists', req.params.id);
     check = JSON.parse(check.toString())
       if(check){ // all good here!
@@ -112,7 +112,7 @@ app.get('/election/:id/voters', async (req, res) => {
   }else{
 
    try{
-    let networkObj = await network.connectToNetwork(appAdmin);
+    let networkObj = await network.connectToNetwork(appSuperAdmin);
     let check = await network.invoke(networkObj, true, 'myAssetExists', req.params.id);
     check = JSON.parse(check.toString())
     if(check){ // all good here!
@@ -133,7 +133,7 @@ app.get('/election', async (req, res) => {
   console.log(req.params);
   console.log("get elections")
   try{
-    let networkObj = await network.connectToNetwork(appAdmin);
+    let networkObj = await network.connectToNetwork(appSuperAdmin);
     let response = await network.invoke(networkObj, true, 'queryByObjectType', 'election');
     let parsedResponse = await JSON.parse(response);
     
@@ -149,21 +149,55 @@ app.get('/election', async (req, res) => {
 app.post('/election' , authenticateJWT, async (req, res) => {
 
 
-  let {name,description,organisation,candidacy_startDate,candidacy_endDate,voting_startDate,voting_endDate} = req.body
-  if(!req.body || !name || !description || !organisation || !candidacy_startDate || !candidacy_endDate || !voting_startDate || !voting_endDate){
+  let {admin_email,name,description,organisation,candidacy_startDate,candidacy_endDate,voting_startDate,voting_endDate} = req.body;
+  if(!req.body || !admin_email || !name || !description || !organisation || !candidacy_startDate || !candidacy_endDate || !voting_startDate || !voting_endDate){
     return res.status(400).json({error:'You must supply all needed attributs'});
   }else{
     
     if (!moment(candidacy_startDate).isValid() || !moment(candidacy_endDate).isValid() || !moment(voting_startDate).isValid() || !moment(voting_endDate).isValid()){
       return res.status(400).json({error:'One of the supplied dates is invalid'});
     }else{
-      try{
+      try {
+        // connect to the network
+        var networkObj = await network.connectToNetwork(appSuperAdmin);
+        // check if the admin that requested the creation exists
+        let check = await network.invoke(networkObj, true, 'myAssetExists', admin_email);
+        check = await JSON.parse(check.toString());
+        console.log("CHECK => ", check);
 
-      let networkObj = await network.connectToNetwork(appAdmin);
-      let response = await network.invoke(networkObj, false, 'createElection', [JSON.stringify({name,description,organisation,candidacy_startDate,candidacy_endDate,voting_startDate,voting_endDate})]);
-      let parsedResponse = await JSON.parse(response);
-      return res.status(200).send(parsedResponse);
-      }catch(e ){
+        if(check){ // admin really exists
+          let response_read_admin = await network.invoke(networkObj, true, 'readMyAsset', admin_email);
+          // then, we get him in order to update him
+          var requestingAdmin = await JSON.parse(response_read_admin);
+          console.log("Requesting_Admin : ", requestingAdmin);
+          // if we're here, then the admin exists, let's proceed with the election creation
+          // reconnect to the network, otherwise we'll get "channel closed error"
+          // since in our invoke function we're disconnecting from the network at the end .. :(
+          networkObj = await network.connectToNetwork(appSuperAdmin);
+          let response = await network.invoke(networkObj, false, 'createElection', [JSON.stringify({name,description,organisation,candidacy_startDate,candidacy_endDate,voting_startDate,voting_endDate})]);
+          let new_election = await JSON.parse(response);
+          console.log("###After Election Creation###");
+          //update the admin by adding the new electionId to his elections array
+          requestingAdmin['elections'].push(new_election.electionId);
+          //reconnect to the network then apply the changes
+          networkObj = await network.connectToNetwork(appSuperAdmin);
+          let response_admin = await network.invoke(networkObj, false, 'updateAdmin', [JSON.stringify(requestingAdmin)]);
+          let updated_admin = await JSON.parse(response_admin);
+          console.log("Updated Admin => " ,updated_admin);
+          return res.status(200).send(new_election);
+        }else{
+          return res.status(404).json({error:'Admin email is incorrect, please verify it and try again'});
+        } 
+      
+      /*
+      //update the admin by adding the new electionId to his elections array
+      requestingAdmin[elections].push(new_election.electionId);
+      //apply the change in our network
+      let response_admin = await network.invoke(networkObj, false, 'updateAdmin', [JSON.stringify(requestingAdmin)]);
+      let updated_admin = await JSON.parse(response_admin);
+      console.log("Updated Admin => " + updated_admin);
+      */
+      }catch(e){
         return res.status(500).json({error:'Problem in transaction execution'});
       }
     }
@@ -185,7 +219,7 @@ app.put('/election/:id' , authenticateJWT, async (req, res) => {
         if(organisation) {updatedElection['organisation']=organisation}
         console.dir('updating election '+updatedElection)
         try{
-        let networkObj = await network.connectToNetwork(appAdmin);
+        let networkObj = await network.connectToNetwork(appSuperAdmin);
         let response = await network.invoke(networkObj, false, 'updateElection', [JSON.stringify(updatedElection)]);
         let parsedResponse = await JSON.parse(response);
         return res.status(200).send(parsedResponse);
@@ -196,21 +230,21 @@ app.put('/election/:id' , authenticateJWT, async (req, res) => {
   }
 });
 
-// get voter by id
+// get voter by id (email is our id)
 app.get('/voter/:id', authenticateJWT, async (req, res) => {
   if(!req.params.id){
-    return res.status(400).json({error:'Bad request , voter id missing'});
+    return res.status(400).json({error:'Bad request , voter email missing'});
   }else{
 
     try{
-      let networkObj = await network.connectToNetwork(appAdmin);
+      let networkObj = await network.connectToNetwork(appSuperAdmin);
       let check = await network.invoke(networkObj, true, 'myAssetExists', req.params.id);
       check = JSON.parse(check.toString());
       if(check){ // all good
         let response = await network.invoke(networkObj, true, 'readMyAsset', req.params.id);
         return res.status(200).json(JSON.parse(response));
       }else{
-        return res.status(404).json({error:'Requested userId not found'});
+        return res.status(404).json({error:'Requested email not found'});
       }
     }catch(e){
       return res.status(500).json(JSON.parse({error:'Problem in transaction'}));
@@ -222,7 +256,7 @@ app.get('/voter/:id', authenticateJWT, async (req, res) => {
 app.get('/voter', authenticateJWT, async (req, res) => {
   console.log("get voters")
   try{
-  let networkObj = await network.connectToNetwork(appAdmin);
+  let networkObj = await network.connectToNetwork(appSuperAdmin);
   let response = await network.invoke(networkObj, true, 'queryByObjectType', 'voter');
   let parsedResponse = await JSON.parse(response);
   let modifiedResponse = JSON.parse(parsedResponse).map(voter=> voter['Record'])
@@ -233,23 +267,73 @@ app.get('/voter', authenticateJWT, async (req, res) => {
   }
 });
 
-// create a voter, no auth required
-app.post('/voter', async (req, res) => {
-  let {electionId,firstName,lastName,email,data} = req.body;
-  if(!req.body  || !electionId || !firstName || !lastName || !email || !data ){
+// create a voter, only admin will call this endpoint while adding voters to his election
+app.post('/voter', authenticateJWT, async (req, res) => {
+  let {admin_email,electionId,firstName,lastName,email,data} = req.body;
+  if(!req.body  || !admin_email || !electionId || !firstName || !lastName || !email || !data ){
     return res.status(400).json({error:'You must supply all needed attributs'});
   }else{
       try{
-        let networkObj = await network.connectToNetwork(appAdmin);
-        
-        
+        // connect to the network using super admin
+        let networkObj = await network.connectToNetwork(appSuperAdmin);
+        // check if the admin that requested the creation exists
+        let check = await network.invoke(networkObj, true, 'myAssetExists', admin_email);
+        check = await JSON.parse(check.toString());
 
-        // first we add the voter then enrollhim
+        if(check) { // admin exists in the worldstate
+          // reconnect to the network
+          networkObj = await network.connectToNetwork(appSuperAdmin);
+          // create the voter
+          let response = await network.invoke(networkObj, false, 'createVoter', [JSON.stringify({electionId,firstName,lastName,email,data})] );
+          let newVoter = await JSON.parse(response);
+          if(newVoter.error){
+              return res.status(500).json(newVoter);
+          } 
+          
+          else {
+  
+            // Here we need to create the user's password, then send it to his email
+            let password = generator.generate({
+              length: 10,
+              numbers: true
+            });
+  
+            //Second create the identity for the voter and add to wallet, super admin will register him
+            let resp = await network.registerVoter(appSuperAdmin, newVoter.electionId, newVoter.firstName, newVoter.lastName, newVoter.email, password, newVoter.data);
+            console.log('response from registerVoter: ');
+            console.log(resp);
+            if (resp.error) {
+              return res.status(404).json(resp.error);
+            }  
+          
+            return res.status(200).json(newVoter);
+          }
+        }
+        else {
+          return res.status(404).json({error:'Admin email is incorrect, please verify it and try again'});
+        }
+        
+      }catch(e){
+        return res.status(500).json({error:'Problem in transaction execution'});
+      }
+  }
+});
+
+// create an admin, only super_admin will call this endpoint
+app.post('/admin', async (req, res) => {
+  let {firstName, lastName, email} = req.body;
+  if(!req.body || !firstName || !lastName || !email){
+    return res.status(400).json({error:'You must supply all needed attributs'});
+  }else{
+      try{
+        let networkObj = await network.connectToNetwork(appSuperAdmin);
+        
+        // first we create the admin then enrollhim
         // it may be the wrong way but we need the random generated id to use it for registration
-        let response = await network.invoke(networkObj, false, 'createVoter', [JSON.stringify({electionId,firstName,lastName,email,data})] );
-        let newVoter = await JSON.parse(response);
-        if(newVoter.error){
-            return res.status(500).json(newVoter);
+        let response = await network.invoke(networkObj, false, 'createAdmin', [JSON.stringify({firstName,lastName,email})] );
+        let newAdmin = await JSON.parse(response);
+        if(newAdmin.error){
+            return res.status(500).json(newAdmin);
         } 
         
         else {
@@ -260,32 +344,70 @@ app.post('/voter', async (req, res) => {
             numbers: true
           });
 
-          //Second create the identity for the voter and add to wallet, normally admin should register him, we're just testing here..
-          let resp = await network.registerVoter( newVoter.voterId, newVoter.electionId, newVoter.firstName, newVoter.lastName, newVoter.email, password, newVoter.data);
-          console.log('response from registerVoter: ');
+          //Second create the identity for the Admin and add to wallet, normally super admin should register him, we're just testing here..
+          let resp = await network.registerAdmin( newAdmin.firstName, newAdmin.lastName, newAdmin.email, password);
+          console.log('response from registerAdmin: ');
           console.log(resp);
           if (resp.error) {
             return res.status(404).json(resp.error);
           }  
         
-          return res.status(200).json(newVoter);
+          return res.status(200).json(newAdmin);
         }
       }catch(e){
         return res.status(500).json({error:'Problem in transaction execution'});
       }
   }
 });
+
+//get all admins
+app.get('/admin', authenticateJWT, async (req, res) => {
+  console.log("get admins")
+  try{
+  let networkObj = await network.connectToNetwork(appSuperAdmin);
+  let response = await network.invoke(networkObj, true, 'queryByObjectType', 'admin');
+  let parsedResponse = await JSON.parse(response);
+  let modifiedResponse = JSON.parse(parsedResponse).map(admin=> admin['Record'])
+
+  return res.status(200).json(modifiedResponse);
+  }catch(e){
+    return res.status(500).json({error:'Problem in transaction'})
+  }
+});
+
+
+// get admin by id (email is our id)
+app.get('/admin/:id', authenticateJWT, async (req, res) => {
+  if(!req.params.id){
+    return res.status(400).json({error:'Bad request , admin email missing'});
+  }else{
+
+    try{
+      let networkObj = await network.connectToNetwork(appSuperAdmin);
+      let check = await network.invoke(networkObj, true, 'myAssetExists', req.params.id);
+      check = JSON.parse(check.toString());
+      if(check){ // all good
+        let response = await network.invoke(networkObj, true, 'readMyAsset', req.params.id);
+        return res.status(200).json(JSON.parse(response));
+      }else{
+        return res.status(404).json({error:'Requested email not found'});
+      }
+    }catch(e){
+      return res.status(500).json(JSON.parse({error:'Problem in transaction'}));
+    }
+  }
+});
         
 
 //login user
 app.post('/login', async (req, res) => {
-  let {voterId,password} = req.body;
-  if(!req.body || !voterId || !password){
+  let {email,password} = req.body;
+  if(!req.body || !email || !password){
     return res.status(400).json({error:'You must supply all needed attributs'});
   }
   else {
     var hash = crypto.pbkdf2Sync(password, "iC!T+1=*nHQ3", 5000, 20, 'sha1').toString('hex');
-    var credentials = voterId + '@' + hash;
+    var credentials = email + '|' + hash;
     let networkObj = await network.connectToNetwork(credentials);
     console.log('networkobj: ');
     console.log(util.inspect(networkObj));
@@ -295,7 +417,7 @@ app.post('/login', async (req, res) => {
     }
   
     try {
-      let invokeResponse = await network.invoke(networkObj, true, 'readMyAsset', voterId);
+      let invokeResponse = await network.invoke(networkObj, true, 'readMyAsset', email);
       let parsedResponse = await JSON.parse(invokeResponse);
       if(parsedResponse.error){
         return res.status(500).json(parsedResponse);
@@ -305,7 +427,7 @@ app.post('/login', async (req, res) => {
       let role = parsedResponse["type"];
       // Generate an access token
       const accessToken = jwt.sign(
-        { username: voterId,  role: role }, 
+        { username: email,  role: role }, 
           accessTokenSecret, 
         { expiresIn: '40m' }
         );
@@ -345,7 +467,7 @@ app.get("/candidate/:id", async (req, res)=> {
   }else{
 
    try{
-    let networkObj = await network.connectToNetwork(appAdmin);
+    let networkObj = await network.connectToNetwork(appSuperAdmin);
     let check = await network.invoke(networkObj, true, 'myAssetExists', req.params.id);
     check = JSON.parse(check.toString())
     if(check){
@@ -355,7 +477,6 @@ app.get("/candidate/:id", async (req, res)=> {
         return res.status(404).json({error:`Entity with id ${req.params.id} is not a candidate`});
       }
       return res.status(200).json({
-        voterId:answer.voterId,
         electionId:answer.electionId,
         firstName:answer.firstName,
         lastName:answer.lastName,
@@ -375,7 +496,7 @@ app.get("/candidate/:id", async (req, res)=> {
 app.get("/candidate", authenticateJWT, async (req, res)=> {
   // TEMP: making adjustment here before return
   try{
-    let networkObj = await network.connectToNetwork(appAdmin);
+    let networkObj = await network.connectToNetwork(appSuperAdmin);
     let response = await network.invoke(networkObj, true, 'queryByObjectType', 'voter');
     let parsedResponse = await JSON.parse(response);
     let modifiedResponse = JSON.parse(parsedResponse).map(voter=> voter['Record']).filter(v=>v.isCandidate);
@@ -388,15 +509,15 @@ app.get("/candidate", authenticateJWT, async (req, res)=> {
 
 // become a candidate, needs auth
 app.post("/candidate", authenticateJWT, async (req, res) => {
-  let {voterId,electionId} = req.body
-  if(!req.body || !voterId || !electionId ){
+  let {email,electionId} = req.body
+  if(!req.body || !email || !electionId ){
     return res.status(400).json({error:'You must supply all needed attributs'});
   }else{
     
     
       try{
-      let networkObj = await network.connectToNetwork(appAdmin);
-      let response = await network.invoke(networkObj, false, 'candidature', [JSON.stringify({voterId,electionId})]);
+      let networkObj = await network.connectToNetwork(appSuperAdmin);
+      let response = await network.invoke(networkObj, false, 'candidature', [JSON.stringify({email,electionId})]);
       let parsedResponse = await JSON.parse(response);
       if(parsedResponse.error){
         return res.status(500).json(parsedResponse);
@@ -413,15 +534,15 @@ app.post("/candidate", authenticateJWT, async (req, res) => {
 
 // update candidacy
 app.put("/toggleCandidate", authenticateJWT, async (req, res) => {
-  let {voterId,electionId} = req.body;
-  if(!req.body || !voterId || !electionId ){
+  let {email,electionId} = req.body;
+  if(!req.body || !email || !electionId ){
     return res.status(400).json({error:'You must supply all needed attributs'});
   }else{
     
     
       try{
-      let networkObj = await network.connectToNetwork(appAdmin);
-      let response = await network.invoke(networkObj, false, 'toggleCandidacy', [JSON.stringify({voterId,electionId})]);
+      let networkObj = await network.connectToNetwork(appSuperAdmin);
+      let response = await network.invoke(networkObj, false, 'toggleCandidacy', [JSON.stringify({email,electionId})]);
       let parsedResponse = await JSON.parse(response);
       if(parsedResponse.error){
         return res.status(500).json(parsedResponse);
@@ -438,15 +559,15 @@ app.put("/toggleCandidate", authenticateJWT, async (req, res) => {
 
 // cast a vote
 app.post('/vote', authenticateJWT, async (req, res)=>{
-  let {voterId,electionId,candidateId} = req.body;
-  if(!req.body || !voterId || !electionId || !candidateId  ){
+  let {voter_email,electionId,candidate_email} = req.body;
+  if(!req.body || !voter_email || !electionId || !candidate_email  ){
     return res.status(400).json({error:'You must supply all needed attributs'});
   }else{
     
     
       try{
-      let networkObj = await network.connectToNetwork(appAdmin);
-      let response = await network.invoke(networkObj, false, 'vote', [JSON.stringify({voterId,electionId,candidateId})]);
+      let networkObj = await network.connectToNetwork(appSuperAdmin);
+      let response = await network.invoke(networkObj, false, 'vote', [JSON.stringify({voter_email,electionId,candidate_email})]);
       let parsedResponse = await JSON.parse(response);
       if(parsedResponse.error){
         return res.status(500).json(parsedResponse);
@@ -463,7 +584,7 @@ app.post('/vote', authenticateJWT, async (req, res)=>{
 //get all assets in world state
 app.get('/queryAll', authenticateJWT, async (req, res) => {
 
-  let networkObj = await network.connectToNetwork(appAdmin);
+  let networkObj = await network.connectToNetwork(appSuperAdmin);
   let response = await network.invoke(networkObj, true, 'queryAll', '');
   let parsedResponse = await JSON.parse(response);
   res.send(parsedResponse);
@@ -472,7 +593,7 @@ app.get('/queryAll', authenticateJWT, async (req, res) => {
 
 app.get('/getCurrentStanding', authenticateJWT, async (req, res) => {
 
-  let networkObj = await network.connectToNetwork(appAdmin);
+  let networkObj = await network.connectToNetwork(appSuperAdmin);
   let response = await network.invoke(networkObj, true, 'queryByObjectType', 'votableItem');
   let parsedResponse = await JSON.parse(response);
   console.log(parsedResponse);
@@ -504,7 +625,7 @@ app.post('/castBallot', async (req, res) => {
 //query for certain objects within the world state
 app.post('/queryWithQueryString', authenticateJWT, async (req, res) => {
 
-  let networkObj = await network.connectToNetwork(appAdmin);
+  let networkObj = await network.connectToNetwork(appSuperAdmin);
   let response = await network.invoke(networkObj, true, 'queryByObjectType', req.body.selected);
   let parsedResponse = await JSON.parse(response);
   res.send(parsedResponse);
@@ -593,7 +714,7 @@ app.post('/queryByKey', authenticateJWT, async (req, res) => {
   console.log('req.body: ');
   console.log(req.body);
 
-  let networkObj = await network.connectToNetwork(appAdmin);
+  let networkObj = await network.connectToNetwork(appSuperAdmin);
   console.log('after network OBj');
   let response = await network.invoke(networkObj, true, 'readMyAsset', req.body.key);
   response = JSON.parse(response);
