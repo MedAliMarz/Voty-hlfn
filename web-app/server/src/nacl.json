@@ -1,0 +1,127 @@
+[
+    {
+      "group": "admin",
+      "permissions": [
+        {
+          "resource": "election/:id",
+          "methods": ["GET", "PUT"],
+          "action": "allow"
+        },
+	      {
+          "resource": "election/:id/voters",
+          "methods": ["GET"],
+          "action": "allow"
+        },
+      	{
+	        "resource": "election",
+          "methods": ["POST", "GET"],
+          "action": "allow"
+	      },
+	      {
+	        "resource": "voter/:id",
+          "methods": ["GET"],
+          "action": "deny"
+	      },
+	      {
+	        "resource": "voter",
+          "methods": ["POST"],
+          "action": "allow"
+	      },
+	      {
+	        "resource": "admin",
+          "methods": ["POST", "GET"],
+          "action": "deny"
+	      },
+	      {
+	        "resource": "admin/:id",
+          "methods": ["GET"],
+          "action": "allow"
+	      },
+	      {
+	        "resource": "candidate",
+          "methods": ["GET"],
+          "action": "allow"
+	      },
+	      {
+	        "resource": "candidate",
+          "methods": ["POST"],
+          "action": "deny"
+	      },
+	      {
+	        "resource": "candidate/:id",
+          "methods": ["GET"],
+          "action": "deny"
+	      },
+	      {
+	        "resource": "toggleCandidate",
+          "methods": ["PUT"],
+          "action": "deny"
+	      },
+	      {
+	        "resource": "vote",
+          "methods": ["POST"],
+          "action": "deny"
+	      },
+	      {
+	        "resource": "getCurrentStanding",
+          "methods": ["GET"],
+          "action": "allow"
+	      }
+      ]
+    },
+    {
+      "group": "voter",
+      "permissions": [
+        {
+          "resource": "election",
+          "methods": "*",
+          "action": "deny"
+        },
+	      {
+          "resource": "election/*",
+          "methods": "*",
+          "action": "deny"
+        },
+	      {
+          "resource": "voter/:id",
+          "methods": ["GET"],
+          "action": "allow"
+        },
+	      {
+          "resource": "voter",
+          "methods": ["POST"],
+          "action": "deny"
+        },
+	      {
+          "resource": "admin*",
+          "methods": "*",
+          "action": "deny"
+        },
+	      {
+          "resource": "candidate/:id",
+          "methods": ["GET"],
+          "action": "allow"
+        },
+	      {
+          "resource": "candidate",
+          "methods": ["GET", "POST"],
+          "action": "allow"
+        },
+	      {
+          "resource": "toggleCandidate",
+          "methods": ["PUT"],
+          "action": "allow"
+        },
+	      {
+          "resource": "vote",
+          "methods": ["POST"],
+          "action": "allow"
+        },
+	      {
+          "resource": "getCurrentStanding",
+          "methods": ["GET"],
+          "action": "allow"
+        }
+      ]
+    }
+]

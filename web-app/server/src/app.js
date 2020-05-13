@@ -31,6 +31,30 @@ const crypto = require('crypto');
 // token-based authentication and autorization ( json web tokens )
 const jwt = require('jsonwebtoken');
 
+// express-acl
+const acl = require('express-acl');
+
+// unless
+var unless = require('express-unless');
+
+// configure the acl
+let aclConfigObject = {
+  baseUrl: '/',
+  //defaultRole: 'voter',
+  //decodedObjectName: 'user',
+  // will search for the role in req.user.role
+  roleSearchPath: 'user.role',
+  denyCallback: (res) => {
+    return res.status(403).json({
+      status: 'Access Denied',
+      success: false,
+      message: 'You are not authorized to access this resource'
+    });
+  }
+};
+
+acl.config(aclConfigObject);
+
 const accessTokenSecret = 'ptROYMOE3Hb$LWw&4u+[rp14l&OSf#';
 
 // we'll put here all the invalidated tokens, we'll need a way to clean up the old tokens
@@ -76,6 +100,8 @@ const authenticateJWT = (req, res, next) => {
           }
 
           req.user = user;
+          console.log("req.user ==> ",user);
+          console.log("req.user.role ==> ",req.user.role);
           next();
       });
   } else {
@@ -83,7 +109,20 @@ const authenticateJWT = (req, res, next) => {
   }
 };
 
-app.get('/election/:id', async (req, res) => {
+authenticateJWT.unless = unless;
+ 
+// integrate the jwt authentication function
+app.use(authenticateJWT.unless({
+  path: [
+    '/login',
+    { url: '/', methods: ['GET', 'PUT']  },
+    { url: '/admin', methods: ['POST']  } // at the end we'll remove this line
+  ]
+}));
+// integrate the acl to our app, we'll skip the auth routes
+app.use(acl.authorize.unless({ path: ['/login', '/logout'] }));
+
+app.get('/election/:id', /*authenticateJWT,*/ async (req, res) => {
   // Return specific election
   if(!req.params.id){
     return res.status(400).json({error:'Bad request , election id missing'});
@@ -146,7 +185,7 @@ app.get('/election', async (req, res) => {
 
 
 // create an election
-app.post('/election' , authenticateJWT, async (req, res) => {
+app.post('/election' , async (req, res) => {
 
 
   let {admin_email,name,description,organisation,candidacy_startDate,candidacy_endDate,voting_startDate,voting_endDate} = req.body;
@@ -188,15 +227,6 @@ app.post('/election' , authenticateJWT, async (req, res) => {
         }else{
           return res.status(404).json({error:'Admin email is incorrect, please verify it and try again'});
         } 
-      
-      /*
-      //update the admin by adding the new electionId to his elections array
-      requestingAdmin[elections].push(new_election.electionId);
-      //apply the change in our network
-      let response_admin = await network.invoke(networkObj, false, 'updateAdmin', [JSON.stringify(requestingAdmin)]);
-      let updated_admin = await JSON.parse(response_admin);
-      console.log("Updated Admin => " + updated_admin);
-      */
       }catch(e){
         return res.status(500).json({error:'Problem in transaction execution'});
       }
@@ -205,7 +235,7 @@ app.post('/election' , authenticateJWT, async (req, res) => {
   
 });
 
-app.put('/election/:id' , authenticateJWT, async (req, res) => {
+app.put('/election/:id' , async (req, res) => {
 
   if(!req.params.id){
     return res.status(400).json({error:'Bad request , election id missing'});
@@ -231,7 +261,7 @@ app.put('/election/:id' , authenticateJWT, async (req, res) => {
 });
 
 // get voter by id (email is our id)
-app.get('/voter/:id', authenticateJWT, async (req, res) => {
+app.get('/voter/:id', async (req, res) => {
   if(!req.params.id){
     return res.status(400).json({error:'Bad request , voter email missing'});
   }else{
@@ -253,7 +283,8 @@ app.get('/voter/:id', authenticateJWT, async (req, res) => {
 });
 
 //get all voters
-app.get('/voter', authenticateJWT, async (req, res) => {
+/*
+app.get('/voter', async (req, res) => {
   console.log("get voters")
   try{
   let networkObj = await network.connectToNetwork(appSuperAdmin);
@@ -266,9 +297,9 @@ app.get('/voter', authenticateJWT, async (req, res) => {
     return res.status(500).json({error:'Problem in transaction'})
   }
 });
-
+*/
 // create a voter, only admin will call this endpoint while adding voters to his election
-app.post('/voter', authenticateJWT, async (req, res) => {
+app.post('/voter', async (req, res) => {
   let {admin_email,electionId,firstName,lastName,email,data} = req.body;
   if(!req.body  || !admin_email || !electionId || !firstName || !lastName || !email || !data ){
     return res.status(400).json({error:'You must supply all needed attributs'});
@@ -361,7 +392,7 @@ app.post('/admin', async (req, res) => {
 });
 
 //get all admins
-app.get('/admin', authenticateJWT, async (req, res) => {
+app.get('/admin', async (req, res) => {
   console.log("get admins")
   try{
   let networkObj = await network.connectToNetwork(appSuperAdmin);
@@ -377,7 +408,7 @@ app.get('/admin', authenticateJWT, async (req, res) => {
 
 
 // get admin by id (email is our id)
-app.get('/admin/:id', authenticateJWT, async (req, res) => {
+app.get('/admin/:id', async (req, res) => {
   if(!req.params.id){
     return res.status(400).json({error:'Bad request , admin email missing'});
   }else{
@@ -443,7 +474,7 @@ app.post('/login', async (req, res) => {
 });
 
 // logout user
-app.post('/logout', authenticateJWT, (req, res) => {
+app.post('/logout', (req, res) => {
   // two ways to logout: 
   // 1- user will logout before token expiry, in this case we'll come here and invalidate his token this way
   // 2- token expires => we'll log him out from the frontend, we won't contact the server in this case
@@ -493,7 +524,7 @@ app.get("/candidate/:id", async (req, res)=> {
 });
 
 //get all candidates
-app.get("/candidate", authenticateJWT, async (req, res)=> {
+app.get("/candidate", async (req, res)=> {
   // TEMP: making adjustment here before return
   try{
     let networkObj = await network.connectToNetwork(appSuperAdmin);
@@ -508,7 +539,7 @@ app.get("/candidate", authenticateJWT, async (req, res)=> {
 });
 
 // become a candidate, needs auth
-app.post("/candidate", authenticateJWT, async (req, res) => {
+app.post("/candidate", async (req, res) => {
   let {email,electionId} = req.body
   if(!req.body || !email || !electionId ){
     return res.status(400).json({error:'You must supply all needed attributs'});
@@ -533,7 +564,7 @@ app.post("/candidate", authenticateJWT, async (req, res) => {
 });
 
 // update candidacy
-app.put("/toggleCandidate", authenticateJWT, async (req, res) => {
+app.put("/toggleCandidate", async (req, res) => {
   let {email,electionId} = req.body;
   if(!req.body || !email || !electionId ){
     return res.status(400).json({error:'You must supply all needed attributs'});
@@ -558,7 +589,7 @@ app.put("/toggleCandidate", authenticateJWT, async (req, res) => {
 });
 
 // cast a vote
-app.post('/vote', authenticateJWT, async (req, res)=>{
+app.post('/vote', async (req, res)=>{
   let {voter_email,electionId,candidate_email} = req.body;
   if(!req.body || !voter_email || !electionId || !candidate_email  ){
     return res.status(400).json({error:'You must supply all needed attributs'});
@@ -580,9 +611,9 @@ app.post('/vote', authenticateJWT, async (req, res)=>{
     
   }
 })
-
+/*
 //get all assets in world state
-app.get('/queryAll', authenticateJWT, async (req, res) => {
+app.get('/queryAll', async (req, res) => {
 
   let networkObj = await network.connectToNetwork(appSuperAdmin);
   let response = await network.invoke(networkObj, true, 'queryAll', '');
@@ -590,8 +621,8 @@ app.get('/queryAll', authenticateJWT, async (req, res) => {
   res.send(parsedResponse);
 
 });
-
-app.get('/getCurrentStanding', authenticateJWT, async (req, res) => {
+*/
+app.get('/getCurrentStanding', async (req, res) => {
 
   let networkObj = await network.connectToNetwork(appSuperAdmin);
   let response = await network.invoke(networkObj, true, 'queryByObjectType', 'votableItem');
@@ -621,9 +652,9 @@ app.post('/castBallot', async (req, res) => {
     res.send(response);
   }
 });
-
+/*
 //query for certain objects within the world state
-app.post('/queryWithQueryString', authenticateJWT, async (req, res) => {
+app.post('/queryWithQueryString', async (req, res) => {
 
   let networkObj = await network.connectToNetwork(appSuperAdmin);
   let response = await network.invoke(networkObj, true, 'queryByObjectType', req.body.selected);
@@ -631,7 +662,7 @@ app.post('/queryWithQueryString', authenticateJWT, async (req, res) => {
   res.send(parsedResponse);
 
 });
-
+*/
 //get voter info, create voter object, and update state with their voterId
 app.post('/registerVoter', async (req, res) => {
   console.log('req.body: ');
@@ -709,8 +740,8 @@ app.post('/validateVoter', async (req, res) => {
   }
 
 });
-
-app.post('/queryByKey', authenticateJWT, async (req, res) => {
+/*
+app.post('/queryByKey', async (req, res) => {
   console.log('req.body: ');
   console.log(req.body);
 
@@ -726,6 +757,7 @@ app.post('/queryByKey', authenticateJWT, async (req, res) => {
     res.send(response);
   }
 });
+*/
 app.get('/', async(req,res)=>{
   res.status(200).json({"result":"Voty API web server running"})
 })
