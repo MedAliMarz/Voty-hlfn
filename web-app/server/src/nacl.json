@@ -3,6 +3,11 @@
       "group": "admin",
       "permissions": [
         {
+	        "resource": "election",
+          "methods": ["GET", "POST"],
+          "action": "allow"
+	      },
+        {
           "resource": "election/:id",
           "methods": ["GET", "PUT"],
           "action": "allow"
@@ -12,11 +17,6 @@
           "methods": ["GET"],
           "action": "allow"
         },
-      	{
-	        "resource": "election",
-          "methods": ["POST", "GET"],
-          "action": "allow"
-	      },
 	      {
 	        "resource": "voter/:id",
           "methods": ["GET"],

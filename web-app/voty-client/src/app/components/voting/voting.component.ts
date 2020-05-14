@@ -53,9 +53,9 @@ export class VotingComponent implements OnInit {
     console.log('voteData', voteData)
     this.voterService.vote(voteData)
       .subscribe(vote=>{
-        console.log("voting vote res ", vote)
-        this.authService.refresh()
-        this.isSpinner = false
+        console.log("voting vote res ", vote);
+        this.authService.refresh();
+        this.isSpinner = false;
         this.toastService.show("Congrats, your vote is recorded","Vote",{status:'success',duration:4000})
       
       }

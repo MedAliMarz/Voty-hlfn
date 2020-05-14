@@ -40,8 +40,6 @@ var unless = require('express-unless');
 // configure the acl
 let aclConfigObject = {
   baseUrl: '/',
-  //defaultRole: 'voter',
-  //decodedObjectName: 'user',
   // will search for the role in req.user.role
   roleSearchPath: 'user.role',
   denyCallback: (res) => {
@@ -122,7 +120,7 @@ app.use(authenticateJWT.unless({
 // integrate the acl to our app, we'll skip the auth routes
 app.use(acl.authorize.unless({ path: ['/login', '/logout'] }));
 
-app.get('/election/:id', /*authenticateJWT,*/ async (req, res) => {
+app.get('/election/:id', async (req, res) => {
   // Return specific election
   if(!req.params.id){
     return res.status(400).json({error:'Bad request , election id missing'});
