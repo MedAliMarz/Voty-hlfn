@@ -71,6 +71,7 @@ export class NavbarComponent implements OnInit {
   constructor(private router:Router,private toastService:NbToastrService ,private themeService:NbThemeService,private authService:AuthService,private menuService:NbMenuService) { }
 
   ngOnInit(): void {
+    this.isLogged = false;
     if(localStorage.getItem('jwt') && localStorage.getItem('loggedUser')){
       this.isLogged = true;
       let role =  localStorage.getItem('role')

@@ -19,7 +19,7 @@
   <a class="navbar-link"  *ngIf="isAdmin" [routerLink]="['/admin']">
     admin
   </a>
-  <nb-actions size="small" class="navbar-actions">
+  <nb-actions *ngIf="isLogged" size="small" class="navbar-actions">
     <nb-action *ngIf="!isAdmin" class="user-action" icon="person-outline" nbContextMenuTag="navbar_menu" [nbContextMenu]="user_items">
       
     </nb-action>
@@ -27,4 +27,5 @@
       
     </nb-action>
   </nb-actions>
+  <button *ngIf="!isLogged" status="primary" nbButton hero  [routerLink]="['/login']" ><nb-icon icon="unlock-outline"></nb-icon> Log in !</button>
 </div>

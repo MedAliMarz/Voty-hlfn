@@ -15,8 +15,13 @@ import {LoginGuard} from './guards/login.guard'
 
 import { CandidateComponent } from './components/candidate/candidate.component';
 import { ElectionComponent } from './components/election/election.component';
+import { LandingComponent } from './pages/landing/landing.component';
 const routes: Routes = [
-
+  {
+    path: '',
+    component: LandingComponent,
+    
+  },
   {
     path: 'login',
     component: LoginComponent,
