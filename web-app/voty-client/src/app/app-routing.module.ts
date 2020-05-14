@@ -10,8 +10,10 @@ import { ContactComponent } from './pages/contact/contact.component';
 import { AboutComponent } from './pages/about/about.component';
 import { StatsComponent } from './pages/stats/stats.component';
 // guards
-import {AuthGuard} from './guards/auth.guard'
-import {LoginGuard} from './guards/login.guard'
+import {AuthGuard} from './guards/auth.guard';
+import {LoginGuard} from './guards/login.guard';
+import {AdminGuard} from './guards/admin.guard';
+import {VoterGuard} from './guards/voter.guard';
 
 import { CandidateComponent } from './components/candidate/candidate.component';
 import { ElectionComponent } from './components/election/election.component';
@@ -30,22 +32,22 @@ const routes: Routes = [
   {
     path: 'admin',
     component: AdminBoardComponent,
-    
+    canActivate: [AuthGuard, AdminGuard]
   },
   {
     path: 'voter',
     component: VoterBoardComponent,
-    
+    canActivate: [AuthGuard, VoterGuard]
   },
   {
     path:'candidacy',
     component: CandidacyComponent,
-    
+    canActivate: [AuthGuard, VoterGuard]
   },
   {
     path:'voting',
     component: VotingComponent,
-    
+    canActivate: [AuthGuard, VoterGuard]
   },
   {
     path:'faq',
@@ -66,13 +68,18 @@ const routes: Routes = [
   {
     path:'candidate/:id',
     component: CandidateComponent,
+    canActivate: [AuthGuard, VoterGuard]
     
   },
   {
     path:'election/:id',
     component: ElectionComponent,
-
+    canActivate: [AuthGuard, AdminGuard]
     
+  },
+  {
+    path: 'landing',
+    component: LandingComponent
   },
 
   { path: '', redirectTo: 'login', pathMatch: 'full' },

@@ -67,6 +67,8 @@ export class AuthService {
           // since voter doesn't have a token, we need to add it from local storage
           // we need to strip out the double quotes that surround our jwt token
           this.loggedUser.token = localStorage.getItem('jwt').replace(/"/g, "");
+          // this update is essential for voting, since the hasVoted will be updated
+          localStorage.setItem('loggedUser', JSON.stringify(voter));
         }, 
         (error) => {
           console.log("ERROR =>" + error);
@@ -80,6 +82,7 @@ export class AuthService {
         // since admin doesn't have a token, we need to add it from local storage
         // we need to strip out the double quotes that surround our jwt token
         this.loggedUser.token = localStorage.getItem('jwt').replace(/"/g, "");
+        localStorage.setItem('loggedUser', JSON.stringify(admin));
       }, 
       (error) => {
         console.log("ERROR =>" + error);
