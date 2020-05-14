@@ -9,41 +9,45 @@
   </div>
   <nb-card [ngClass]="{'d-none':isHidden}" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
     <nb-card-body>
-      <nb-stepper orientation="horizontal" disableStepNavigation #stepper>
+      <nb-stepper orientation="horizontal" #stepper>
         <nb-step [label]="labelOne">
           <ng-template #labelOne>Election Creation</ng-template>
           <h4>Please provide the necessary informations</h4>
           <form [formGroup]="electionForm">
             <div class="form-group">
               <label for="name" class="label">Name</label>
-              <input nbInput id="name" fullWidth placeholder="name" formControlName="name" type="text">
+              <input nbInput id="name" fullWidth placeholder="name" [status]="electionForm.get('name').invalid && electionForm.get('name').touched?'danger':'basic'" formControlName="name" type="text">
             </div>
             <div class="form-group">
               <label for="organisation" class="label">Organisation</label>
               <input nbInput id="organisation" fullWidth placeholder="Which organisation?"
-                formControlName="organisation" type="text">
+                [status]="electionForm.get('organisation').invalid && electionForm.get('organisation').touched?'danger':'basic'" formControlName="organisation" type="text">
             </div>
 
             <div class="form-group">
               <label for="description" class="label">description</label>
               <textarea nbInput id="description" fullWidth placeholder="Describe the election"
-                formControlName="description"></textarea>
+                [status]="electionForm.get('description').invalid && electionForm.get('description').touched?'danger':'basic'" formControlName="description"></textarea>
             </div>
             <div class="form-group">
               <label for="candidacy" class="label">Candidacy Phase Range</label>
               <input nbInput [nbDatepicker]="rangepicker_candidacy" fullWidth id="candidacy"
-                formControlName="candidacy_range" placeholder="range of candidacy phase">
-              <nb-rangepicker #rangepicker_candidacy></nb-rangepicker>
+                [status]="electionForm.get('candidacy_range').invalid && electionForm.get('candidacy_range').touched?'danger':'basic'" formControlName="candidacy_range" placeholder="range of candidacy phase">
+              <nb-rangepicker  boundingMonth="true"  #rangepicker_candidacy></nb-rangepicker>
+
             </div>
+            <nb-alert *ngIf="electionForm.hasError('candidacy_range_error')" status="warning" >
+              {{electionForm.getError('candidacy_range_error')}}
+            </nb-alert>
             <div class="row">
 
               <div class="col" >
                 <label for="startHourC" class="label d-inline-block ">Candidacy Starting Hour</label>
-                <input list="time" placeholder='time' formControlName="candidacy_start_hour" fullWidth step="1,30,5" nbInput type="time" id="startHourC" name="startHour">
+                <input list="time" placeholder='time' [status]="electionForm.get('candidacy_start_hour').invalid && electionForm.get('candidacy_start_hour').touched?'danger':'basic'" formControlName="candidacy_start_hour" fullWidth step="1,30,5" nbInput type="time" id="startHourC" name="startHour">
               </div>
               <div class="col" >
                 <label for="endHourC" class="label d-inline-block ">Candidacy Ending Hour</label>
-                <input list="time" placeholder='time' formControlName="candidacy_end_hour" fullWidth step="1,30,5" nbInput type="time" id="endHourC" name="startHour">
+                <input list="time" placeholder='time' [status]="electionForm.get('candidacy_end_hour').invalid && electionForm.get('candidacy_end_hour').touched?'danger':'basic'" formControlName="candidacy_end_hour" fullWidth step="1,30,5" nbInput type="time" id="endHourC" name="startHour">
               </div>
             </div>
             
@@ -64,18 +68,21 @@
             </datalist>
             <div class="form-group">
               <label for="voting" class="label">Voting Phase Range</label>
-              <input nbInput [nbDatepicker]="rangepicker_voting" fullWidth id="voting" formControlName="voting_range"
+              <input nbInput [nbDatepicker]="rangepicker_voting" fullWidth id="voting" [status]="electionForm.get('voting_range').invalid && electionForm.get('voting_range').touched?'danger':'basic'" formControlName="voting_range"
                 placeholder="range of voting phase">
-              <nb-rangepicker #rangepicker_voting></nb-rangepicker>
+              <nb-rangepicker   boundingMonth="true"  #rangepicker_voting></nb-rangepicker>
             </div>
+            <nb-alert *ngIf="electionForm.hasError('voting_range_error')" status="warning" >
+              {{electionForm.getError('voting_range_error')}}
+            </nb-alert>
             <div class="row">
               <div class="col" >
                 <label for="startHourV" class="label d-inline-block ">Voting Starting Hour</label>
-                <input list="time" placeholder='time' formControlName="voting_start_hour" fullWidth step="1,30,5" nbInput type="time" id="startHourV" name="startHour">
+                <input list="time" placeholder='time' [status]="electionForm.get('voting_start_hour').invalid && electionForm.get('voting_start_hour').touched?'danger':'basic'" formControlName="voting_start_hour" fullWidth step="1,30,5" nbInput type="time" id="startHourV" name="startHour">
               </div>
               <div class="col" >
                 <label for="endHourV" class="label d-inline-block ">Voting Ending Hour</label>
-                <input list="time" placeholder='time' formControlName="voting_end_hour" fullWidth step="1,30,5" nbInput type="time" id="endHourV" name="startHour">
+                <input list="time" placeholder='time' [status]="electionForm.get('voting_end_hour').invalid && electionForm.get('voting_end_hour').touched?'danger':'basic'" formControlName="voting_end_hour" fullWidth step="1,30,5" nbInput type="time" id="endHourV" name="startHour">
               </div>
             </div>
 

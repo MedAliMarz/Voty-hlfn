@@ -51,6 +51,9 @@ export class ElectionComponent implements OnInit {
     })
     this.loadElection()
   }
+
+
+  
   toggleModification(){
     this.isModify = !this.isModify;
     this.isModify?this.electionForm.enable():this.electionForm.disable()

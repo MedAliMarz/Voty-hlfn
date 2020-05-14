@@ -17,12 +17,12 @@
         </div>
         <div class="form-group">
             <label for="description" class="label">Description</label>
-            <textarea nbInput id="description" formControlName="description"  fullWidth placeholder="Describe the election"  [value]="election.description" ></textarea>
+            <textarea nbInput id="description" [status]="electionForm.get('description').invalid && electionForm.get('description').touched?'danger':'basic'" formControlName="description"  fullWidth placeholder="Describe the election"  [value]="election.description" ></textarea>
         </div>
         
         <div class="form-group">
             <label for="organisation" class="label">organisation</label>
-            <input nbInput id="organisation" formControlName="organisation"  fullWidth placeholder="Which organisation ?"  [value]="election.organisation" type="text">
+            <input nbInput id="organisation" [status]="electionForm.get('organisation').invalid && electionForm.get('organisation').touched?'danger':'basic'" formControlName="organisation"  fullWidth placeholder="Which organisation ?"  [value]="election.organisation" type="text">
         </div>
         <div class="form-group">
             <label for="vnumbers" class="label">Number of voters</label>

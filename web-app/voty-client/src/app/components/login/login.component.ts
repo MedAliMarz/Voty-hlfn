@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService,
     private router: Router,
     private toastrService: NbToastrService) { }
+  isSpinner: boolean;
   loginForm: FormGroup
   user = {
     email: '',
@@ -26,22 +27,26 @@ export class LoginComponent implements OnInit {
       'email': new FormControl('', [Validators.required]),
       'password': new FormControl('', [Validators.required])
     })
+    console.log(this.loginForm.get('email'))
   }
   login() {
-
     console.log("Logging ", this.loginForm.value);
+    this.isSpinner = true;
     this.authService.login(this.loginForm.value).subscribe((res) => {
+      this.isSpinner = false;
 
       //this.router.navigateByUrl('/voter');
       this.toastrService.show("You logged in successfully", "Login", {
         status: 'success'
 
       });
+      
     }, (err) => {
       console.log("ERROR => " , err)
       this.toastrService.show("User not found, verify the credentials", "Incorrect credentials", {
         status: 'danger'
       })
+      this.isSpinner = false;
     })
   }
 }

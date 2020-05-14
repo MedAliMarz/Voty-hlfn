@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidatorFn ,AbstractControl, ValidationErrors} from '@angular/forms';
 import { NbThemeService, NbToastrService, NbDialogService } from '@nebular/theme';
 import { ElectionService } from 'src/app/services/election.service';
 import { VoterService } from 'src/app/services/voter.service'
@@ -22,9 +22,7 @@ export class AdminBoardComponent implements OnInit {
   isHidden:boolean=true;
   isSpinner:boolean=false;
   isLoading : boolean= true;
-  rangeCandidacy='';
-  rangeVoting='';
-
+  // date = Date;
   electionSubmitted = false;
   createdElection:Election = null;
   votersSumbitted = false;
@@ -69,9 +67,11 @@ export class AdminBoardComponent implements OnInit {
   votersForm:FormGroup;
   votersDataSource:LocalDataSource
   
+
+  startingDay:Date;
   ngOnInit(): void {
     this.themeService.changeTheme("dark");
-
+   
     this.loadElections()
     this.electionForm = new FormGroup({
       name : new FormControl('',[Validators.required]),
@@ -83,7 +83,7 @@ export class AdminBoardComponent implements OnInit {
       candidacy_end_hour : new FormControl('',[Validators.required,]),
       voting_start_hour : new FormControl('',[Validators.required,]),
       voting_end_hour : new FormControl('',[Validators.required,]),
-    })
+    },{validators:[candidacyPhaseValidator,votingPhaseValidator]})
     this.votersDataSource = new LocalDataSource()
     this.votersForm = new FormGroup({
 
@@ -203,8 +203,6 @@ export class AdminBoardComponent implements OnInit {
         this.isLoading=false;
       })
   }
-
-  
   finishCreation(){
     this.stepper.reset();
     this.isHidden = true;
@@ -218,4 +216,80 @@ export class AdminBoardComponent implements OnInit {
   ngOnDestroy(){
     this.themeService.changeTheme("default");
   }
+  getMin(d):Date{
+    let min = new Date(d)
+    min.setDate(min.getDate()-1)
+    return min
+  }
+  getMax(d):Date{
+    let max = new Date(d)
+    max.setDate(max.getDate()+30)
+    return max
+  }
+
 }
+
+
+const votingPhaseValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
+  console.log('voting validator !')
+  console.log(control.errors)
+  const candidacyRange = control.get('candidacy_range');
+  const candidacy_start_hour = control.get('candidacy_start_hour')
+  const candidacy_end_hour = control.get('candidacy_end_hour')
+
+  const votingRange = control.get('voting_range');
+  const voting_start_hour = control.get('voting_start_hour')
+  const voting_end_hour = control.get('voting_end_hour')
+
+  if((votingRange.invalid && votingRange.touched) || (voting_start_hour.invalid && voting_start_hour.touched) || (voting_end_hour.invalid && voting_end_hour.touched)){
+    return {voting_range_error:'One of the voting period is invalid'}
+  }else{
+    let range= votingRange.value
+    if(Date.parse(range.start) == Date.parse(range.end)){
+      let start_hour= voting_start_hour.value.split(':')
+      let end_hour= voting_end_hour.value.split(':')
+      let shv = parseInt(start_hour[0])*60 + parseInt(start_hour[1]) 
+      let ehv = parseInt(end_hour[0])*60 + parseInt(end_hour[1])
+      if(shv+30 <= ehv ){
+        return null;
+      }else{
+        return {voting_range_error:"voting period also must be atleast 30 min long"}
+      }
+    }else {
+      return null
+    }
+  }
+  
+}
+
+const candidacyPhaseValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
+  console.log('candidacy validator !')
+  console.log(control.errors)
+  const candidacyRange = control.get('candidacy_range');
+  const candidacy_start_hour = control.get('candidacy_start_hour')
+  const candidacy_end_hour = control.get('candidacy_end_hour')
+  console.log("candidacyRange ",candidacyRange.value)
+  if((candidacyRange.invalid && candidacyRange.touched) || (candidacy_start_hour.invalid && candidacy_start_hour.touched) || (candidacy_end_hour.invalid && candidacy_end_hour.touched)){
+    return {candidacy_range_error:'One of the candidacy period inputs is invalid'}
+  }else{
+    let range= candidacyRange.value
+    if(Date.parse(range.start) == Date.parse(range.end)){
+      console.log("candidacy same day");
+      
+      let start_hour= candidacy_start_hour.value.split(':')
+      let end_hour= candidacy_end_hour.value.split(':')
+      let shv = parseInt(start_hour[0])*60 + parseInt(start_hour[1]) 
+      let ehv = parseInt(end_hour[0])*60 + parseInt(end_hour[1])
+      console.log('s, e',shv,ehv)
+
+      if(shv+30 <= ehv ){
+        return null;
+      }else{
+        return {candidacy_range_error:"candidacy period must be atleast 30 min long"}
+      }
+    }else {
+      return null
+    }
+  }
+
+};

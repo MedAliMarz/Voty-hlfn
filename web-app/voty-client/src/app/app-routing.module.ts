@@ -30,17 +30,17 @@ const routes: Routes = [
   {
     path: 'voter',
     component: VoterBoardComponent,
-    canActivate:[AuthGuard]
+    
   },
   {
     path:'candidacy',
     component: CandidacyComponent,
-    canActivate:[AuthGuard]
+    
   },
   {
     path:'voting',
     component: VotingComponent,
-    canActivate:[AuthGuard]
+    
   },
   {
     path:'faq',
@@ -61,7 +61,7 @@ const routes: Routes = [
   {
     path:'candidate/:id',
     component: CandidateComponent,
-    canActivate:[AuthGuard]
+    
   },
   {
     path:'election/:id',

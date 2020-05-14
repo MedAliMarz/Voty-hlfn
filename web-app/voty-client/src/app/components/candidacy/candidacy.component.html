@@ -1,6 +1,6 @@
  
- <h4 class="text-center">hello {{loggedUser.email}} ,{{loggedUser.firstName}} , {{loggedUser.email}}</h4>
- <nb-card *ngIf="!loggedUser.isCandidate" class="col-6 col-md-4 mx-auto my-auto" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
+<h4 class="text-center">hello {{loggedUser.email}} ,{{loggedUser.firstName}} , {{loggedUser.email}}</h4>
+<nb-card  class="col-6 col-md-4 mx-auto my-auto" *ngIf="!loggedUser.isCandidate" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
   <nb-card-header>
     <h3 class="mx-auto">Became a candidate !</h3>
   </nb-card-header>
@@ -11,7 +11,7 @@
       
       <div class="form-group mb-2">
         <label for="data" class="label">Provide some career informations</label>
-        <textarea nbInput id="data" formControlName="data" fullWidth placeholder="3 years Researcher at X" type="text"></textarea>
+        <textarea nbInput id="data" [status]="candidateForm.get('data').invalid && candidateForm.get('data').touched?'danger':'basic'" formControlName="data" fullWidth placeholder="3 years Researcher at X" type="text"></textarea>
       </div>
           <input  [disabled]="candidateForm.invalid" (click)="createCandidate()" status="primary" fullWidth nbButton type="button" value="Save" >
 
