@@ -25,6 +25,7 @@ let Election = require('./Election.js');
 let Voter = require('./Voter.js');
 let Admin = require('./Admin.js');
 let VotableItem = require('./VotableItem.js');
+let SuperAdmin = require('./SuperAdmin.js');
 
 class MyAssetContract extends Contract {
   
@@ -180,6 +181,31 @@ class MyAssetContract extends Contract {
 
   }
 
+
+  /**
+   *
+   * createSuperAdmin
+   *
+   * Creates a super admin in the world state, based on his email.
+   *  
+   * @param args.firstName - first name of superadmin
+   * @param args.lastName - last name of superadmin
+   * @param args.email - email of superadmin
+   * @returns - nothing - but updates the world state with a superadmin
+   */
+
+
+  async createSuperAdmin(ctx, args) {
+
+    args = JSON.parse(args);
+    //create a new super admin
+    let newSuperAdmin = await new SuperAdmin(args.firstName, args.lastName, args.email, args.password);
+      
+    // update the world state
+    await ctx.stub.putState(newSuperAdmin.email, Buffer.from(JSON.stringify(newSuperAdmin)));
+    return newSuperAdmin;
+
+  }
 
 
   /**

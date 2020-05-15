@@ -392,3 +392,102 @@ exports.registerAdmin = async function (firstName, lastName, email, password) {
     return response;
   }
 };
+
+
+exports.registerSuperAdmin = async function (firstName, lastName, email, password) {
+
+  if (!firstName || !lastName || !email || !password) {
+    let response = {};
+    response.error = 'Error! You need to fill all fields before you can register!';
+    return response;
+  }
+
+  try {
+
+    // Create a new file system based wallet for managing identities.
+    const walletPath = path.join(process.cwd(), 'wallet');
+    const wallet = new FileSystemWallet(walletPath);
+    console.log(`Wallet path: ${walletPath}`);
+    console.log(wallet);
+
+    // Set up our admin's credentials in the correct format stored in the wallet
+    var admin_hashed_pw = crypto.pbkdf2Sync(password, "iC!T+1=*nHQ3", 5000, 20, 'sha1').toString('hex');
+    const admin_credentials = email + '|' + admin_hashed_pw;
+
+    // Check to see if we've already enrolled the admin.
+    const adminExists = await wallet.exists(admin_credentials);
+    if (adminExists) {
+      let response = {};
+      console.log(`An identity for the user ${email} already exists in the wallet`);
+      response.error = `Error! An identity for the user ${email} already exists in the wallet. Please enter
+        a different license number.`;
+      return response;
+    }
+
+    // Check to see if we've already enrolled the super admin.
+    const superAdminExists = await wallet.exists(appSuperAdmin);
+    if (!superAdminExists) {
+      console.log(`An identity for the super admin ${appSuperAdmin} does not exist in the wallet`);
+      console.log('Run the enrollAdmin.js application before retrying');
+      let response = {};
+      response.error = `An identity for the super admin ${appSuperAdmin} does not exist in the wallet. 
+        Run the enrollSuperAdmin.js application before retrying`;
+      return response;
+    }
+
+    // Create a new gateway for connecting to our peer node.
+    const gateway = new Gateway();
+    await gateway.connect(ccp, { wallet, identity: appSuperAdmin, discovery: gatewayDiscovery });
+
+    // Get the CA client object from the gateway to interact with the CA.
+    const ca = gateway.getClient().getCertificateAuthority();
+    const currentIdentity = gateway.getCurrentIdentity(); // HERE, currentIdentity == appSuperAdmin identity
+    console.log(`Current identity connected to the gateway: ${currentIdentity}`);
+
+    // Register the admin
+    const secret = await ca.register({ affiliation: '', enrollmentID: email, role: 'superadmin' }, currentIdentity);
+    // Enroll the admin
+    const enrollment = await ca.enroll({ enrollmentID: email, enrollmentSecret: secret });
+    // Create his identity
+    const identity = await X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
+    // import him to the wallet
+    await wallet.import(admin_credentials, identity);
+    console.log(`Successfully registered admin ${firstName} ${lastName}. Use your email: ${email} to login above.`);
+    
+    // send the password to the admin through email
+    // 1 - configuration of the transport object, here we're using mailtrap to test with fake emails
+    let transport = nodemailer.createTransport({
+      host: 'smtp.mailtrap.io',
+      port: 2525,
+      auth: {
+         user: 'fed21155c52ed5',
+         pass: '29f135d029a046'
+      }
+    });
+
+    // 2 - Now we'll set up our message
+    const message = {
+      from: 'admin@voty.com', // Sender address
+      to: email,         // List of recipients
+      subject: 'Voty - Election Credentials', // Subject line
+      html: `<h1>Welcome to VOTY!</h1><p>Hey <b>${firstName} ${lastName}</b><br><p>Here's your <b>password</b>: ${password} <br>Keep it somewhere safe!` // HTML message
+    };
+
+    // 3 - Send the email
+    transport.sendMail(message, function(err, info) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(info);
+      }
+    });
+
+    let response = `Successfully registered superadmin ${firstName} ${lastName}. Use your email: ${email} to login above.`;
+    return response;
+  } catch (error) {
+    console.error(`Failed to register superadmin + ${email} + : ${error}`);
+    let response = {};
+    response.error = error;
+    return response;
+  }
+};

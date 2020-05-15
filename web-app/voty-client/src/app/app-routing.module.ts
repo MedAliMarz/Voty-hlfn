@@ -14,11 +14,13 @@ import {AuthGuard} from './guards/auth.guard';
 import {LoginGuard} from './guards/login.guard';
 import {AdminGuard} from './guards/admin.guard';
 import {VoterGuard} from './guards/voter.guard';
+import { SuperadminGuard } from './guards/superadmin.guard';
 
 import { CandidateComponent } from './components/candidate/candidate.component';
 import { ElectionComponent } from './components/election/election.component';
 import { LandingComponent } from './pages/landing/landing.component';
 import { SuperadminBoardComponent } from './pages/superadmin-board/superadmin-board.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -37,7 +39,7 @@ const routes: Routes = [
   {
     path: 'superadmin',
     component: SuperadminBoardComponent,
-    
+    canActivate: [AuthGuard, SuperadminGuard]
   },
   {
     path: 'voter',

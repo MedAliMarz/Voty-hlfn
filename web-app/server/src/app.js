@@ -113,8 +113,8 @@ authenticateJWT.unless = unless;
 app.use(authenticateJWT.unless({
   path: [
     '/login',
-    { url: '/', methods: ['GET', 'PUT']  },
-    { url: '/admin', methods: ['POST']  } // at the end we'll remove this line
+    { url: '/', methods: ['GET', 'PUT']  }
+    //{ url: '/admin', methods: ['POST']  } // at the end we'll remove this line
   ]
 }));
 // integrate the acl to our app, we'll skip the auth routes
@@ -427,6 +427,68 @@ app.get('/admin/:id', async (req, res) => {
   }
 });
         
+// create a super admin, we'll use it once then restrict from everyone
+app.post('/superadmin', async (req, res) => {
+  let {firstName, lastName, email} = req.body;
+  if(!req.body || !firstName || !lastName || !email){
+    return res.status(400).json({error:'You must supply all needed attributs'});
+  }else{
+      try{
+        let networkObj = await network.connectToNetwork(appSuperAdmin);
+        
+        // first we create the admin then enrollhim
+        // it may be the wrong way but we need the random generated id to use it for registration
+        let response = await network.invoke(networkObj, false, 'createSuperAdmin', [JSON.stringify({firstName,lastName,email})] );
+        let newAdmin = await JSON.parse(response);
+        if(newAdmin.error){
+            return res.status(500).json(newAdmin);
+        } 
+        
+        else {
+
+          // Here we need to create the user's password, then send it to his email
+          let password = generator.generate({
+            length: 10,
+            numbers: true
+          });
+
+          //Second create the identity for the Admin and add to wallet, normally super admin should register him, we're just testing here..
+          let resp = await network.registerSuperAdmin( newAdmin.firstName, newAdmin.lastName, newAdmin.email, password);
+          console.log('response from registerAdmin: ');
+          console.log(resp);
+          if (resp.error) {
+            return res.status(404).json(resp.error);
+          }  
+        
+          return res.status(200).json(newAdmin);
+        }
+      }catch(e){
+        return res.status(500).json({error:'Problem in transaction execution'});
+      }
+  }
+});
+
+// get superadmin by id (email is our id)
+app.get('/superadmin/:id', async (req, res) => {
+  if(!req.params.id){
+    return res.status(400).json({error:'Bad request , superadmin email missing'});
+  }else{
+
+    try{
+      let networkObj = await network.connectToNetwork(appSuperAdmin);
+      let check = await network.invoke(networkObj, true, 'myAssetExists', req.params.id);
+      check = JSON.parse(check.toString());
+      if(check){ // all good
+        let response = await network.invoke(networkObj, true, 'readMyAsset', req.params.id);
+        return res.status(200).json(JSON.parse(response));
+      }else{
+        return res.status(404).json({error:'Requested email not found'});
+      }
+    }catch(e){
+      return res.status(500).json(JSON.parse({error:'Problem in transaction'}));
+    }
+  }
+});
 
 //login user
 app.post('/login', async (req, res) => {

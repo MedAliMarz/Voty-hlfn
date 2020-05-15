@@ -29,6 +29,10 @@ export class LoginGuard implements CanActivate {
                     console.log("in admin =>");
                     this.router.navigate(['/admin']);
                 }
+                else if(role == 'superadmin') {
+                    console.log("in superadmin =>");
+                    this.router.navigate(['/superadmin']);
+                }
                 return false;
             }
         }

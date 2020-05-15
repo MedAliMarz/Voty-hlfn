@@ -5,6 +5,7 @@ import { map, tap } from 'rxjs/operators';
 import { VoterService } from './voter.service';
 import { Router } from '@angular/router';
 import { AdminService } from './admin.service';
+import { SuperAdminService } from './superadmin.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class AuthService {
   constructor(private httpClient:HttpClient,
     private voterService:VoterService,
     private adminService:AdminService,
+    private superAdminService:SuperAdminService,
     private router:Router) { }
 
   login(user){
@@ -36,6 +38,9 @@ export class AuthService {
       }
       else if(user['type'] == 'admin') {
         this.router.navigateByUrl('/admin');
+      }
+      else if(user['type'] == 'superadmin') {
+        this.router.navigateByUrl('/superadmin');
       }
       return user;
   }));
@@ -83,6 +88,20 @@ export class AuthService {
         // we need to strip out the double quotes that surround our jwt token
         this.loggedUser.token = localStorage.getItem('jwt').replace(/"/g, "");
         localStorage.setItem('loggedUser', JSON.stringify(admin));
+      }, 
+      (error) => {
+        console.log("ERROR =>" + error);
+      })
+    }
+    else if(currentRole == 'superadmin') {
+      this.superAdminService.getSuperAdmin(currentUserId)
+      .subscribe(superAdmin=>{
+        this.loggedUser= superAdmin;
+        console.log("###LOGGED_USER => " + this.loggedUser);
+        // since admin doesn't have a token, we need to add it from local storage
+        // we need to strip out the double quotes that surround our jwt token
+        this.loggedUser.token = localStorage.getItem('jwt').replace(/"/g, "");
+        localStorage.setItem('loggedUser', JSON.stringify(superAdmin));
       }, 
       (error) => {
         console.log("ERROR =>" + error);
