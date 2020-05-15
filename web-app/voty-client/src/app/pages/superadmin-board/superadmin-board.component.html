@@ -1,0 +1,49 @@
+<h3 class="text-center mb-4">SuperAdmin Dashboard</h3>
+<div class="row">
+    <div class="col-8 col-md-5 mx-auto">
+        <nb-card  size="small" [nbSpinner]="isCreating" nbSpinnerSize="giant" nbSpinnerStatus="warning">
+            <nb-card-header>
+              <h5 >Add an election admin</h5>
+            </nb-card-header>
+            <nb-card-body>
+              
+              <form [formGroup]="adminForm">
+                <div class="row ">
+                    <div class="col form-group">
+                        <label for="firstName" class="label d-inline-block">First name</label>
+                        <input nbInput id="firstName" fullWidth [status]="adminForm.get('firstName').invalid && adminForm.get('firstName').touched?'danger':'basic'" formControlName="firstName" placeholder="Foulen" type="text">
+                    </div>
+                    <div class="col form-group">
+                        <label for="lastName" class="label d-inline-block">Last name</label>
+                        <input nbInput id="lastName" fullWidth [status]="adminForm.get('lastName').invalid && adminForm.get('lastName').touched?'danger':'basic'" formControlName="lastName" placeholder="Ben Falten" type="text">
+                    </div>
+                </div>
+                  <div class="form-group mb-4">
+                    <label for="email" class="label">Email</label>
+                    <input nbInput id="email" [status]="adminForm.get('email').invalid && adminForm.get('email').touched?'danger':'basic'" formControlName="email" fullWidth placeholder="foulen.benfalten@voty.tn" type="text">
+                  </div>
+                    <input  [disabled]="adminForm.invalid" (click)="createAdmin()" status="primary" fullWidth nbButton type="button" value="Save" >
+              </form>  
+                
+              </nb-card-body>
+        </nb-card>
+    </div>
+    <div class="col-8 col-md-7 mx-auto">
+        <app-admins-list [admins]="admins" [isLoading]="isLoading">
+        </app-admins-list>
+    </div>
+</div>
+
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card>
+      <nb-card-header>
+        <h5>Continue with creation ?</h5>
+      </nb-card-header>
+      <nb-card-body>{{ data }}</nb-card-body>
+      <nb-card-footer>
+        <button nbButton status="danger" (click)="ref.close(false)" class="mr-5">No</button>
+        <button nbButton status="success" (click)="ref.close(true)">Yes continue</button>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>
+  

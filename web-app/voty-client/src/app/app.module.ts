@@ -40,7 +40,9 @@ import { ChartModule } from 'angular2-chartjs';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {JwtInterceptor} from './guards/jwt.interceptor';
 // range component
-import {NbCalendarRangeComponent} from '@nebular/theme'
+import {NbCalendarRangeComponent} from '@nebular/theme';
+import { SuperadminBoardComponent } from './pages/superadmin-board/superadmin-board.component';
+import { AdminsListComponent } from './components/admins-list/admins-list.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,6 +62,8 @@ import {NbCalendarRangeComponent} from '@nebular/theme'
     ContactComponent,
     AboutComponent,
     StatsComponent,
+    SuperadminBoardComponent,
+    AdminsListComponent,
     
   ],
   imports: [

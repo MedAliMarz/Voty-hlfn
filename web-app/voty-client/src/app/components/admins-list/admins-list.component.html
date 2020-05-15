@@ -1,0 +1,13 @@
+<nb-card size="small" [nbSpinner]="isLoading" nbSpinnerSize="giant" nbSpinnerStatus="warning">
+    <nb-card-header>
+        <h5>Admins list</h5>
+    </nb-card-header>
+    <nb-card-body *ngIf="isLoading">Loading admins ... </nb-card-body>
+    <nb-card-body *ngIf="!isLoading && (!admins || admins.length==0)">No admins found</nb-card-body>
+
+    <nb-card-body *ngIf="!isLoading && admins && admins.length">
+        <nb-menu [items]="adminsMenu" autoCollapse="true">
+        </nb-menu>
+    </nb-card-body>
+  </nb-card>
+  
