@@ -103,7 +103,7 @@ export class AdminBoardComponent implements OnInit {
   initElection(){
     if(!this.electionForm.invalid && !this.electionSubmitted){
       this.electionSubmitted = true
-      let admin_email = localStorage.getItem('email').replace(/"/g, "");
+      let admin_email = localStorage.getItem('userId').replace(/"/g, "");
       let newElection = this.electionForm.value;
       // add the admin's email, we need it to verify that he's allowed to create the election
       newElection.admin_email = admin_email;
@@ -149,7 +149,7 @@ export class AdminBoardComponent implements OnInit {
       let voters =  this.votersDataSource['data']
         .map(voter=>{
         voter['electionId'] = this.createdElection['electionId'];
-        voter['admin_email'] = localStorage.getItem('email').replace(/"/g, "");
+        voter['admin_email'] = localStorage.getItem('userId').replace(/"/g, "");
         return voter;
         })
         async.eachOfSeries(voters, (voter, index, callback)=> {
@@ -175,7 +175,7 @@ export class AdminBoardComponent implements OnInit {
           this.isSpinner=false;
 
           if( err ) {
-            console.log('One of the voter wasn\'t registered ',err);
+            console.log('One of the voters wasn\'t registered ',err);
             this.toastService.show(`Problem in adding voters`,"Adding Voters",{status:'warning'})
           } else {
             this.toastService.show(`All voter have been added`,"Adding Voters",{status:'success'})

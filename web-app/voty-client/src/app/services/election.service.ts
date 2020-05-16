@@ -16,6 +16,9 @@ export class ElectionService {
   getElectionVoters(electionId:string){
     return this.httpClient.get<Voter[]>(`${this.url}/${electionId}/voters`)
   }
+  getElectionCandidates(electionId:string){
+    return this.httpClient.get<Voter[]>(`${this.url}/${electionId}/candidates`)
+  }
   getElections(){
     return this.httpClient.get<Election[]>(`${this.url}`)
   }

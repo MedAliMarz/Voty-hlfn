@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { NbDialogService, NbToastrService } from '@nebular/theme';
 import { Voter } from 'src/app/models/voter.model';
 import {VoterService} from 'src/app/services/voter.service';
-import {CandidateService} from 'src/app/services/candidate.service';
+import {ElectionService} from 'src/app/services/election.service';
 import {AuthService} from 'src/app/services/auth.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class VotingComponent implements OnInit {
   @ViewChild("dialog") dialog:TemplateRef<any>
   constructor(private dialogService:NbDialogService,
     private voterService:VoterService,
-    private candidateService:CandidateService,
+    private electionService:ElectionService,
     public authService:AuthService,
     private toastService:NbToastrService) { }
   voteForm:FormGroup
@@ -24,7 +24,7 @@ export class VotingComponent implements OnInit {
   loggedUser = JSON.parse(localStorage.getItem('loggedUser'));
   ngOnInit(): void {
     this.voteForm = new FormGroup({
-      candidateEmail: new FormControl('',[Validators.required]),
+      candidateId: new FormControl('',[Validators.required]),
 
     })
     this.isSpinner = true
@@ -46,8 +46,8 @@ export class VotingComponent implements OnInit {
   initVote(){
     this.isSpinner = false;
     let voteData ={
-      voter_email:this.loggedUser.email,
-      candidate_email:this.voteForm.value.candidateEmail,
+      voterId:this.loggedUser.voterId,
+      candidateId:this.voteForm.value.candidateId,
       electionId:this.loggedUser.electionId
     }
     console.log('voteData', voteData)
@@ -70,14 +70,12 @@ export class VotingComponent implements OnInit {
   }
   loadCandidates(){
     
-    this.candidateService.getCandidates()
+    this.electionService.getElectionCandidates(this.loggedUser.electionId)
       .subscribe(
         candidates=>{
           console.log(candidates)
           console.log('loggedUser.electionId ', this.loggedUser.electionId)
-          this.candidates = candidates.filter(candidate=>{
-            return (candidate.electionId == this.loggedUser.electionId)
-          })
+          this.candidates = candidates;
           console.log(this.candidates)
           this.isSpinner = false
 

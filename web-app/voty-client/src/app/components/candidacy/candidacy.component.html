@@ -1,8 +1,8 @@
  
-<h4 class="text-center">hello {{loggedUser.email}} ,{{loggedUser.firstName}} , {{loggedUser.email}}</h4>
+<h4 class="text-center">hello {{loggedUser.firstName}} {{loggedUser.lastName | uppercase}}</h4>
 <nb-card  class="col-6 col-md-4 mx-auto my-auto" *ngIf="!loggedUser.isCandidate" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
   <nb-card-header>
-    <h3 class="mx-auto">Became a candidate !</h3>
+    <h3 class="mx-auto">Become a candidate !</h3>
   </nb-card-header>
   <nb-card-body>
     

@@ -29,17 +29,19 @@ export class AuthService {
       console.log('login auth ,',JSON.stringify(user['token']),user);
       localStorage.setItem('jwt', JSON.stringify(user['token']));
       localStorage.setItem('role', JSON.stringify(user['type']));
-      localStorage.setItem('email', JSON.stringify(user['email']));
       localStorage.setItem('loggedUser', JSON.stringify(user));
       this.loggedUser = user;
       // routing after login success
       if(user['type'] == 'voter') {
+        localStorage.setItem('userId', JSON.stringify(this.loggedUser['voterId']));
         this.router.navigateByUrl('/voter');
       }
       else if(user['type'] == 'admin') {
+        localStorage.setItem('userId', JSON.stringify(this.loggedUser['email']));
         this.router.navigateByUrl('/admin');
       }
       else if(user['type'] == 'superadmin') {
+        localStorage.setItem('userId', JSON.stringify(this.loggedUser['email']));
         this.router.navigateByUrl('/superadmin');
       }
       return user;
@@ -48,7 +50,7 @@ export class AuthService {
   logout(){
     localStorage.removeItem('jwt');
     localStorage.removeItem('role');
-    localStorage.removeItem('email');
+    localStorage.removeItem('userId');
     localStorage.removeItem('loggedUser');
     // fixed redirection
     this.router.navigate(['/login']);
@@ -61,7 +63,7 @@ export class AuthService {
     );
   }
   refresh(){
-    const currentUserId = localStorage.getItem('email').replace(/"/g, "");
+    const currentUserId = localStorage.getItem('userId').replace(/"/g, "");
     console.log("###REFRESH=>CurrenUserId => " + currentUserId);
     const currentRole = localStorage.getItem('role').replace(/"/g, "");
     if(currentRole == 'voter') {

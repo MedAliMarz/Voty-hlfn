@@ -12,8 +12,8 @@ export class VoterService {
 
   constructor(private httpClient:HttpClient) { }
 
-  getVoter(email:string){
-    return this.httpClient.get<Voter>(`${this.url}/${email}`)
+  getVoter(voterId:string){
+    return this.httpClient.get<Voter>(`${this.url}/${voterId}`)
   }
   getVoters(){
     return this.httpClient.get<Voter[]>(`${this.url}`)

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 // admin model
 import {Admin} from '../models/admin.model';
+import { Election } from '../models/election.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,5 +22,8 @@ export class AdminService {
   createAdmin(newAdmin){
     console.log("creating admin: ",newAdmin)
     return this.httpClient.post<Admin>(`${this.url}`,newAdmin)
+  }
+  getAdminElections(email: string){
+    return this.httpClient.get<Election[]>(`${this.url}/${email}/elections`);
   }
 }

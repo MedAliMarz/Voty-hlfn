@@ -14,12 +14,12 @@ export class LoginGuard implements CanActivate {
         if(localStorage.length >= 3) {
             const token = localStorage.getItem('jwt').replace(/"/g, "");
             const role = localStorage.getItem('role').replace(/"/g, "");
-            const email = localStorage.getItem('email').replace(/"/g, "");
+            const userId = localStorage.getItem('userId').replace(/"/g, "");
             console.log("##TOKEN## => " + token);
             console.log("##ROLE## => " + role);
-            console.log("##USER_ID## => " + email);
+            console.log("##USER_ID## => " + userId);
 
-            if (token && email && role) {
+            if (token && userId && role) {
                 this.authService.refresh();
                 if(role == 'voter') {
                     console.log("in voter =>");

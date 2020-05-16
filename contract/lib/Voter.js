@@ -13,7 +13,7 @@ class Voter {
    * @returns - voter object
    */
   constructor(electionId, firstName, lastName, email, data) {
-
+      this.voterId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
       this.electionId = electionId;
       this.firstName = firstName;
       this.lastName = lastName;
@@ -39,12 +39,12 @@ class Voter {
    *
    * check for valid ID card - stateID or drivers License.
    *  
-   * @param email - voter's email 
+   * @param voterId - voter's id 
    * @returns - yes if valid Voter, no if invalid
    */
-  async validateVoter(email) {
+  async validateVoter(voterId) {
     //email error checking here, i.e. check if valid drivers License, or state ID
-    if (email) {
+    if (voterId) {
       return true;
     } else {
       return false;

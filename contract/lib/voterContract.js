@@ -144,7 +144,7 @@ class MyAssetContract extends Contract {
       let election = await JSON.parse(electionAsBytes);
       let newVoter = await new Voter(args.electionId, args.firstName, args.lastName,args.email,args.data);
       // update the world state
-      await ctx.stub.putState(newVoter.email, Buffer.from(JSON.stringify(newVoter)));
+      await ctx.stub.putState(newVoter.voterId, Buffer.from(JSON.stringify(newVoter)));
       election.votersNumber +=1
       await ctx.stub.putState(election.electionId,Buffer.from(JSON.stringify(election)));
       // let response = `voter with voterId ${newVoter.voterId} is added (updated in the world state)`;
@@ -473,15 +473,15 @@ async readMyAsset(ctx, myAssetId) {
    *
    * vote
    * 
-   * First to checks that a particular voter_email has not voted before, and then 
+   * First to checks that a particular voterId has not voted before, and then 
    * checks if it is a valid election time, and if it is, we increment the 
    * count of the political party that was picked by the voter and update 
    * the world state. 
    * 
    * @param 
    * @param electionId - the electionId of the election we want to vote in
-   * @param voter_email - the email of the voter who wants to vote
-   * @param candidate_email - the candiateId of the selected candidate
+   * @param voterId - the id of the voter who wants to vote
+   * @param candidateId - the candiateId of the selected candidate
    * @returns an array which has the winning briefs of the ballot. 
    */
   async vote(ctx, args) {
@@ -494,14 +494,14 @@ async readMyAsset(ctx, myAssetId) {
       return response;
     }
     //check voter existance
-    let check_voter = await this.myAssetExists(ctx, args.voter_email);
+    let check_voter = await this.myAssetExists(ctx, args.voterId);
     if(!check_voter){
       let response = {};
       response.error = 'Voter doesn\'t exist';
       return response;
     }
     //check candidate existance
-    let check_candidate = await this.myAssetExists(ctx, args.candidate_email);
+    let check_candidate = await this.myAssetExists(ctx, args.candidateId);
     if(!check_candidate){
       let response = {};
       response.error = 'Candidate doesn\'t exist';
@@ -509,7 +509,7 @@ async readMyAsset(ctx, myAssetId) {
     }
     
     // check if the voter joined the right election
-    let voterAsBytes = await ctx.stub.getState(args.voter_email);
+    let voterAsBytes = await ctx.stub.getState(args.voterId);
     let voter = await JSON.parse(voterAsBytes);
     if(voter.electionId!=args.electionId){
       let response = {};
@@ -523,7 +523,7 @@ async readMyAsset(ctx, myAssetId) {
       return response;
     }
     // check if the candiate join the right election and is a candidate
-    let candidateAsBytes = await ctx.stub.getState(args.candidate_email);
+    let candidateAsBytes = await ctx.stub.getState(args.candidateId);
     let candidate = await JSON.parse(candidateAsBytes);
     if(candidate.electionId!=args.electionId || !candidate.isCandidate || !candidate.isActive){
       let response = {};
@@ -542,11 +542,11 @@ async readMyAsset(ctx, myAssetId) {
       // change the status of the voter
       voter.hasVoted = true;
       // update voter state
-      await ctx.stub.putState(voter.email, Buffer.from(JSON.stringify(voter)));
+      await ctx.stub.putState(voter.voterId, Buffer.from(JSON.stringify(voter)));
       // add the vote to the candidate
       candidate.votes += 1
       // update candidate state
-      await ctx.stub.putState(candidate.email, Buffer.from(JSON.stringify(candidate)));
+      await ctx.stub.putState(candidate.voterId, Buffer.from(JSON.stringify(candidate)));
       // add the vote to the election
       election.votes +=1
       // update the election state
@@ -571,17 +571,17 @@ async readMyAsset(ctx, myAssetId) {
    * change his attribut and add him to the list
    * 
    * @param electionId - the electionId of the election we want to vote in
-   * @param email - the email of the voter who wants to vote
+   * @param voterId - the id of the voter who wants to vote
    * @returns none. 
    */
   async candidature(ctx, args) {
     args = JSON.parse(args);
 
-    let voter_email = args.email;
+    let voter_id = args.voterId;
     let electionId = args.electionId;
     
     let electionExists = await this.myAssetExists(ctx, electionId);
-    let voterExists  = await this.myAssetExists(ctx,voter_email);
+    let voterExists  = await this.myAssetExists(ctx,voter_id);
     // check the existance of the election
     if (electionExists) {
       let electionAsBytes = await ctx.stub.getState(electionId);
@@ -595,7 +595,7 @@ async readMyAsset(ctx, myAssetId) {
         // check the existance of the voter
         if (voterExists){
         
-          let voterAsBytes = await ctx.stub.getState(args.email);
+          let voterAsBytes = await ctx.stub.getState(args.voterId);
           let voter = await JSON.parse(voterAsBytes);
           // check if the voter is in the correct election
           if(voter.electionId == electionId){
@@ -603,7 +603,7 @@ async readMyAsset(ctx, myAssetId) {
             voter.isCandidate = true;
             voter.isActive = true;
             voter.votes=0;
-            await ctx.stub.putState(voter.email, Buffer.from(JSON.stringify(voter)));
+            await ctx.stub.putState(voter.voterId, Buffer.from(JSON.stringify(voter)));
             //let response = `Voter with id: ${voter.voterId} is now a candidate in the election`;
             return voter;
           }else{
@@ -640,17 +640,17 @@ async readMyAsset(ctx, myAssetId) {
    * activate/desactivate his candidacy
    * 
    * @param electionId - the electionId of the election we want to vote in
-   * @param email - the email of the voter who wants to vote
+   * @param voterId - the email of the voter who wants to vote
    * @returns none. 
    */
   async toggleCandidacy(ctx,args){
     args = JSON.parse(args);
 
     //get the political party the voter voted for, also the key
-    let voter_email = args.email;
+    let voter_id = args.voterId;
     let electionId = args.electionId;
     let electionExists = await this.myAssetExists(ctx, electionId);
-    let voterExists  = await this.myAssetExists(ctx,voter_email);
+    let voterExists  = await this.myAssetExists(ctx,voter_id);
     if (electionExists) {
       let electionAsBytes = await ctx.stub.getState(electionId);
       let election = await JSON.parse(electionAsBytes);
@@ -662,12 +662,12 @@ async readMyAsset(ctx, myAssetId) {
       if(parsedCurrentTime >= candidacyStart && parsedCurrentTime < candidacyEnd){
         if (voterExists){
           
-          let voterAsBytes = await ctx.stub.getState(args.email);
+          let voterAsBytes = await ctx.stub.getState(args.voterId);
           let voter = await JSON.parse(voterAsBytes);
           
           if(voter.electionId == electionId && voter.isCandidate){
             voter.isActive = !voter.isActive;
-            await ctx.stub.putState(voter.email, Buffer.from(JSON.stringify(voter)));
+            await ctx.stub.putState(voter.voterId, Buffer.from(JSON.stringify(voter)));
             //let response = `The candidate with id: ${voter.voterId} toggled his candidacy`;
             return voter;
           }else{

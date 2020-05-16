@@ -1,6 +1,6 @@
 {
     "name": "voter-contract",
-    "version": "7.13.2",
+    "version": "7.14.2",
     "description": "My Smart Contract",
     "main": "index.js",
     "engines": {

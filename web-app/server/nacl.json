@@ -28,6 +28,11 @@
         "action": "allow"
       },
       {
+        "resource": "election/:id/candidates",
+        "methods": ["GET"],
+        "action": "allow"
+      },
+      {
         "resource": "voter/:id",
         "methods": ["GET"],
         "action": "deny"
@@ -48,9 +53,14 @@
         "action": "allow"
       },
       {
-        "resource": "candidate",
+        "resource": "admin/:id/elections",
         "methods": ["GET"],
         "action": "allow"
+      },
+      {
+        "resource": "candidate",
+        "methods": ["GET"],
+        "action": "deny"
       },
       {
         "resource": "candidate",
@@ -98,9 +108,19 @@
         "action": "deny"
       },
       {
-        "resource": "election/*",
-        "methods": "*",
+        "resource": "election/:id",
+        "methods": ["GET", "PUT"],
+        "action": "allow"
+      },
+      {
+        "resource": "election/:id/voters",
+        "methods": ["GET"],
         "action": "deny"
+      },
+      {
+        "resource": "election/:id/candidates",
+        "methods": ["GET"],
+        "action": "allow"
       },
       {
         "resource": "voter/:id",
@@ -124,8 +144,13 @@
       },
       {
         "resource": "candidate",
-        "methods": ["GET", "POST"],
+        "methods": ["POST"],
         "action": "allow"
+      },
+      {
+        "resource": "candidate",
+        "methods": ["GET"],
+        "action": "deny"
       },
       {
         "resource": "toggleCandidate",
@@ -184,6 +209,11 @@
       },
       {
         "resource": "admin/:id",
+        "methods": ["GET"],
+        "action": "allow"
+      },
+      {
+        "resource": "admin/:id/elections",
         "methods": ["GET"],
         "action": "allow"
       },

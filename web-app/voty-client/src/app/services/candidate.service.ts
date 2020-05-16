@@ -12,9 +12,9 @@ export class CandidateService {
 
   constructor(private httpClient:HttpClient) { }
 
-  getCandidate(candidate_email:string){
-    console.log('candidate email in candidate auth', candidate_email)
-    return this.httpClient.get<Voter>(`${this.url}/${candidate_email}`)
+  getCandidate(candidateId:string){
+    console.log('candidate id in candidate auth', candidateId)
+    return this.httpClient.get<Voter>(`${this.url}/${candidateId}`)
   }
   getCandidates(){
     return this.httpClient.get<Voter[]>(`${this.url}`)

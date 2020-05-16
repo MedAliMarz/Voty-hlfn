@@ -189,9 +189,9 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
   }
 };
 
-exports.registerVoter = async function (admin_credentials, electionId, firstName, lastName, email, password, data) {
+exports.registerVoter = async function (admin_credentials, voterId, electionId, firstName, lastName, email, password, data) {
 
-  if (!admin_credentials || !electionId || !firstName || !lastName || !email || !password || !data) {
+  if (!admin_credentials || !voterId || !electionId || !firstName || !lastName || !email || !password || !data) {
     let response = {};
     response.error = 'Error! You need to fill all fields before you can register!';
     return response;
@@ -207,12 +207,12 @@ exports.registerVoter = async function (admin_credentials, electionId, firstName
 
     // Check to see if we've already enrolled the user.
     let user_hashed_pw = crypto.pbkdf2Sync(password, "iC!T+1=*nHQ3", 5000, 20, 'sha1').toString('hex');
-    const user_credentials = email + '|' + user_hashed_pw;
+    const user_credentials = voterId + '|' + user_hashed_pw;
     const userExists = await wallet.exists(user_credentials);
     if (userExists) {
       let response = {};
-      console.log(`An identity for the user ${email} already exists in the wallet`);
-      response.error = `Error! An identity for the user ${email} already exists in the wallet. Please enter
+      console.log(`An identity for the user ${voterId} already exists in the wallet`);
+      response.error = `Error! An identity for the user ${voterId} already exists in the wallet. Please enter
         a different license number.`;
       return response;
     }
@@ -244,17 +244,17 @@ exports.registerVoter = async function (admin_credentials, electionId, firstName
     console.log("Hashed password: " + user_hashed_pw);
 
     // Register the user
-    const secret = await ca.register({ affiliation: '', enrollmentID: email, role: 'voter' }, adminIdentity);
+    const secret = await ca.register({ affiliation: '', enrollmentID: voterId, role: 'voter' }, adminIdentity);
     console.log(`###SECRET### =>  ${secret}`);
     // Enroll user
-    const enrollment = await ca.enroll({ enrollmentID: email, enrollmentSecret: secret });
+    const enrollment = await ca.enroll({ enrollmentID: voterId, enrollmentSecret: secret });
     console.log(`###ENROLLMENT### =>  ${enrollment}`);
     // Create User Identity
     const userIdentity = await X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
     console.log(`###USER_IDENTITY### =>  ${userIdentity}`);
     // Import user credentials & identity to wallet
     await wallet.import(user_credentials, userIdentity);
-    console.log(`Successfully registered voter ${firstName} ${lastName}. Use your email: ${email} to login above.`);
+    console.log(`Successfully registered voter ${firstName} ${lastName}. Use your id: ${voterId} to login above.`);
     
     // send the password to the user/voter through email
     // 1 - configuration of the transport object, here we're using mailtrap to test with fake emails
@@ -272,7 +272,7 @@ exports.registerVoter = async function (admin_credentials, electionId, firstName
       from: 'admin@voty.com', // Sender address
       to: email,         // List of recipients
       subject: 'Voty - Election Credentials', // Subject line
-      html: `<h1>Welcome to VOTY!</h1><p>Hey <b>${firstName} ${lastName}</b><br><p>Here's your <b>password</b>: ${password} <br>Keep it somewhere safe!` // HTML message
+      html: `<h1>Welcome to VOTY!</h1><p>Hey <b>${firstName} ${lastName}</b><br><p>You were registered to the election <b>${electionId}</b><br><p>Here's your <b>voter id</b>: ${voterId} <br><br><p>Here's your <b>password</b>: ${password} <br>Keep it somewhere safe!` // HTML message
     };
 
     // 3 - Send the email
@@ -284,7 +284,7 @@ exports.registerVoter = async function (admin_credentials, electionId, firstName
       }
     });
 
-    let response = `Successfully registered voter ${firstName} ${lastName}. Use your email: ${email} to login above.`;
+    let response = `Successfully registered voter ${firstName} ${lastName}. Use your id: ${voterId} to login above.`;
     return response;
   } catch (error) {
     console.error(`Failed to register user + ${email} + : ${error}`);
@@ -371,7 +371,7 @@ exports.registerAdmin = async function (firstName, lastName, email, password) {
       from: 'admin@voty.com', // Sender address
       to: email,         // List of recipients
       subject: 'Voty - Election Credentials', // Subject line
-      html: `<h1>Welcome to VOTY!</h1><p>Hey <b>${firstName} ${lastName}</b><br><p>Here's your <b>password</b>: ${password} <br>Keep it somewhere safe!` // HTML message
+      html: `<h1>Welcome to VOTY!</h1><p>Hey <b>${firstName} ${lastName}</b>!<br>You were registered as an admin by our super admin, you can create elections and add voters!<br><p>Here's your <b>password</b>: ${password} <br>Keep it somewhere safe!` // HTML message
     };
 
     // 3 - Send the email

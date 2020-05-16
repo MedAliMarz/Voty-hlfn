@@ -17,17 +17,17 @@ export class LoginComponent implements OnInit {
   isSpinner: boolean;
   loginForm: FormGroup
   user = {
-    email: '',
+    id: '',
     password: '',
 
   }
   submitted = false;
   ngOnInit(): void {
     this.loginForm = new FormGroup({
-      'email': new FormControl('', [Validators.required]),
+      'id': new FormControl('', [Validators.required]),
       'password': new FormControl('', [Validators.required])
     })
-    console.log(this.loginForm.get('email'))
+    console.log(this.loginForm.get('id'));
   }
   login() {
     console.log("Logging ", this.loginForm.value);

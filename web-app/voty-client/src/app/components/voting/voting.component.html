@@ -4,8 +4,8 @@
     </nb-card-header>
     <nb-card-body>
         <form [formGroup]="voteForm">
-            <nb-select fullWidth [status]="voteForm.get('candidateEmail').invalid && voteForm.get('candidateEmail').touched?'danger':'basic'" formControlName="candidateEmail" placeholder="Who ?" class="mb-3">  
-              <nb-option *ngFor="let candidate of candidates" [value]="candidate.email">{{candidate.firstName}} {{candidate.lastName}}</nb-option>
+            <nb-select fullWidth [status]="voteForm.get('candidateId').invalid && voteForm.get('candidateId').touched?'danger':'basic'" formControlName="candidateId" placeholder="Who ?" class="mb-3">  
+              <nb-option *ngFor="let candidate of candidates" [value]="candidate.voterId">{{candidate.firstName}} {{candidate.lastName}}</nb-option>
               </nb-select>
               <input [disabled]="voteForm.invalid" (click)="vote()" status="primary" fullWidth nbButton type="button" value="Vote" >
         </form>
