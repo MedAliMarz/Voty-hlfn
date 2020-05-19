@@ -14,8 +14,9 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnInit {
   currentTheme = 'default';
   private destroy$: Subject<void> = new Subject<void>();
-  isAdmin:boolean = null;
+
   isLogged:boolean;
+  userRole:string;
   themes = [
     {
       value: 'default',
@@ -67,17 +68,34 @@ export class NavbarComponent implements OnInit {
       icon: 'unlock-outline',
     },
   ]
-  
-  constructor(private router:Router,private toastService:NbToastrService ,private themeService:NbThemeService,private authService:AuthService,private menuService:NbMenuService) { }
+  super_admin_items: NbMenuItem[] =[
+    {
+      title: 'dashboard',
+      icon: 'activity-outline',
+      link:'dashboard'
+    },
+    {
+      title: 'admins list',
+      icon: 'people-outline',
+      link:'superadmin'
+    },
+    {
+      title: 'Logout',
+      icon: 'unlock-outline',
+    },
+  ]
+  constructor(private router:Router,private toastService:NbToastrService ,private themeService:NbThemeService,public authService:AuthService,private menuService:NbMenuService) { }
 
   ngOnInit(): void {
-    this.isLogged = false;
-    if(localStorage.getItem('jwt') && localStorage.getItem('loggedUser')){
-      this.isLogged = true;
-      let role =  localStorage.getItem('role')
-      console.log('role', role)
-      this.isAdmin = role==='admin'
-    }
+    this.authService.isLogged.subscribe(value=>{
+      console.log('logged changed',value)
+      this.isLogged = value
+    })
+    this.authService.role.subscribe(value=>{
+      console.log('role changed',value)
+      this.userRole = value
+    })
+
     
     this.menuService.onItemClick()
     .pipe(
@@ -86,7 +104,6 @@ export class NavbarComponent implements OnInit {
     .subscribe(item => 
       {
         this.authService.logout().subscribe((ok)=>{
-          this.router.navigateByUrl('/');
           this.toastService.show('You have logged out','Logout',{status:'warning'})
         })
       }
@@ -95,6 +112,8 @@ export class NavbarComponent implements OnInit {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this.authService.isLogged.unsubscribe()
+    this.authService.role.unsubscribe()
   }
 
   changeTheme(themeName: string) {

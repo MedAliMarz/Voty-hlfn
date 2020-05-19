@@ -16,6 +16,7 @@ export class AuthGuard implements CanActivate {
         const token = localStorage.getItem('jwt').replace(/"/g, "");
         if (currentUser && token) {
             // logged in so return true
+            this.authenticationService.refresh()
             return true;
         }
 

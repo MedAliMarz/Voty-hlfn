@@ -1,6 +1,6 @@
-<nb-card [size]="'medium'" [nbSpinner]="isSpinner"  nbSpinnerSize="giant" nbSpinnerStatus="warning">
+<nb-card [size]="'medium'"  [nbSpinner]="isSpinner"  nbSpinnerSize="giant" nbSpinnerStatus="warning">
     <nb-card-body *ngIf="candidates && candidates.length">
-      <nb-list >
+      <nb-list  >
         <nb-list-item *ngFor="let candidate of candidates" class="d-inline-block">          
         <span>
           {{candidate.firstName + ' ' + candidate.lastName}}
@@ -9,10 +9,7 @@
       </nb-list-item>
       </nb-list>
     </nb-card-body>
-    <ng-template   *ngIf="!isSpinner && !candidates" >
-        <nb-alert status="warning" class="mt-2">
+    <nb-alert status="basic" class="mt-2" *ngIf="!isSpinner && (!candidates || candidates.length==0)">
       <h6 class="text-center" >There is no candidates </h6>
     </nb-alert>
-  </ng-template>
   </nb-card>
-

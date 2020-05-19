@@ -13,5 +13,4 @@ export class CandidatesListComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

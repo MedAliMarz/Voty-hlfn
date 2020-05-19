@@ -82,6 +82,7 @@ function token_exists(black_list, token) {
 
 // Express middleware that handles the authentication process
 const authenticateJWT = (req, res, next) => {
+  console.log('================authejxt')
   cleanBlackList();
   const authHeader = req.headers.authorization;
 
@@ -185,7 +186,7 @@ app.get('/election/:id/candidates', async (req, res) => {
     if(check){ // all good here!
       let response = await network.invoke(networkObj, true, 'queryByObjectType', 'voter');
       let parsedResponse = JSON.parse(response)
-      return res.status(200).json(JSON.parse(parsedResponse).filter(voter=>voter['Record'].electionId==req.params.id).map(voter=>voter['Record'])).filter(v=>v.isCandidate);
+      return res.status(200).json(JSON.parse(parsedResponse).filter(voter=>voter['Record'].electionId==req.params.id).map(voter=>voter['Record']).filter(v=>(v.isCandidate==true)));
     }else{
       return res.status(404).json({error:'Specified election not found'});
     }
@@ -356,7 +357,7 @@ app.post('/voter', async (req, res) => {
               length: 10,
               numbers: true
             });
-  
+            console.log('Voter cred: ',newVoter.voterId,password)
             //Second create the identity for the voter and add to wallet, super admin will register him
             let resp = await network.registerVoter(appSuperAdmin, newVoter.voterId, newVoter.electionId, newVoter.firstName, newVoter.lastName, newVoter.email, password, newVoter.data);
             console.log('response from registerVoter: ');
@@ -402,7 +403,7 @@ app.post('/admin', async (req, res) => {
             length: 10,
             numbers: true
           });
-
+          console.log('admin password : ',password)
           //Second create the identity for the Admin and add to wallet, normally super admin should register him, we're just testing here..
           let resp = await network.registerAdmin( newAdmin.firstName, newAdmin.lastName, newAdmin.email, password);
           console.log('response from registerAdmin: ');
@@ -511,7 +512,7 @@ app.post('/superadmin', async (req, res) => {
             length: 10,
             numbers: true
           });
-
+          console.log("super admin password : ",password)
           //Second create the identity for the Admin and add to wallet, normally super admin should register him, we're just testing here..
           let resp = await network.registerSuperAdmin( newAdmin.firstName, newAdmin.lastName, newAdmin.email, password);
           console.log('response from registerAdmin: ');
@@ -595,6 +596,8 @@ app.post('/login', async (req, res) => {
 
 // logout user
 app.post('/logout', (req, res) => {
+  console.log('================ Logout')
+
   // two ways to logout: 
   // 1- user will logout before token expiry, in this case we'll come here and invalidate his token this way
   // 2- token expires => we'll log him out from the frontend, we won't contact the server in this case

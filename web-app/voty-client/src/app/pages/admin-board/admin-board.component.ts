@@ -1,15 +1,80 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { FormGroup, FormControl, Validators, ValidatorFn ,AbstractControl, ValidationErrors} from '@angular/forms';
+import { Component, OnInit, ViewChild, TemplateRef,OnChanges, SimpleChanges } from '@angular/core';
+import { FormGroup, FormControl, Validators, ValidatorFn ,NgModel, ValidationErrors} from '@angular/forms';
 import { NbThemeService, NbToastrService, NbDialogService } from '@nebular/theme';
 import { ElectionService } from 'src/app/services/election.service';
 import { VoterService } from 'src/app/services/voter.service'
 import { CandidateService } from 'src/app/services/candidate.service'
+import { DefaultEditor,DefaultFilter } from 'ng2-smart-table';
 
 import async from 'async'; 
 // election model
 import {Election} from '../../models/election.model';
 // smart table
 import { LocalDataSource } from 'ng2-smart-table';
+import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
+
+// custom editor component
+
+@Component({
+  selector: 'input-editor',
+  template: `
+    <input nbInput
+            size='small'
+            fullWidth
+           [(ngModel)]="cell.newValue"
+           [name]="cell.getId()"
+           [placeholder]="cell.getTitle()"
+           [disabled]="!cell.isEditable()"
+           (click)="onClick.emit($event)"
+           (keydown.enter)="onEdited.emit($event)"
+           (keydown.esc)="onStopEditing.emit()">
+    `,
+})
+export class CustomInputEditorComponent extends DefaultEditor {
+
+  constructor() {
+    super();
+  }
+}
+
+// custom-filter component
+@Component({
+  template: `
+    <input 
+      nbInput
+      fullWidth
+      status="primary"
+      [formControl]="inputControl"
+      [placeholder]="column.title + '?'"
+      type="text">
+  `,
+})
+export class CustomFilterComponent extends DefaultFilter implements OnInit, OnChanges {
+  inputControl = new FormControl();
+
+  constructor() {
+    super();
+  }
+
+  ngOnInit() {
+    this.inputControl.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(this.delay),
+      )
+      .subscribe((value: number) => {
+        this.query = value !== null ? this.inputControl.value.toString() : '';
+        this.setFilter();
+      });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.query) {
+      this.query = changes.query.currentValue;
+      this.inputControl.setValue(this.query);
+    }
+  }
+}
 @Component({
   selector: 'app-admin-board',
   templateUrl: './admin-board.component.html',
@@ -29,6 +94,9 @@ export class AdminBoardComponent implements OnInit {
   constructor(private dialogService:NbDialogService,private toastService:NbToastrService,
     private themeService:NbThemeService,private electionService:ElectionService,
     private voterService:VoterService,private candidateService:CandidateService) { }
+  editorSettings = {type:'custom',component:CustomInputEditorComponent}
+  filterSettings = {type:'custom',component:CustomFilterComponent}
+
   settings = {
     add: {
       inputClass:'',
@@ -47,19 +115,27 @@ export class AdminBoardComponent implements OnInit {
       deleteButtonContent: '&#10005;',
       confirmDelete: true,
     },
+    
     columns: {
-      
       firstName: {
-        title: 'First Name'
+        title: 'First Name',
+        editor:this.editorSettings,
+        filter:this.filterSettings
       },
       lastName: {
-        title: 'Last Name'
+        title: 'Last Name',
+        editor:this.editorSettings,
+        filter:this.filterSettings
       },
       email: {
-        title: 'Email'
+        title: 'Email',
+        editor:this.editorSettings,
+        filter:this.filterSettings
       },
       data: {
-        title: 'Data'
+        title: 'Data',
+        editor:this.editorSettings,
+        filter:this.filterSettings
       }
     }
   };
@@ -293,3 +369,5 @@ const candidacyPhaseValidator: ValidatorFn = (control: FormGroup): ValidationErr
   }
 
 };
+
+

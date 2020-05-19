@@ -6,6 +6,7 @@ import { VoterService } from './voter.service';
 import { Router } from '@angular/router';
 import { AdminService } from './admin.service';
 import { SuperAdminService } from './superadmin.service';
+import { Observable,Subject, BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,14 +14,17 @@ import { SuperAdminService } from './superadmin.service';
 export class AuthService {
   loginUrl ='api/login'
   logoutUrl = 'api/logout'
-  isAdmin:boolean;
-  isLogged:boolean;
+  isLogged:Subject<boolean>;
   loggedUser = null;
+  role:Subject<string>;
   constructor(private httpClient:HttpClient,
     private voterService:VoterService,
     private adminService:AdminService,
     private superAdminService:SuperAdminService,
-    private router:Router) { }
+    private router:Router) { 
+      this.isLogged = new BehaviorSubject<boolean>(false)
+      this.role = new Subject()
+    }
 
   login(user){
     console.log("###LOGIN_USER### => " ,user);
@@ -31,6 +35,7 @@ export class AuthService {
       localStorage.setItem('role', JSON.stringify(user['type']));
       localStorage.setItem('loggedUser', JSON.stringify(user));
       this.loggedUser = user;
+      
       // routing after login success
       if(user['type'] == 'voter') {
         localStorage.setItem('userId', JSON.stringify(this.loggedUser['voterId']));
@@ -44,38 +49,50 @@ export class AuthService {
         localStorage.setItem('userId', JSON.stringify(this.loggedUser['email']));
         this.router.navigateByUrl('/superadmin');
       }
+      this.isLogged.next(true)
+      this.role.next(user['type']);
       return user;
   }));
   }
   logout(){
-    localStorage.removeItem('jwt');
+    
     localStorage.removeItem('role');
     localStorage.removeItem('userId');
     localStorage.removeItem('loggedUser');
     // fixed redirection
-    this.router.navigate(['/login']);
+    this.isLogged.next(false);
+    this.role.next('');
+    //this.router.navigate(['/login']);
     
     return this.httpClient.post(this.logoutUrl,{}).pipe(
       tap(response=>{
+        localStorage.removeItem('jwt');
         this.loggedUser = null;
+        
         this.router.navigate(['/login']);
       })
     );
   }
   refresh(){
     const currentUserId = localStorage.getItem('userId').replace(/"/g, "");
-    console.log("###REFRESH=>CurrenUserId => " + currentUserId);
     const currentRole = localStorage.getItem('role').replace(/"/g, "");
+    console.log("###REFRESH=>CurrenUserId => " + currentUserId,currentRole);
+    if(!currentUserId || !currentRole){
+      return
+    }
     if(currentRole == 'voter') {
       this.voterService.getVoter(currentUserId)
         .subscribe(voter=>{
           this.loggedUser= voter;
+          
           console.log("###LOGGED_USER => " + this.loggedUser);
           // since voter doesn't have a token, we need to add it from local storage
           // we need to strip out the double quotes that surround our jwt token
           this.loggedUser.token = localStorage.getItem('jwt').replace(/"/g, "");
           // this update is essential for voting, since the hasVoted will be updated
           localStorage.setItem('loggedUser', JSON.stringify(voter));
+          this.isLogged.next(true)
+          this.role.next(currentRole)
         }, 
         (error) => {
           console.log("ERROR =>" + error);
@@ -85,11 +102,14 @@ export class AuthService {
       this.adminService.getAdmin(currentUserId)
       .subscribe(admin=>{
         this.loggedUser= admin;
+        
         console.log("###LOGGED_USER => " + this.loggedUser);
         // since admin doesn't have a token, we need to add it from local storage
         // we need to strip out the double quotes that surround our jwt token
         this.loggedUser.token = localStorage.getItem('jwt').replace(/"/g, "");
         localStorage.setItem('loggedUser', JSON.stringify(admin));
+        this.isLogged.next(true)
+        this.role.next(currentRole)
       }, 
       (error) => {
         console.log("ERROR =>" + error);
@@ -99,11 +119,14 @@ export class AuthService {
       this.superAdminService.getSuperAdmin(currentUserId)
       .subscribe(superAdmin=>{
         this.loggedUser= superAdmin;
+        
         console.log("###LOGGED_USER => " + this.loggedUser);
         // since admin doesn't have a token, we need to add it from local storage
         // we need to strip out the double quotes that surround our jwt token
         this.loggedUser.token = localStorage.getItem('jwt').replace(/"/g, "");
         localStorage.setItem('loggedUser', JSON.stringify(superAdmin));
+        this.isLogged.next(true)
+        this.role.next(currentRole)
       }, 
       (error) => {
         console.log("ERROR =>" + error);
@@ -111,3 +134,12 @@ export class AuthService {
     }
   }
 }
+/*
+constructor() 
+public schoolObservable = new Observable(observer => {
+   observer.next(this.schoolID);
+   this.updateObservable = (newValue) => {
+      observer.next(newValue); observer.complete(); 
+    }; 
+  });
+*/

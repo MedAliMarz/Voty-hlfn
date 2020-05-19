@@ -1,7 +1,7 @@
 //Import Hyperledger Fabric 1.4 programming model - fabric-network
 'use strict';
 
-const { FileSystemWallet, Gateway, X509WalletMixin } = require('fabric-network');
+const { FileSystemWallet, Gateway, X509WalletMixin,  } = require('fabric-network');
 const path = require('path');
 const fs = require('fs');
 

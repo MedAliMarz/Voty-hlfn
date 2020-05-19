@@ -17,7 +17,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/login/login.component';
 import { VoterBoardComponent } from './pages/voter-board/voter-board.component';
-import { AdminBoardComponent } from './pages/admin-board/admin-board.component';
+import { AdminBoardComponent, CustomFilterComponent } from './pages/admin-board/admin-board.component';
 import { from } from 'rxjs';
 import { CandidateComponent } from './components/candidate/candidate.component';
 import { CandidatesListComponent } from './components/candidates-list/candidates-list.component';
@@ -32,6 +32,7 @@ import { AboutComponent } from './pages/about/about.component';
 import { StatsComponent } from './pages/stats/stats.component';
 // The smart table module
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { CustomInputEditorComponent } from './pages/admin-board/admin-board.component';
 
 // Charjs modules
 import { ChartModule } from 'angular2-chartjs';
@@ -64,7 +65,8 @@ import { AdminsListComponent } from './components/admins-list/admins-list.compon
     StatsComponent,
     SuperadminBoardComponent,
     AdminsListComponent,
-    
+    CustomInputEditorComponent,
+    CustomFilterComponent
   ],
   imports: [
     BrowserModule,
