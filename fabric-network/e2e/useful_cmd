@@ -1,0 +1,1000 @@
+ 1155  cd server/
+ 1156  npm i
+ 1157  npm start
+ 1158  node src/app.js 
+ 1159  cd web-app/client/
+ 1160  npm i
+ 1161  npm run serve
+ 1162  node web-app/server/enrollAdmin.js 
+ 1163  cd web-app/server/
+ 1164  node enrollAdmin.js 
+ 1165  cd ..
+ 1166  cd server/
+ 1167  ls
+ 1168  docker ps
+ 1169  docker logs c75649643938
+ 1170  docker ps
+ 1171  ls
+ 1172  clea
+ 1173  clear
+ 1174  ls
+ 1175  ll
+ 1176  cd gopath/
+ 1177  ls
+ 1178  cd fabric-samples/
+ 1179  ls
+ 1180  cd basic-network/
+ 1181  ls
+ 1182  ./generate.sh 
+ 1183  ./start.sh 
+ 1184  ls
+ 1185  less connection.json 
+ 1186  less connection.yaml 
+ 1187  pwd
+ 1188  cp connection.json .
+ 1189  cp connection.json fabric_connection.json 
+ 1190  ls
+ 1191  nano fabric_connection.json 
+ 1192  cat "" > fabric_connection.json 
+ 1193  cat "" >fabric_connection.json 
+ 1194  cat >fabric_connection.json 
+ 1195  ls
+ 1196  ls -l
+ 1197  nano fabric_connection.json 
+ 1198  s
+ 1199  ls
+ 1200  ls config/
+ 1201  ls crypto-config/
+ 1202  ls
+ 1203  cat crypto-config
+ 1204  cat crypto-config.yaml 
+ 1205  docker ps
+ 1206  ls
+ 1207  cat docker-compose.yml 
+ 1208  docker ps
+ 1209  ./stop.sh
+ 1210  ./start.sh 
+ 1211  docker ps
+ 1212  ./teardown.sh 
+ 1213  docker ps
+ 1214  ./start.sh 
+ 1215  docker ps
+ 1216  docker logs b223d5e1019a
+ 1217  docker status b223d5e1019a
+ 1218  docker --help
+ 1219  docker stats b223d5e1019a
+ 1220  docker logs b223d5e1019a
+ 1221  ./teardown.sh 
+ 1222  ./generate.sh 
+ 1223  docker ps
+ 1224  ./start.sh 
+ 1225  docker ps
+ 1226  docker logs b223d5e1019a
+ 1227  docker logs 3b9dc9eb9dc0
+ 1228  docker ps
+ 1229  cd gopath/fabric-samples/basic-network/
+ 1230  sl
+ 1231  ls
+ 1232  less connection.json 
+ 1233  docker ps
+ 1234  cd .
+ 1235  cd #
+ 1236  ls 
+ 1237  cd gopath/
+ 1238  ls
+ 1239  cd evote/
+ 1240  ls
+ 1241  ls contract/
+ 1242  cd docs/
+ 1243  wallet.png
+ 1244  ls
+ 1245  cd .
+ 1246  cd ..
+ 1247  cd fabric-samples/basic-network/
+ 1248  ./teardown.sh 
+ 1249  ls
+ 1250  cd gopath/fabric-samples/basic-network/
+ 1251  ls
+ 1252  ./start.sh 
+ 1253  docker ps
+ 1254  docker logs 815fa9a0d0a9
+ 1255  ls
+ 1256  cat connection.json 
+ 1257  cat connection.yaml 
+ 1258  ls
+ 1259  cat configtx.yaml 
+ 1260  ls
+ 1261  cat crypto-config.yaml 
+ 1262  ls
+ 1263  ls config
+ 1264  ls config crypto-config
+ 1265  cat docker-compose.yml 
+ 1266  ./teardown.sh 
+ 1267  ls
+ 1268  cat generate.sh 
+ 1269  ./generate.sh 
+ 1270  ./start.sh 
+ 1271  ls
+ 1272  ls crypto-config/peerOrganizations/org1.example.com/ca/
+ 1273  nano docker-compose.yml 
+ 1274  cp docker-compose.yml docker-compose.yml[old]
+ 1275  ls
+ 1276  nano docker-compose.yml 
+ 1277  docker
+ 1278  docker ps
+ 1279  ./teardown.sh 
+ 1280  ./start.sh 
+ 1281  docker ps
+ 1282  sa
+ 1283  docker ps
+ 1284  docker logs edf906bb0eca
+ 1285  docker logs 7123ddaf1f36
+ 1286  ./stop.sh 
+ 1287  ls /etc/hy
+ 1288  docker ps
+ 1289  ls /etc/hy
+ 1290  ls
+ 1291  node enrollAdmin.js 
+ 1292  cd web-app/server/
+ 1293  npm start
+ 1294  cd web-app/client/
+ 1295  npm run serve
+ 1296  cd web-app/server/
+ 1297  node enrollAdmin.js 
+ 1298  docker ps
+ 1299  docker logs 3dec7567c47b
+ 1300  ./stop.sh 
+ 1301  ./start.sh 
+ 1302  touch connection.profile.json
+ 1303  nano connection.profile.json 
+ 1304  docker ps
+ 1305  docker logs 1a1ed611105b
+ 1306  ./stop.sh 
+ 1307  cd ..
+ 1308  ls
+ 1309  cd first-network/
+ 1310  ls
+ 1311  cat configtx.yaml 
+ 1312  ls
+ 1313  ls channel-artifacts/
+ 1314  cat ccp-template.
+ 1315  cat ccp-template.json 
+ 1316  ls
+ 1317  cat crypto-config.yaml 
+ 1318  cd ..
+ 1319  ls
+ 1320  ls balance-transfer/
+ 1321  cat balance-transfer/runApp.sh 
+ 1322  ls balance-transfer/
+ 1323  ls balance-transfer/artifacts/
+ 1324  cat  balance-transfer/artifacts/docker-compose.yaml 
+ 1325  ls 
+ 1326  cd basic-network/
+ 1327  ls
+ 1328  cat config/ch
+ 1329  cat config/channel.tx 
+ 1330  ./start.sh 
+ 1331  ./stop.sh 
+ 1332  docker ps
+ 1333  cd ..
+ 1334  sl
+ 1335  ls
+ 1336  cd src/github.com/hyperledger/fabric/
+ 1337  ls
+ 1338  cd examples/
+ 1339  ls
+ 1340  cd #
+ 1341  cd gopath/fabric-samples/basic-network/
+ 1342  ls
+ 1343  cat configtx.yaml 
+ 1344  voterId, args.registrarId, args.firstName, args.lastName);
+ 1345  peer lifecycle chaincode install fabcar.tar.gz
+ 1346  peer chaincode
+ 1347  cd ..
+ 1348  ls
+ 1349  ls bin/
+ 1350  cd bin/
+ 1351  ls
+ 1352  peer lifecycle chaincode install fabcar.tar.gz
+ 1353  ./peer lifecycle chaincode install fabcar.tar.gz
+ 1354  ./peer chaincode install fabcar.tar.gz
+ 1355  docker ps
+ 1356  peer lifecycle chaincode install fabcar.tar.gz
+ 1357  ./peer
+ 1358  ./peer channel list
+ 1359  ./peer package
+ 1360  ./peer in
+ 1361  ./peer channel list
+ 1362  export FABRIC_CFG_PATH=/var/hyperledger/config
+ 1363  ./peer channel list
+ 1364  ls
+ 1365  export FABRIC_CFG_PATH=/home/khalil/gopath/src/github.com/hyperledger/fabric/sampleconfig/core.yaml
+ 1366  ./peer channel list
+ 1367  ./peer channel list
+ 1368  cat /home/khalil/gopath/src/github.com/hyperledger/fabric/sampleconfig/core.yaml
+ 1369  export FABRIC_CFG_PATH=/home/khalil/gopath/fabric-samples/basic-network
+ 1370  ./peer channel list
+ 1371  export CORE_PEER_TLS_ENABLED=true
+ 1372  export CORE_PEER_LOCALMSPID="Org1MSP"
+ 1373  export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+ 1374  export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+ 1375  export CORE_PEER_ADDRESS=localhost:7051
+ 1376  ./peer channel list
+ 1377  export CORE_PEER_TLS_ROOTCERT_FILE=/home/khalil/gopath/fabric-samples/basic-network/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+ 1378  export CORE_PEER_MSPCONFIGPATH=/home/khalil/gopath/fabric-samples/basic-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+ 1379  ./peer channel list
+ 1380  ./peer channel
+ 1381  ./peer channel list
+ 1382  ./peer chaincode install 
+ 1383  docker ps
+ 1384  ls
+ 1385  cd gopath/fabric-samples/basic-network/
+ 1386  ls
+ 1387  ./start.sh 
+ 1388  docker ps
+ 1389  docker logs 5093ec9a6744
+ 1390  ./stop.sh 
+ 1391  ./start.sh 
+ 1392  docker logs 7a77913825bc
+ 1393  docker ps
+ 1394  docker logs e3d970905bf4
+ 1395  cat fabric_connection.json 
+ 1396  nano fabric_connection.json 
+ 1397  docker ps
+ 1398  docker logs 81aa243a65b5
+ 1399  docker ps
+ 1400  docker logs 7a77913825bc
+ 1401  docker ps
+ 1402  docker logs 7a77913825bc
+ 1403  docker logs 81aa243a65b5
+ 1404  docker logs 7a77913825bc
+ 1405  cat start.sh 
+ 1406  cat generate.sh 
+ 1407  cat configtx.yaml 
+ 1408  cat config/channel.tx 
+ 1409  nano fabric_connection.json 
+ 1410  ./stop.sh 
+ 1411  ./start.sh 
+ 1412  docker ps
+ 1413  docker logs 3dec7567c47b
+ 1414  compose-playground
+ 1415  composer-playground
+ 1416  cat fabric_connection.json 
+ 1417  ./start.sh 
+ 1418  cat docker-compose.yml
+ 1419  cat start.sh 
+ 1420  find ~/gopath/src/github.com/hyperledger/fabric -iname "core.yaml"
+ 1421  ls
+ 1422  pwd
+ 1423  cp connection.yaml core.yaml
+ 1424  ls
+ 1425  cd crypto-config/
+ 1426  pwd
+ 1427  docker ps
+ 1428  cd ..
+ 1429  ./stop.sh 
+ 1430  ls
+ 1431  npm start
+ 1432  node src/app.js 
+ 1433  npm start
+ 1434  cd ..
+ 1435  npm start
+ 1436  cd server/
+ 1437  npm start
+ 1438  node src/app.js 
+ 1439  clear
+ 1440  node src/app.js 
+ 1441  cd web-app/client/
+ 1442  npm run serve
+ 1443  cd gopath/evote/web-app/
+ 1444  cd client/
+ 1445  npm run serve &
+ 1446  ps -ef | grep node
+ 1447  ps -ef | grep run
+ 1448  ps -ef | grep serve
+ 1449  npm run serve
+ 1450  cd ..
+ 1451  cd fabric-samples/
+ 1452  cd basic-network/
+ 1453  ls
+ 1454  cp ../fabcar/javascript/invoke.js js/
+ 1455  ls js
+ 1456  cd js
+ 1457  nano invoke.js 
+ 1458  node invoke.js 
+ 1459  cd ..
+ 1460  cat start.sh 
+ 1461  cat generate.sh 
+ 1462  ls
+ 1463  cp generate.sh gen.sh
+ 1464  nano gen.sh 
+ 1465  ./gen.sh 
+ 1466  cd ..
+ 1467  cd server/
+ 1468  node src/app.js 
+ 1469  ps -ef | grep node
+ 1470  ps -ef | npm
+ 1471  ps -ef | grep npm
+ 1472  ps -ef | node
+ 1473  ps -ef | grep node
+ 1474  ps
+ 1475  ps -aux
+ 1476  cd gopath/
+ 1477  cd fabric-samples/
+ 1478  ll
+ 1479  cp fabcar/javascript/registerUser.js basic-network/
+ 1480  cd basic-network/
+ 1481  ls
+ 1482  cat registerUser.js 
+ 1483  cd ..
+ 1484  cp ./fabcar/javascript/enrollAdmin.js basic-network/
+ 1485  cd basic-network/
+ 1486  ll
+ 1487  ./start.sh 
+ 1488  mkdir js
+ 1489  mv enrollAdmin.js registerUser.js js/
+ 1490  ls
+ 1491  ls js
+ 1492  nano js/enrollAdmin.js 
+ 1493  nano js/registerUser.js 
+ 1494  cd js
+ 1495  node enrollAdmin.js 
+ 1496  npm init
+ 1497  ls
+ 1498  const ccpPath = path.resolve(__dirname, '..', 'connection.json');
+ 1499  npm i fabric-ca-client
+ 1500  npm i fabric-network --save
+ 1501  npm i fabric-ca-client --save
+ 1502  node enrollAdmin.js 
+ 1503  cat enrollAdmin.js 
+ 1504  nano enrollAdmin.js 
+ 1505  node enrollAdmin.js 
+ 1506  cat enrollAdmin.js 
+ 1507  nano enrollAdmin.js 
+ 1508  node enrollAdmin.js 
+ 1509  cd ..
+ 1510  cat enrollAdmin.js 
+ 1511  cd js
+ 1512  cat enrollAdmin.js 
+ 1513  cat ../connection.json 
+ 1514  cat enrollAdmin.js 
+ 1515  cat ../connection.json 
+ 1516  cat ../../first-network/connection-org1.json 
+ 1517  cat enrollAdmin.js 
+ 1518  nano enrollAdmin.js 
+ 1519  node enrollAdmin.js 
+ 1520  nano enrollAdmin.js 
+ 1521  node enrollAdmin.js 
+ 1522  ls
+ 1523  nano registerUser.js 
+ 1524  node registerUser.js 
+ 1525  .././stop.sh
+ 1526  cd ..
+ 1527  ./stop.sh 
+ 1528  ./start.sh 
+ 1529  ./stop.sh 
+ 1530  ./start.sh 
+ 1531  cat fabric_connection.json 
+ 1532  ./stop.sh 
+ 1533  cat docker-compose.yml
+ 1534  docker ps
+ 1535  ./start.sh 
+ 1536  docker ps
+ 1537  cat ../fabcar/javascript/query.js 
+ 1538  docker ps
+ 1539  docker logs 6ddbea487563
+ 1540  cd js
+ 1541  cat enrollAdmin.js 
+ 1542  cd ..
+ 1543  cat connection.json
+ 1544  cd js
+ 1545  ls
+ 1546  rm wallet
+ 1547  rm -rF wallet
+ 1548  rm -ri wallet
+ 1549  ls
+ 1550  rm -rI wallet
+ 1551  ls
+ 1552  rm -rI wallet/
+ 1553  ls
+ 1554  rm -Rf wallet/
+ 1555  ls
+ 1556  node enrollAdmin.js 
+ 1557  docker logs 6ddbea487563
+ 1558  docker ps
+ 1559  docker logs 3e51342f2d7a
+ 1560  node registerUser.js 
+ 1561  docker logs 3e51342f2d7a
+ 1562  cat enrollAdmin.js 
+ 1563  docker exec cli peer chaincode install -n sacc -v 0 -p github.com/sacc
+ 1564  docker ps
+ 1565  cd ..
+ 1566  docker-compose -f docker-compose.yml up -d cli
+ 1567  docker exec cli peer chaincode install -n sacc -v 0 -p github.com/sacc
+ 1568  docker exec cli peer chaincode instantiate -n sacc -v 0 -C mychannel -c '{"Args":["a", "100"]}'
+ 1569  docker exec cli peer chaincode invoke -n sacc -C mychannel -c '{"Args":["get", "a"]}'
+ 1570  docker exec cli peer chaincode invoke -n sacc -C mychannel -c '{"Args":["set", "a", "500"]}'
+ 1571  ls
+ 1572  cd js
+ 1573  ls
+ 1574  nano invoke
+ 1575  nano invoke.js 
+ 1576  node invoke.js 
+ 1577  ls
+ 1578  cat byfn.sh 
+ 1579  cat byfn.sh | grep update
+ 1580  ls
+ 1581  cat * | grep Org2MSPanchors
+ 1582  cat c* | grep Org2MSPanchors
+ 1583  cat c.* | grep Org2MSPanchors
+ 1584  cat con* | grep Org2MSPanchors
+ 1585  cat do* | grep Org2MSPanchors
+ 1586  cat do*
+ 1587  cat do* | grep anchor
+ 1588  cat do* | grep a
+ 1589  cat do* | grep anch
+ 1590  ls
+ 1591  cat script/* | grep a
+ 1592  cat scripts/* | grep a
+ 1593  cat scripts/* | grep anch
+ 1594  cat scripts/script.sh | grep anch
+ 1595  cat scripts/step1 | grep anch
+ 1596  cat scripts/step1* | grep anch
+ 1597  cat scripts/step2* | grep anch
+ 1598  cat scripts/step3* | grep anch
+ 1599  cat scripts/testorg3.sh | grep anch
+ 1600  cat scripts/upgrade_to_v14.sh | grep anch
+ 1601  cat scripts/utils.sh | grep anch
+ 1602  cat scripts/utils.sh 
+ 1603  gedit
+ 1604  gedit scripts/utils.sh 
+ 1605  cp scripts/utils.sh ../basic-network/
+ 1606  gedit scripts/script.sh 
+ 1607  ls
+ 1608  cat byfn.sh 
+ 1609  gedit scripts/script.sh 
+ 1610  cd scripts/
+ 1611  ./script.sh 
+ 1612  cd ..
+ 1613  ls
+ 1614  ./byfn.sh 
+ 1615  cd ..
+ 1616  cd basic-network/
+ 1617  ls
+ 1618  cd config/
+ 1619  ls
+ 1620  cd ..
+ 1621  docker-compose -f docker-compose.yml up -d cli
+ 1622  cd gopath/fabric-samples/basic-network/
+ 1623  ls
+ 1624  ./start.sh 
+ 1625  peer
+ 1626  cd ..
+ 1627  ls
+ 1628  cd bin
+ 1629  ls
+ 1630  pwd
+ 1631  export PATH=$PATH:/home/khalil/gopath/fabric-samples/bin
+ 1632  peer
+ 1633  ls
+ 1634  cd 
+ 1635  cd gopath/fabric-samples/basic-network/
+ 1636  ls
+ 1637  peer
+ 1638  peer channel update -o orderer.example.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx
+ 1639  gedit 
+ 1640  gedit utils.sh 
+ 1641  cat start.sh 
+ 1642  gedit utils.sh 
+ 1643  gedit utils.sh &
+ 1644  docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer0.org1.example.com peer channel join -b mychannel.block peer channel join -b mychannel.block
+ 1645  docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" orderer.example.com:7050 peer channel update -o orderer.example.com:7050 -c mychannel -f ./config/Org1MSPanchors.tx
+ 1646  docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer peer channel update -o orderer.example.com:7050 -c mychannel -f ./config/Org1MSPanchors.tx
+ 1647  docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer0.org1.example.com peer channel update -o orderer.example.com:7050 -c mychannel -f ./config/Org1MSPanchors.tx
+ 1648  docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer0.org1.example.com peer channel update -o orderer.example.com:7050 -c mychannel -f config/Org1MSPanchors.tx
+ 1649  docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer0.org1.example.com peer channel update -o orderer.example.com:7050 -c mychannel -f /etc/hyperledger/configtx/Org1MSPanchors.tx
+ 1650  cd js/
+ 1651  ls
+ 1652  rm -rF wallet/
+ 1653  rm -rf wallet/
+ 1654  ls
+ 1655  node enrollAdmin.js 
+ 1656  node registerUser.js 
+ 1657  node invoke.js 
+ 1658  docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer0.org1.example.com peer channel update -o orderer.example.com:7050 -c mychannel -f /etc/hyperledger/configtx/Org1MSPanchors.tx
+ 1659  cd ..
+ 1660  cp start.sh start.sh.bkp
+ 1661  nano start.sh
+ 1662  cd js/
+ 1663  ls
+ 1664  history
+ 1665  docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer0.org1.example.com peer channel update -o orderer.example.com:7050 -c mychannel -f /etc/hyperledger/configtx/Org1MSPanchors.tx
+ 1666  cd ..
+ 1667  ls
+ 1668  stop.sh
+ 1669  ./stop.sh
+ 1670  ./start.sh
+ 1671  docker ps
+ 1672  docker logs 55b07feed305
+ 1673  docker ps
+ 1674  docker logs e685d380c6af
+ 1675  docker ps
+ 1676  docker logs 58b0cb0a13dc
+ 1677  docker exec cli p
+ 1678  ls
+ 1679  docker exec cli peer chaincode install -n sacc -v 0 -p voterContract@7.0.0.cds
+ 1680  docker exec cli peer chaincode install -n sacc -v 0 -p ./voterContract@7.0.0.cds
+ 1681  ls
+ 1682  cat registerUser.js 
+ 1683  nano registerUser.js 
+ 1684  node registerUser.js 
+ 1685  nano registerUser.js 
+ 1686  node registerUser.js 
+ 1687  rm -rf wallet/
+ 1688  node enrollAdmin.js 
+ 1689  node registerUser.js 
+ 1690  cd ..
+ 1691  ./stop.sh 
+ 1692  cd ..
+ 1693  cd voty-client/
+ 1694  ng serve
+ 1695  npm start
+ 1696  nvm install v11.12
+ 1697  npm start
+ 1698  nvm version
+ 1699  ls
+ 1700  cd gopath/
+ 1701  git clone "https://github.com/MedAliMarz/Voty-hlfn.git"
+ 1702  cd Voty-hlfn/web-app/server/
+ 1703  npm i
+ 1704  cd ..
+ 1705  cd voty-client/
+ 1706  npm i
+ 1707  docker ps
+ 1708  top
+ 1709  cd ..
+ 1710  cd server/
+ 1711  node enrollAdmin.js 
+ 1712  exit
+ 1713  touch auth
+ 1714  nano auth
+ 1715  exit
+ 1716  cd web-app/
+ 1717  cd server/
+ 1718  npm start
+ 1719  cd ..
+ 1720  cd voty-client/
+ 1721  npm start
+ 1722  nvm install v12
+ 1723  npm start
+ 1724  clear
+ 1725  npm start
+ 1726  cd gopath/
+ 1727  cd fabric-samples/
+ 1728  cd fabcar/
+ 1729  ls
+ 1730  cat startFabric.sh 
+ 1731  ./startFabric.sh 
+ 1732  cd javascript
+ 1733  ls
+ 1734  npm i
+ 1735  cd ..
+ 1736  cd fabric-samples/fabcar/
+ 1737  ./stopFabric.sh 
+ 1738  ps -ef
+ 1739  curl
+ 1740  curl -d "id=0000&registrarId=8080&firstName=khalil&lastName=Mejri&password=12345678" -X POST http://localhost:8081/app.post('/registerVoter', async (req, res) => {
+ 1741  curl -d "id=0000&registrarId=8080&firstName=khalil&lastName=Mejri&paemail=khalilssword=12345678" -X POST http://localhost:8081/registerVoter
+ 1742  curl -d "id=0000&registrarId=8080&firstName=khalil&lastName=Mejri&password=12345678&email=khalil.0927mejri@gmail.com" -X POST http://localhost:8081/registerVoter
+ 1743  curl -d "registrarId=8080&firstName=khalil&lastName=Mejri&password=12345678&email=khalil.0927mejri@gmail.com" -X POST http://localhost:8081/registerVoter
+ 1744  ls
+ 1745  ifconfig
+ 1746  cd gopath/Voty-hlfn/
+ 1747  git status
+ 1748  git checkout .
+ 1749  git status
+ 1750  git pull
+ 1751  cd 
+ 1752  cat auth 
+ 1753  cd gopath/
+ 1754  cd fabric-samples/fabcar/
+ 1755  ls
+ 1756  ./startFabric.sh 
+ 1757  ./stopFabric.sh 
+ 1758  cat ../basic-network/start.sh
+ 1759  history
+ 1760  cd .
+ 1761  cd ..
+ 1762  cd basic-network/
+ 1763  docker ps
+ 1764  cat configtx.yaml 
+ 1765  cd ..
+ 1766  cd fabcar/
+ 1767  ls
+ 1768  ./startEvoteFabric.sh 
+ 1769  ./stopFabric.sh 
+ 1770  ./startEvoteFabric.sh 
+ 1771  cat ../chaincode/evote/javascript/lib/voterContract.js 
+ 1772  cat ../chaincode/evote/javascript/index.js 
+ 1773  cat ../chaincode/evote/javascript/package.json 
+ 1774  cat ../chaincode/fabcar/javascript/index.js 
+ 1775  cat ../chaincode/evote/javascript/index.js 
+ 1776  cat ../chaincode/fabcar/javascript/lib/fabcar.js 
+ 1777  cat ../chaincode/fabcar/javascript/package.json 
+ 1778  nano ../chaincode/evote/javascript/package.json 
+ 1779  cat ../chaincode/fabcar/javascript/package.json 
+ 1780  nano ../chaincode/evote/javascript/package.json 
+ 1781  ./stopFabric.sh 
+ 1782  ./startEvoteFabric.sh 
+ 1783  ./stopFabric.sh 
+ 1784  nano ../chaincode/evote/javascript/package.json 
+ 1785  cat ../chaincode/evote/javascript/lib/voterContract.js 
+ 1786  nano ../chaincode/evote/javascript/lib/voterContract.js 
+ 1787  cat startEvoteFabric.sh grep fabcar
+ 1788  cat startEvoteFabric.sh | grep fabcar
+ 1789  nano startEvoteFabric.sh 
+ 1790  ./startEvoteFabric.sh 
+ 1791  nano ../chaincode/evote/javascript/lib/Election.js 
+ 1792  cat ../chaincode/
+ 1793  ./startEvoteFabric.sh 
+ 1794  nano ../chaincode/evote/javascript/lib/Ballot.js 
+ 1795  nano ../chaincode/evote/javascript/lib/VotableItem.js 
+ 1796  nano ../chaincode/evote/javascript/lib/Voter.js 
+ 1797  nano ../chaincode/evote/javascript/lib/voterContract.js 
+ 1798  cd ..
+ 1799  cd fabric-samples/chaincode/evote/javascript/
+ 1800  ls
+ 1801  rm -rf web-app/ voterContract@7.0.0.cds 
+ 1802  ls
+ 1803  rm package-lock.json 
+ 1804  ls
+ 1805  ls
+ 1806  cat package.json 
+ 1807  cd .. 
+ 1808  cd ..
+ 1809  cat fabcar/javascript/package.json 
+ 1810  ls
+ 1811  cd javascript
+ 1812  ls
+ 1813  rm -rf wallet/
+ 1814  node enrollAdmin.js 
+ 1815  node registerUser.js 
+ 1816  node query.js 
+ 1817  cat invoke.js 
+ 1818  node query.js 
+ 1819  node invoke.js 
+ 1820  node query.js 
+ 1821  cat invoke.js 
+ 1822  cd ..
+ 1823  cd
+ 1824  find / -iname chaincode
+ 1825  cd gopath/fabric-samples/first-network/scripts/
+ 1826  ls
+ 1827  cat utils.sh 
+ 1828  cat script.sh 
+ 1829  cd..
+ 1830  cd ..
+ 1831  ls
+ 1832  cat byfn.sh 
+ 1833  ls
+ 1834  cat configtx.yaml 
+ 1835  echo $GOPATH
+ 1836  echo $GO_PATH
+ 1837  echo $GOPATH
+ 1838  cd
+ 1839  cat .bashrc 
+ 1840  cat .profile 
+ 1841  echo $GOPATH
+ 1842  echo $GOROOT
+ 1843  ls
+ 1844  find / -iname "fabcar.*"
+ 1845  cd gopath/fabric-samples/chaincode/
+ 1846  cd
+ 1847  mkdir -rf gopath/fabric-samples/chaincode/evote/javascript
+ 1848  mkdir -vf gopath/fabric-samples/chaincode/evote/javascript
+ 1849  mkdir --help
+ 1850  mkdir -p gopath/fabric-samples/chaincode/evote/javascript
+ 1851  cp gopath/evote/contract/*  gopath/fabric-samples/chaincode/evote/javascript
+ 1852  cp -rf gopath/evote/contract/*  gopath/fabric-samples/chaincode/evote/javascript
+ 1853  cp -r gopath/evote/contract/.*  gopath/fabric-samples/chaincode/evote/javascript
+ 1854  cp -rf gopath/evote/contract/*  gopath/fabric-samples/chaincode/evote/javascript
+ 1855  cp -r gopath/evote/contract/*  gopath/fabric-samples/chaincode/evote/javascript
+ 1856  cat gopath/fabric-samples/chaincode/fabcar/javascript/index.js 
+ 1857  cat gopath/fabric-samples/chaincode/fabcar/javascript/lib/fabcar.js 
+ 1858  cd gopath/fabric-samples/fabcar
+ 1859  ls
+ 1860  cp startFabric.sh startEvoteFabric.sh 
+ 1861  ls
+ 1862  cat startEvoteFabric.sh 
+ 1863  cat startEvoteFabric.sh | grep "/fabcar"
+ 1864  nano startEvoteFabric.sh 
+ 1865  cd javascript/
+ 1866  ls
+ 1867  rm -rf wallet/
+ 1868  cd ..
+ 1869  cat startEvoteFabric.sh | intiLeg
+ 1870  cat startEvoteFabric.sh | grep intiLeg
+ 1871  cat startEvoteFabric.sh | grep init
+ 1872  cd ..
+ 1873  cat chaincode/fabcar/javascript/lib/fabcar.js 
+ 1874  cd fabcar/javascript
+ 1875  ls
+ 1876  cd ..
+ 1877  ls
+ 1878  nano startEvoteFabric.sh 
+ 1879  cd javascript
+ 1880  cp invoke.js invokeEvote.js
+ 1881  nano invokeEvote.js 
+ 1882  node enrollAdmin.js 
+ 1883  node registerUser.js 
+ 1884  node query.js 
+ 1885  cp query.js queryEvote.js
+ 1886  nano queryEvote.js 
+ 1887  node queryEvote.js 
+ 1888  node invokeEvote.js 
+ 1889  nano invokeEvote.js 
+ 1890  node invokeEvote.js 
+ 1891  nano invokeEvote.js 
+ 1892  node invokeEvote.js 
+ 1893  nano invokeEvote.js 
+ 1894  docker ps
+ 1895  cd ..
+ 1896  ./stopFabric.sh 
+ 1897  cd gopath/
+ 1898  cd fabric-samples/
+ 1899  cd chaincode/fabcar/javascript/
+ 1900  ls
+ 1901  cat index.js 
+ 1902  nano index.js 
+ 1903  cd
+ 1904  cd gopath/fabric-samples/fabcar/javascript/
+ 1905  ls
+ 1906  nano invoke.js 
+ 1907  nano query.js 
+ 1908  cd
+ 1909  cd gopath/fabric-samples/chaincode/fabcar/javascript/lib/
+ 1910  ls
+ 1911  cat fabcar.js 
+ 1912  cat voterContract.js 
+ 1913  clear
+ 1914  head voterContract.js 
+ 1915  head 10 voterContract.js 
+ 1916  head -10 voterContract.js 
+ 1917  head -50 voterContract.js 
+ 1918  nano voterContract.js 
+ 1919  cd ..
+ 1920  nano index.js 
+ 1921  cat lib/Vot
+ 1922  cat lib/Voter.js 
+ 1923  cat lib/Ballot.js 
+ 1924  head -50 voterContract.js 
+ 1925  cat lib/voterContract.js 
+ 1926  nano lib/voterContract.js 
+ 1927  cd
+ 1928  cd gopath/fabric-samples/bin/
+ 1929  ls
+ 1930  peer
+ 1931  ./peer
+ 1932  cd
+ 1933  cd gopath/fabric-samples/chaincode/fabcar/javascript
+ 1934  ls
+ 1935  head -50 lib/voterContract.js 
+ 1936  head -50 lib/fabcar.js 
+ 1937  head -100 lib/fabcar.js 
+ 1938  nano lib/voterContract.js 
+ 1939  cd
+ 1940  cd gopath/fabric-samples/
+ 1941  ls
+ 1942  cp -r basic-network/ voty-network
+ 1943  ls
+ 1944  cd voty-network/
+ 1945  ls
+ 1946  cd ..
+ 1947  cp -r basic-network/ voty-network
+ 1948  cd voty-network/
+ 1949  cd ..
+ 1950  cd basic-network/
+ 1951  ls
+ 1952  ls js
+ 1953  cd ..
+ 1954  cd voty-network/
+ 1955  ls
+ 1956  cat js
+ 1957  ls
+ 1958  cat init.sh 
+ 1959  cat generate.sh 
+ 1960  ls
+ 1961  cat utils.sh 
+ 1962  ls
+ 1963* 
+ 1964  nano start.sh 
+ 1965  ./start.sh 
+ 1966  docker ps
+ 1967  ./stop.sh 
+ 1968  cat docker-compose.yml
+ 1969  ls
+ 1970  ls crypto-config
+ 1971  nano docker-compose.yml
+ 1972  ls
+ 1973  config/
+ 1974* 
+ 1975  nano docker-compose.yml
+ 1976  nano start.sh 
+ 1977  nano docker-compose.yml
+ 1978  nano start.sh 
+ 1979  ./start.sh 
+ 1980  nano docker-compose.yml
+ 1981  ./start.sh 
+ 1982  nano docker-compose.yml
+ 1983  ls
+ 1984  nano start.sh 
+ 1985  ./start.sh 
+ 1986  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_ADDRESS=peer0.org1.example.com:7051 -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp -e cli peer chaincode install -n fabcar -v 1.0 -p /opt/gopath/src/github.com/chaincode/fabcar/javascript -l node
+ 1987  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_ADDRESS=peer0.org1.example.com:7051 -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode install -n fabcar -v 1.0 -p /opt/gopath/src/github.com/chaincode/fabcar/javascript -l node
+ 1988  nano docker-compose.yml
+ 1989  ./stop.sh 
+ 1990  ./start.sh 
+ 1991  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_ADDRESS=peer0.org1.example.com:7051 -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode install -n fabcar -v 1.0 -p /opt/gopath/src/github.com/chaincode/fabcar/javascript -l node
+ 1992  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_ADDRESS=peer0.org1.example.com:7051 -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode install list
+ 1993  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_ADDRESS=peer0.org1.example.com:7051 -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode list
+ 1994  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_ADDRESS=peer0.org1.example.com:7051 -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode list --installed
+ 1995  nano start.sh 
+ 1996  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -l node -v 1.0 -c '{"Args":[]}' -P 'AND('\''Org1MSP.member'\'','\''Org2MSP.member'\'')' --peerAddresses peer0.org1.example.com:7051
+ 1997  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -l node -v 1.0 -c '{"Args":[]}' -P 'AND('\''Org1MSP.member'\'')' --peerAddresses peer0.org1.example.com:7051
+ 1998  docker ps
+ 1999  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -l node -v 1.0 -c '{"Args":[]}' -P 'AND('\''Org1MSP.member'\'')' --peerAddresses peer0.org1.example.com:7051
+ 2000  docker ps
+ 2001  docker logs
+ 2002  docker logs decce52eb494
+ 2003  docker logs decce52eb4949743f0d5f245
+ 2004  docker logs 9743f0d5f245
+ 2005  ./stop.sh 
+ 2006  ls
+ 2007  cat core.yaml 
+ 2008  ls
+ 2009  cat start
+ 2010  cat docker-compose.yml
+ 2011  ./stop.sh 
+ 2012  ./start.sh 
+ 2013  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -l node -v 1.0 -c '{"Args":[]}' --peerAddresses peer0.org1.example.com:7051
+ 2014  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -l node -v 1.0 -c '{"Args":[]}' -P 'AND('\''Org1MSP.member'\'')' --peerAddresses peer0.org1.example.com:7051
+ 2015  cat docker-compose.yml
+ 2016  nano docker-compose.yml
+ 2017  ./start.sh 
+ 2018  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -l node -v 1.0 -c '{"Args":[]}' -P 'AND('\''Org1MSP.member'\'')' --peerAddresses peer0.org1.example.com:7051
+ 2019  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode list
+ 2020  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode list --installed
+ 2021  nano start.sh 
+ 2022  ./start.sh 
+ 2023  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_ADDRESS=peer0.org1.example.com:7051 -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode install -n fabcar -v 1.0 -p /opt/gopath/src/github.com/chaincode/fabcar/go -l go
+ 2024  cd ..
+ 2025  cd chaincode/fabcar/go/
+ 2026  ls
+ 2027  cd
+ 2028  cd gopath/fabric-samples/voty-network/
+ 2029  ls
+ 2030  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_ADDRESS=peer0.org1.example.com:7051 -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode install -n fabcar -v 1.0 -p /opt/gopath/src/github.com/chaincode/fabcar/go 
+ 2031  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_ADDRESS=peer0.org1.example.com:7051 -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode install -n fabcar -v 1.0 -p /opt/gopath/src/github.com/chaincode/fabcar/go -l golang
+ 2032  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_ADDRESS=peer0.org1.example.com:7051 -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode install -n fabcar -v 1.0 -p /opt/gopath/src/github.com/chaincode/fabcar/javascript -l node
+ 2033  docker logs cli
+ 2034  nano docker-compose.yml
+ 2035  ./start.sh 
+ 2036  docker ps
+ 2037  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_ADDRESS=peer0.org1.example.com:7051 -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode install -n fabcar -v 1.0 -p /opt/gopath/src/github.com/chaincode/fabcar/javascript -l node
+ 2038  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -l node -v 1.0 -c '{"Args":[]}' -P 'AND('\''Org1MSP.member'\'')' --peerAddresses peer0.org1.example.com:7051
+ 2039  cat start.sh 
+ 2040  nano start.sh 
+ 2041  ./start.sh 
+ 2042  docker ps
+ 2043  docker logs ae4d55ade95c
+ 2044  nano docker-compose.yml
+ 2045  ./start.sh 
+ 2046  docker ps
+ 2047  docker logs e749ced3a94b
+ 2048  nano start.sh 
+ 2049  ./start.sh 
+ 2050  docker ps
+ 2051  docker logs 846ecef83ca9
+ 2052  docker ps
+ 2053  docker logs 846ecef83ca9
+ 2054  docker psclear
+ 2055  clear
+ 2056  cat start.sh 
+ 2057  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -l node -v 1.0 -c '{"Args":[]}' -P 'AND('\''Org1MSP.member'\'')' --peerAddresses peer0.org1.example.com:7051
+ 2058  docker logs 846ecef83ca9
+ 2059  nano docker-compose.yml
+ 2060  ./stop.sh 
+ 2061  nano docker-compose.yml
+ 2062  ./start.sh 
+ 2063  docker ps
+ 2064  ./start.sh 
+ 2065  nano docker-compose.yml
+ 2066  ./start.sh 
+ 2067  nano docker-compose.yml
+ 2068  ./start.sh 
+ 2069  nano docker-compose.yml
+ 2070  ./start.sh 
+ 2071  nano docker-compose.yml
+ 2072  ./start.sh 
+ 2073  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -l node -v 1.0 -c '{"Args":[]}' -P 'AND('\''Org1MSP.member'\'')' --peerAddresses peer0.org1.example.com:7051
+ 2074  docker ps
+ 2075  docker logs c96104c285db
+ 2076  ./start.sh 
+ 2077  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -l node -v 1.0 -c '{"Args":[]}' -P 'AND('\''Org1MSP.member'\'')' --peerAddresses peer0.org1.example.com:7051
+ 2078  docker ps
+ 2079  docker logs 12ee492ae7a8
+ 2080  docker rmi $(docker images "dev-*" -q)
+ 2081  ./stop.sh 
+ 2082  docker rmi $(docker images "dev-*" -q)
+ 2083  docker rm $(docker ps -aq)
+ 2084  ./start.sh 
+ 2085  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -l node -v 1.0 -c '{"Args":[]}' -P 'AND('\''Org1MSP.member'\'')' --peerAddresses peer0.org1.example.com:7051
+ 2086  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode list --installed
+ 2087  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode list --instantiated
+ 2088  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode list 
+ 2089  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode list --instantiated
+ 2090  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode list --instantiated -C mychannel
+ 2091  ls
+ 2092  clear
+ 2093  ls
+ 2094  ls js
+ 2095  cp ~/gopath/fabric-samples/fabcar/javascript/e* js/
+ 2096  cp ~/gopath/fabric-samples/fabcar/javascript/i* js/
+ 2097  cp ~/gopath/fabric-samples/fabcar/javascript/q* js/
+ 2098  cp ~/gopath/fabric-samples/fabcar/javascript/registe* js/
+ 2099* cp ~/gopath/fabric-samples/fabcar/javascript/package* js/
+ 2100  cd js
+ 2101  ls
+ 2102  npm i
+ 2103  rm -rf wallet/
+ 2104  node enrollAdmin.js 
+ 2105  rm -rf node_modules/
+ 2106  rm package-lock.json 
+ 2107  npm i
+ 2108  node enrollAdmin.js 
+ 2109  cat enrollAdmin.js 
+ 2110  nano enrollAdmin.js 
+ 2111  cat enrollAdmin.js 
+ 2112  nano enrollAdmin.js 
+ 2113  node enrollAdmin.js 
+ 2114  nano enrollAdmin.js 
+ 2115  node enrollAdmin.js 
+ 2116  cp ../../basic-network/js/enrollAdmin.js .
+ 2117  cp ../../basic-network/js/registerUser.js .
+ 2118  ls
+ 2119  cat enrollAdmin.js 
+ 2120  cp ../../basic-network/js/enrollAdmin.js ./
+ 2121  cat enrollAdmin.js 
+ 2122  node enrollAdmin.js 
+ 2123  node registerUser.js 
+ 2124  node query.js 
+ 2125  ls
+ 2126  ls wallet/
+ 2127  nano registerUser.js 
+ 2128  cay registerUser.js | grep user2
+ 2129  cat registerUser.js | grep user2
+ 2130  nano registerUser.js 
+ 2131  node registerUser.js 
+ 2132  node query.js 
+ 2133  nano query.js 
+ 2134  cat registerUser.js 
+ 2135  nano query.js 
+ 2136  node query.js 
+ 2137  cd ..
+ 2138  docker exec -e CORE_PEER_LOCALMSPID=Org1MSP -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabcar -c '{"function":"initLedger","Args":[]}' --waitForEvent --peerAddresses peer0.org1.example.com:7051
+ 2139  cd js
+ 2140  node invoke.js 
+ 2141  node query.js 
+ 2142  nano invoke.js 
+ 2143  cat query.js 
+ 2144  nano invoke.js 
+ 2145  node invoke.js 
+ 2146  docker ps
+ 2147  docker logs 4f90a8b2bd87
+ 2148  docker ps
+ 2149  docker logs 590403c0ab0f
+ 2150  cd ..
+ 2151  ls
+ 2152  cat docker-compose.yml
+ 2153  nano docker-compose.yml
+ 2154  history > last_cmd
