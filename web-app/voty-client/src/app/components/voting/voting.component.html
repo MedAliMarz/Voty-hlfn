@@ -1,3 +1,4 @@
+<h3 class="text-center" *ngIf="timer_data!=null" id="timer">{{timer_data}}</h3>
 <nb-card class="col-6 col-md-4 mx-auto my-auto" *ngIf="!loggedUser.hasVoted" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
     <nb-card-header>
         <h4>Choose your candidate</h4>
@@ -11,12 +12,12 @@
         </form>
     </nb-card-body>
 </nb-card>
-<nb-card class="col-6 col-md-4 mx-auto my-auto" *ngIf="loggedUser.hasVoted" >
-  <nb-card-header>
-      <h4>You have already voted !</h4>
+<nb-card class="col-6 col-md-4 mx-auto my-auto" *ngIf="loggedUser.hasVoted || hasEnded" >
+  <nb-card-header *ngIf="loggedUser.hasVoted && !hasEnded">
+      <h4 class="text-center">You have already voted !</h4>
   </nb-card-header>
   <nb-card-body>
-      <h5 class="text-center">you can check the result</h5>
+      
       <a  [routerLink]="['/stats']" status="success" fullWidth nbButton>Check results !</a>
   </nb-card-body>
 </nb-card>

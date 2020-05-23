@@ -23,8 +23,8 @@ export class CandidateService {
     console.log("candiate ",newCandidate)
     return this.httpClient.post<Voter>(`${this.url}`,newCandidate)
   }
-  toggleCandidacy(toggleData){
-    // toggleData : {electionId, voterId}
-    return this.httpClient.put<Voter>(`api/toggleCandidate`,toggleData)
+  updateCandidacy(updatedCandidate){
+    // updatedCandidate : {electionId, voterId,data,isActive}
+    return this.httpClient.put<Voter>(`${this.url}`,updatedCandidate)
   }
 }

@@ -186,7 +186,7 @@ app.get('/election/:id/candidates', async (req, res) => {
     if(check){ // all good here!
       let response = await network.invoke(networkObj, true, 'queryByObjectType', 'voter');
       let parsedResponse = JSON.parse(response)
-      return res.status(200).json(JSON.parse(parsedResponse).filter(voter=>voter['Record'].electionId==req.params.id).map(voter=>voter['Record']).filter(v=>(v.isCandidate==true)));
+      return res.status(200).json(JSON.parse(parsedResponse).filter(voter=>voter['Record'].electionId==req.params.id).map(voter=>voter['Record']).filter(v=>(v.isCandidate==true && v.isActive==true)));
     }else{
       return res.status(404).json({error:'Specified election not found'});
     }
@@ -562,7 +562,7 @@ app.post('/login', async (req, res) => {
     var credentials = id + '|' + hash;
     let networkObj = await network.connectToNetwork(credentials);
     console.log('networkobj: ');
-    console.log(util.inspect(networkObj));
+    //console.log(util.inspect(networkObj));
   
     if (networkObj.error) {
       return res.status(404).send(networkObj);
@@ -687,16 +687,19 @@ app.post("/candidate", async (req, res) => {
 });
 
 // update candidacy
-app.put("/toggleCandidate", async (req, res) => {
-  let {voterId,electionId} = req.body;
-  if(!req.body || !voterId || !electionId ){
+app.put("/candidate", async (req, res) => {
+  console.log("entered candidate put");
+  
+  let {voterId,electionId,isActive,data} = req.body;
+  console.log(req.body)
+  if(!req.body || !voterId || !electionId || (isActive==undefined || isActive==null) || !data ){
     return res.status(400).json({error:'You must supply all needed attributs'});
   }else{
     
     
       try{
       let networkObj = await network.connectToNetwork(appSuperAdmin);
-      let response = await network.invoke(networkObj, false, 'toggleCandidacy', [JSON.stringify({voterId,electionId})]);
+      let response = await network.invoke(networkObj, false, 'updateCandidacy', [JSON.stringify({voterId,electionId,isActive,data})]);
       let parsedResponse = await JSON.parse(response);
       if(parsedResponse.error){
         return res.status(500).json(parsedResponse);
@@ -759,7 +762,7 @@ app.get('/getCurrentStanding', async (req, res) => {
 app.post('/castBallot', async (req, res) => {
   let networkObj = await network.connectToNetwork(req.body.voterId);
   console.log('util inspecting');
-  console.log(util.inspect(networkObj));
+  //console.log(util.inspect(networkObj));
   req.body = JSON.stringify(req.body);
   console.log('req.body');
   console.log(req.body);
@@ -804,13 +807,13 @@ app.post('/registerVoter', async (req, res) => {
     console.log(req.body.voterId);
     let networkObj = await network.connectToNetwork(voterId);
     console.log('networkobj: ');
-    console.log(networkObj);
+    //console.log(networkObj);
 
     if (networkObj.error) {
       res.send(networkObj.error);
     }
     console.log('network obj');
-    console.log(util.inspect(networkObj));
+    //console.log(util.inspect(networkObj));
 
 
     req.body = JSON.stringify(req.body);
@@ -841,7 +844,7 @@ app.post('/validateVoter', async (req, res) => {
   console.log(req.body);
   let networkObj = await network.connectToNetwork(req.body.voterId);
   console.log('networkobj: ');
-  console.log(util.inspect(networkObj));
+  //console.log(util.inspect(networkObj));
 
   if (networkObj.error) {
     res.send(networkObj);

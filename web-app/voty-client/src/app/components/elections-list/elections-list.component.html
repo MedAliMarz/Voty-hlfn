@@ -1,4 +1,4 @@
-<nb-card [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning"  [size]="'medium'"  >
+<nb-card *ngIf="elections && elections.length!=0" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning"  [size]="'medium'"  >
     <nb-card-body *ngIf="elections && elections.length">
       <nb-list >
         <nb-list-item *ngFor="let election of elections" class="d-inline-block">          
@@ -10,10 +10,10 @@
       </nb-list>
     </nb-card-body>
   </nb-card>
-  <ng-template *ngIf="!isSpinner && !elections" >
-      <nb-alert status="warning"  class="mt-2">
-    <h6 class="text-center" >There is no elections </h6>
-  </nb-alert>
-</ng-template>
+
+<nb-alert status="basic"  class="mt-2" *ngIf="!isSpinner && (!elections || elections.length==0)">
+    <h6 class="text-center" >You didn't created any election yet</h6>
+</nb-alert>
+
 
  

@@ -21,13 +21,19 @@ export class VotingComponent implements OnInit {
   voteForm:FormGroup
   isSpinner:boolean = false
   candidates:Voter[];
+  timer_data = null;
+  hasEnded:boolean=false;
+  hasStarted:boolean=false;
   loggedUser = JSON.parse(localStorage.getItem('loggedUser'));
   ngOnInit(): void {
+
+    this.loadVotingTime()
     this.voteForm = new FormGroup({
       candidateId: new FormControl('',[Validators.required]),
 
     })
     this.isSpinner = true
+    
     this.loadCandidates();
   }
   vote(){
@@ -56,8 +62,8 @@ export class VotingComponent implements OnInit {
         console.log("voting vote res ", vote);
         this.authService.refresh();
         this.isSpinner = false;
+        this.loggedUser.hasVoted = true;
         this.toastService.show("Congrats, your vote is recorded","Vote",{status:'success',duration:4000})
-      
       }
       ,err=>{
         console.log("voting err", err)
@@ -85,5 +91,53 @@ export class VotingComponent implements OnInit {
         this.isSpinner = false
 
       })
+  }
+  loadVotingTime(){
+    this.electionService.getElection(this.loggedUser.electionId)
+      .subscribe(
+        election=>{
+          let start = election.voting_startDate;
+          let end = election.voting_endDate;
+          this.initTimers(start,end)
+        },
+        err=>{
+
+        }
+      )
+  }
+  initTimers(startDate,endDate){
+    var countDownDate = new Date(endDate).getTime();
+    var countUpDate = new Date(startDate).getTime();
+    // Update the count down every 1 second
+    var now = new Date().getTime();
+    if(now < countUpDate){
+      var distance = countDownDate - now;
+
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      this.timer_data = `Election will start in ${days}d ${hours}h ${minutes}m ${seconds}s`
+    }else{
+      this.hasStarted = true;
+    var x = setInterval(() => {
+      var now = new Date().getTime();
+      var distance = countDownDate - now;
+
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      if (distance < 0) {
+        this.timer_data = "Election Phase Has Ended!";
+        clearInterval(x);
+        this.hasEnded =true  
+      }
+      
+      this.timer_data =  `Election ends in ${days}d ${hours}h ${minutes}m ${seconds}s`
+    
+      }, 1000);
+    }
   }
 }
