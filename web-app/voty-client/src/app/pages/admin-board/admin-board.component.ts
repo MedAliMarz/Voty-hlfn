@@ -132,11 +132,7 @@ export class AdminBoardComponent implements OnInit {
         editor:this.editorSettings,
         filter:this.filterSettings
       },
-      data: {
-        title: 'Data',
-        editor:this.editorSettings,
-        filter:this.filterSettings
-      }
+      
     }
   };
   electionForm:FormGroup;
@@ -225,6 +221,7 @@ export class AdminBoardComponent implements OnInit {
       let voters =  this.votersDataSource['data']
         .map(voter=>{
         voter['electionId'] = this.createdElection['electionId'];
+        voter['data']=''
         voter['admin_email'] = localStorage.getItem('userId').replace(/"/g, "");
         return voter;
         })
@@ -254,7 +251,7 @@ export class AdminBoardComponent implements OnInit {
             console.log('One of the voters wasn\'t registered ',err);
             this.toastService.show(`Problem in adding voters`,"Adding Voters",{status:'warning'})
           } else {
-            this.toastService.show(`All voter have been added`,"Adding Voters",{status:'success'})
+            this.toastService.show(`All voters have been added`,"Adding Voters",{status:'success'})
             this.votersSumbitted = true;
             this.stepper.next()
           }

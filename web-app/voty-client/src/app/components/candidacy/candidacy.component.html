@@ -1,12 +1,12 @@
- 
-<h4 class="text-center">hello {{loggedUser.firstName}} {{loggedUser.lastName | uppercase}}</h4>
+<h3 class="text-center" *ngIf="timer_data!=null" id="timer">{{timer_data}}</h3>
+
 <nb-card  class="col-6 col-md-4 mx-auto my-auto" *ngIf="!loggedUser.isCandidate" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
   <nb-card-header>
     <h3 class="mx-auto">Become a candidate !</h3>
   </nb-card-header>
   <nb-card-body>
     
-    <form [formGroup]="candidateForm">
+    <form [formGroup]="candidateForm" >
       
       
       <div class="form-group mb-2">
@@ -34,13 +34,23 @@
         </textarea>
       </div>
     -->
+    <form [formGroup]="candidateUpdateForm" >
+      
+      
       <div class="form-group mb-2">
-
-        <label for="toggle" class="label">Switch {{loggedUser.isActive ?'Off ':'On '}}your candidacy</label>
-
-        <nb-toggle fullWidth id="toggle" [(ngModel)]="active" labelPosition="start"> {{' '}}</nb-toggle>
+        <label for="data" class="label">Provide some career informations</label>
+        <textarea nbInput id="data" [status]="candidateUpdateForm.get('data').invalid && candidateUpdateForm.get('data').touched?'danger':'basic'" formControlName="data" fullWidth placeholder="3 years Researcher at X" type="text"></textarea>
       </div>
-        <input (click)="modifyCandidate()" status="primary" fullWidth nbButton type="button"value="Save" />
+      <div class="form-group mb-2">
+        
+        <label for="toggle" class="label">Switch {{candidateUpdateForm.value.isActive ?'Off ':'On '}}your candidacy</label>
+
+        <nb-toggle fullWidth id="toggle" formControlName="isActive" labelPosition="start"> {{' '}}</nb-toggle>
+      </div>
+          <input  [disabled]="candidateUpdateForm.invalid" (click)="updateCandidate()" status="primary" fullWidth nbButton type="button" value="Save" >
+
+    </form>  
+      
 
     </nb-card-body>
   </nb-card>

@@ -630,7 +630,71 @@ async readMyAsset(ctx, myAssetId) {
       return response;
     }
   }
+/**
+   *
+   * updateCandidacy
+   * 
+   * First to checks that a particular voter is in the same election 
+   * checks if that voter is already candidate
+   * activate/desactivate his candidacy 
+   * update his career (data) field
+   * 
+   * @param electionId - the electionId of the election we want to vote in
+   * @param data - the career 'data' of the candidate to change
+   * @param isActive - the new value for the candidacy activity field
+   * @param voterId - the email of the voter who wants to vote
+   * @returns none. 
+   */
+  async updateCandidacy(ctx,args){
+    args = JSON.parse(args);
+    let voter_id = args.voterId;
+    let electionId = args.electionId;
+    
+    let electionExists = await this.myAssetExists(ctx, electionId);
+    let voterExists  = await this.myAssetExists(ctx,voter_id);
+    if (electionExists) {
+      let electionAsBytes = await ctx.stub.getState(electionId);
+      let election = await JSON.parse(electionAsBytes);
+      // candidacy phase deadline test
+      let candidacyStart = await Date.parse(election.candidacy_startDate);
+      let candidacyEnd = await Date.parse(election.candidacy_endDate);
+      let currentTime = await new Date();
+      let parsedCurrentTime = await Date.parse(currentTime);
+      if(parsedCurrentTime >= candidacyStart && parsedCurrentTime < candidacyEnd){
+        if (voterExists){
+          
+          let voterAsBytes = await ctx.stub.getState(args.voterId);
+          let voter = await JSON.parse(voterAsBytes);
+          
+          if(voter.electionId == electionId && voter.isCandidate){
+            voter.isActive = args.isActive;
+            voter.data = args.data
+            await ctx.stub.putState(voter.voterId, Buffer.from(JSON.stringify(voter)));
+            //let response = `The candidate with id: ${voter.voterId} toggled his candidacy`;
+            return voter;
+          }else{
+            let response = {};
+            response.error = 'This is not a candidate in this election';
+            return response;
+          }
+          
 
+        }else{
+          let response = {};
+          response.error = 'this voter doesn\'t exist!';
+          return response;
+        }
+      }else{
+        let response = {};
+        response.error = 'Candidacy phase not open!';
+        return response;
+      }
+    }else{
+      let response = {};
+      response.error = 'Election not found!';
+      return response;
+    }
+  }
 /**
    *
    * toggleCandidacy

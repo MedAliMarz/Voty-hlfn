@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable,throwError } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
-import { catchError } from 'rxjs/operators';
+import { catchError, } from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class JwtInterceptor implements HttpInterceptor {
@@ -36,7 +36,7 @@ export class JwtInterceptor implements HttpInterceptor {
             this.router.navigateByUrl(`/login`);
         }
         console.error(errorMsg);
-        return Observable.throw(errorMsg);
+        return throwError(errorMsg);
     }
     
 

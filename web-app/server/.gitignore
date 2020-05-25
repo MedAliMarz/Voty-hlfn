@@ -78,3 +78,8 @@ typings/
 
 #wallet
 wallet
+
+# connection files (changed by dali)
+fabric_connection.json
+local_fabric_connection.json
+config.json
