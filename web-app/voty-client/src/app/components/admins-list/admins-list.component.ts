@@ -30,11 +30,20 @@ export class AdminsListComponent implements OnInit {
           async.mapSeries(admin.elections,(electionId,cb)=>{
             this.electionService.getElection(electionId)
               .subscribe(election=>{
-                cb(null,{title:election.name})
+                cb(null,{
+                  title:election.name,
+                  link: `../election/${election.electionId}`,
+                  icon: {
+                    status: 'warning',
+                    icon:(!election.state || election.state=='created')?'alert-circle-outline':'checkmark-circle-outline',
+                    
+                  }
+                })
               },error=>{
                 cb(`election : ${electionId} is not loaded`)
               })
           },(err,children)=>{
+            console.log('children ',children)
             cbg(null,<NbMenuItem>{
               title:`${admin.firstName} ${admin.lastName}`,
               children : children

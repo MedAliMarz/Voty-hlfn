@@ -289,6 +289,21 @@ app.put('/election/:id' , async (req, res) => {
   }
 });
 
+app.put('/activateElection' ,async (req,res)=>{
+  let {electionId}= req.body
+  if(!req.body || ! electionId){
+    return res.status(400).json({error:'Bad request , election id missing'});
+  }else{
+    try{
+      let networkObj = await network.connectToNetwork(appSuperAdmin);
+      let response = await network.invoke(networkObj, false, 'validateElection', [JSON.stringify({electionId})]);
+      let parsedResponse = await JSON.parse(response);
+      return res.status(200).send(parsedResponse);
+      }catch(e){
+        return res.status(500).json({error:'Problem in transaction execution'});
+      }
+  }
+})
 // get voter by id
 app.get('/voter/:id', async (req, res) => {
   if(!req.params.id){
@@ -663,15 +678,15 @@ app.get("/candidate", async (req, res)=> {
 
 // become a candidate, needs auth
 app.post("/candidate", async (req, res) => {
-  let {voterId,electionId} = req.body
-  if(!req.body || !voterId || !electionId ){
+  let {voterId,electionId,data} = req.body
+  if(!req.body || !voterId || !electionId || !data ){
     return res.status(400).json({error:'You must supply all needed attributs'});
   }else{
     
     
       try{
       let networkObj = await network.connectToNetwork(appSuperAdmin);
-      let response = await network.invoke(networkObj, false, 'candidature', [JSON.stringify({voterId,electionId})]);
+      let response = await network.invoke(networkObj, false, 'candidature', [JSON.stringify({voterId,electionId,data})]);
       let parsedResponse = await JSON.parse(response);
       if(parsedResponse.error){
         return res.status(500).json(parsedResponse);

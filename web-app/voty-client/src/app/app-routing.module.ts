@@ -82,7 +82,8 @@ const routes: Routes = [
   {
     path:'election/:id',
     component: ElectionComponent,
-    canActivate: [AuthGuard, AdminGuard]
+    canActivate: [AuthGuard],
+
     
   },
   {

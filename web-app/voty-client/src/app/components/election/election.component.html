@@ -5,11 +5,17 @@
   </nb-card>
 <nb-card class="col-8 mx-auto"  *ngIf="isSpinner==false" >
     <nb-card-header>
-        <h4 class="float-left">Election details </h4>
-        <nb-toggle class="float-right" fullWidth id="toggle" (checkedChange)="toggleModification()" [checked]="isModify" labelPosition="end">modify</nb-toggle>
-
+        <h4 class="float-left">Election details {{authService.role | async }} {{election.state}}</h4>
+        <nb-toggle *ngIf="(authService.role|async)=='admin'; else btnb" class="float-right" fullWidth id="toggle" (checkedChange)="toggleModification()" [checked]="isModify" labelPosition="end">modify</nb-toggle>
+        <ng-template #btnb>
+        <button size="medium"  *ngIf="election.state=='created'" status="primary" (click)="activateElection()" nbButton class="float-right" >Approve Election</button>
+    </ng-template>
     </nb-card-header>
+
     <nb-card-body>
+        <nb-alert *ngIf="election.state=='validated'" status="info" >
+            This election is approved !
+        </nb-alert>
         <form  [formGroup]="electionForm">
         <div class="form-group">
             <label for="name" class="label">Name</label>

@@ -9,4 +9,6 @@ export class Election{
     voting_startDate : Date | string;
     voting_endDate : Date | string;
     type : string;
+    state : string;
+
 }

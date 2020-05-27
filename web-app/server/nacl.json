@@ -33,6 +33,11 @@
         "action": "allow"
       },
       {
+        "resource": "activateElection",
+        "methods": "*",
+        "action": "deny"
+      },
+      {
         "resource": "voter/:id",
         "methods": ["GET"],
         "action": "deny"
@@ -123,6 +128,11 @@
         "action": "allow"
       },
       {
+        "resource": "activateElection",
+        "methods": "*",
+        "action": "deny"
+      },
+      {
         "resource": "voter/:id",
         "methods": ["GET"],
         "action": "allow"
@@ -181,6 +191,11 @@
         "resource": "election",
         "methods": "*",
         "action": "deny"
+      },
+      {
+        "resource": "activateElection",
+        "methods": ["PUT"],
+        "action": "allow"
       },
       {
         "resource": "election/*",
