@@ -6,6 +6,7 @@ import { Election } from 'src/app/models/election.model';
 import {NbCalendarRange} from '@nebular/theme'
 import { Voter } from 'src/app/models/voter.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-election',
   templateUrl: './election.component.html',
@@ -36,7 +37,8 @@ export class ElectionComponent implements OnInit {
     private electionService:ElectionService,
     private activatedRoute:ActivatedRoute,
     private dialogService:NbDialogService,
-    private themeService:NbThemeService) { }
+    private themeService:NbThemeService,
+    public authService:AuthService) { }
 
   ngOnInit(): void {
     this.isModify = false;
@@ -152,6 +154,29 @@ export class ElectionComponent implements OnInit {
           })
         }
       )
+  }
+  activateElection(){
+    let ref = this.dialogService.open(this.dialog,{context:"Are you sure to approve this election ?!"});
+    ref.onClose.subscribe(value=> {
+      if(value){
+
+        this.isSpinner = true
+        this.electionService.activateElection(this.electionId)
+          .subscribe(
+            election=>{
+              this.toastService.show('Election has been approved','Election',{status:'success'})
+              this.election = election
+              this.isSpinner = false
+            }
+            ,err=>{
+              this.toastService.show('Election approving has failed','Election',{status:'warning'})
+              this.isSpinner = false
+            }
+          )
+      }else{
+
+      }
+    })
   }
   handleCandidacyRangeChange(data){
     console.log(data)

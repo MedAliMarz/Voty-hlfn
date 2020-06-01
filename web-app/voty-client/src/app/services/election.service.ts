@@ -29,4 +29,7 @@ export class ElectionService {
   updateElection(electionId,electionData){
     return this.httpClient.put<Election>(`${this.url}/${electionId}`,electionData)
   }
+  activateElection(electionId){
+    return this.httpClient.put<Election>(`api/activateElection`,{electionId})
+  }
 }

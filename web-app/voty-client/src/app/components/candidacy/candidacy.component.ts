@@ -4,6 +4,7 @@ import { NbDialogService, NbToastrService } from '@nebular/theme';
 import { CandidateService } from 'src/app/services/candidate.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ElectionService } from 'src/app/services/election.service';
+import { Election } from 'src/app/models/election.model';
 
 @Component({
   selector: 'app-candidacy',
@@ -22,6 +23,7 @@ export class CandidacyComponent implements OnInit {
   isCandidate:boolean = true;
   isSpinner:boolean = false;
   submitted:boolean=false;
+  election:Election
   timer_data = null;
   hasEnded:boolean=false;
   hasStarted:boolean=false;
@@ -58,7 +60,8 @@ export class CandidacyComponent implements OnInit {
   initCandidate(){
     let newCandidate ={
       electionId:JSON.parse(localStorage.getItem('loggedUser')).electionId,
-      voterId:JSON.parse(localStorage.getItem('loggedUser')).voterId
+      voterId:JSON.parse(localStorage.getItem('loggedUser')).voterId,
+      data:this.candidateForm.value.data
     }
     this.candidateService.createCandidate(newCandidate)
       .subscribe(
@@ -119,6 +122,7 @@ export class CandidacyComponent implements OnInit {
     this.electionService.getElection(this.loggedUser.electionId)
       .subscribe(
         election=>{
+          this.election = election
           let start = election.candidacy_startDate;
           let end = election.candidacy_endDate;
           this.initTimers(start,end)
@@ -133,10 +137,10 @@ export class CandidacyComponent implements OnInit {
     var countUpDate = new Date(startDate).getTime();
     // Update the count down every 1 second
     var now = new Date().getTime();
-    this.candidateForm.disable()
+    
     if(now < countUpDate){
       var distance = countDownDate - now;
-      
+      this.candidateForm.disable()
       var days = Math.floor(distance / (1000 * 60 * 60 * 24));
       var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -155,6 +159,10 @@ export class CandidacyComponent implements OnInit {
 
       if (distance < 0) {
         this.timer_data = "Candidacy Phase Has Ended!";
+        this.candidateForm.disable()
+        if(this.candidateUpdateForm){
+          this.candidateUpdateForm.disable()
+        }
         clearInterval(x);
         this.hasEnded =true  
       }

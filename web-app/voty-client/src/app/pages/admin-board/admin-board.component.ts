@@ -221,7 +221,7 @@ export class AdminBoardComponent implements OnInit {
       let voters =  this.votersDataSource['data']
         .map(voter=>{
         voter['electionId'] = this.createdElection['electionId'];
-        voter['data']=''
+        voter['data']=' '
         voter['admin_email'] = localStorage.getItem('userId').replace(/"/g, "");
         return voter;
         })
