@@ -24,7 +24,6 @@ class Election {
       this.description = description;
       this.organisation = organisation;      
       this.votersNumber = 0
-      this.votes = 0
       this.candidacy_startDate = candidacy_startDate;
       this.candidacy_endDate = candidacy_endDate;
       this.voting_startDate = voting_startDate;

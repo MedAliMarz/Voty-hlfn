@@ -3,10 +3,12 @@
     This election is not approved yet ! 
   </nb-alert>
 
-<div *ngIf="election.state=='validated'">  
-  <h3 class="text-center" *ngIf="timer_data!=null" id="timer">{{timer_data}}</h3>
-
-  <nb-card  class="col-6 col-md-4 mx-auto my-auto" *ngIf="!loggedUser.isCandidate" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
+<div *ngIf="election.state=='validated'" class="text-center">  
+  <h3  *ngIf="timer_data!=null" id="timer">{{timer_data}}</h3>
+  <a  [routerLink]="['/voting']" nbButton status="primary" *ngIf="hasEnded">
+    Check voting phase !
+  </a>
+  <nb-card  class="col-6 col-md-4 mx-auto my-auto" *ngIf="!loggedUser.isCandidate && !hasEnded" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
     <nb-card-header>
       <h3 class="mx-auto">Become a candidate !</h3>
     </nb-card-header>
@@ -26,7 +28,7 @@
       </nb-card-body>
     </nb-card>
     
-  <nb-card *ngIf="loggedUser.isCandidate" class="col-6 col-md-4 mx-auto my-auto" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
+  <nb-card *ngIf="loggedUser.isCandidate && !hasEnded" class="col-6 col-md-4 mx-auto my-auto" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
       <nb-card-header>
         <h3 class="mx-auto">You are already a candidate</h3>
       </nb-card-header>

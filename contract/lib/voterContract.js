@@ -577,10 +577,7 @@ async readMyAsset(ctx, myAssetId) {
       candidate.votes += 1
       // update candidate state
       await ctx.stub.putState(candidate.voterId, Buffer.from(JSON.stringify(candidate)));
-      // add the vote to the election
-      election.votes +=1
-      // update the election state
-      await ctx.stub.putState(election.electionId, Buffer.from(JSON.stringify(election)));
+
 
       let response  = 'A vote has been updated in world state';
       return response

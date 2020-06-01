@@ -32,4 +32,7 @@ export class ElectionService {
   activateElection(electionId){
     return this.httpClient.put<Election>(`api/activateElection`,{electionId})
   }
+  getStanding(electionId){
+    return this.httpClient.post('api/standing',{electionId})
+  }
 }

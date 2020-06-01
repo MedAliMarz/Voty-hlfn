@@ -123,7 +123,7 @@ export class VotingComponent implements OnInit {
       this.timer_data = `Election will start in ${days}d ${hours}h ${minutes}m ${seconds}s`
     }else{
       this.hasStarted = true;
-    var x = setInterval(() => {
+      var x = setInterval(() => {
       var now = new Date().getTime();
       var distance = countDownDate - now;
 
@@ -136,9 +136,11 @@ export class VotingComponent implements OnInit {
         this.timer_data = "Election Phase Has Ended!";
         clearInterval(x);
         this.hasEnded =true  
+      }else{
+        this.timer_data =  `Election ends in ${days}d ${hours}h ${minutes}m ${seconds}s`
+
       }
       
-      this.timer_data =  `Election ends in ${days}d ${hours}h ${minutes}m ${seconds}s`
     
       }, 1000);
     }

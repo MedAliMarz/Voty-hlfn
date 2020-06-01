@@ -82,7 +82,6 @@ function token_exists(black_list, token) {
 
 // Express middleware that handles the authentication process
 const authenticateJWT = (req, res, next) => {
-  console.log('================authejxt')
   cleanBlackList();
   const authHeader = req.headers.authorization;
 
@@ -763,13 +762,56 @@ app.get('/queryAll', async (req, res) => {
 
 });
 */
-app.get('/getCurrentStanding', async (req, res) => {
+app.post('/standing', async (req, res) => {
+  // if election has ended we return all result
+  // else we return only ratio votes/voters  
+  let {electionId} = req.body
+  if(!req.body || !electionId) {
+    return res.status(400).json({error:'Supply the election id'})
+  }else{
+    try{
 
-  let networkObj = await network.connectToNetwork(appSuperAdmin);
-  let response = await network.invoke(networkObj, true, 'queryByObjectType', 'votableItem');
-  let parsedResponse = await JSON.parse(response);
-  console.log(parsedResponse);
-  res.send(parsedResponse);
+    
+      let networkObj = await network.connectToNetwork(appSuperAdmin);
+      let check = await network.invoke(networkObj, true, 'myAssetExists', electionId);
+      check = await JSON.parse(check.toString());
+      
+      if(!check){
+        return res.status(404).json({error:'Election not found'})
+      }else{
+        
+        networkObj = await network.connectToNetwork(appSuperAdmin);
+        let response = await network.invoke(networkObj, true, 'readMyAsset', electionId);
+        let election = await JSON.parse(response)
+        //networkObj = await network.connectToNetwork(appSuperAdmin);
+        response = await network.invoke(networkObj, true, 'queryByObjectType', 'voter');
+        
+        let parsedResponse = await JSON.parse(response)
+        let candidates = JSON.parse(parsedResponse)
+          .filter(voter=>voter['Record'].electionId==electionId)
+          .map(voter=>voter['Record'])
+          .filter(v=>(v.isCandidate==true && v.isActive==true))
+          
+        if(Date.parse(election.voting_endDate)<Date.now()){
+          // election has ended we return every information
+          // get the election candidates and return their data
+          return res.status(200).json({election,candidates})
+        }else{
+          // election is still occuring we reveal only the number of votes/voters
+          // get the election candidates , calculate the votes number
+          return res.status(200).json({
+            election,
+            votes: candidates.map(c=> c.votes).reduce((a,b)=>a+b,0)
+          })
+        }
+      }
+    }catch(e){
+      return res.status(500).json({error:"Server problem",e})
+    }
+    
+    
+  }
+  
 
 });
 

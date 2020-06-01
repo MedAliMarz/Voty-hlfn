@@ -1,40 +1,8 @@
 <!--<chart type="bar" [data]="data" [options]="options"></chart>
 -->
-<div class="row justify-content-center" *ngIf="ended">
-    <div class="col-lg-6">
-      <nb-card size="medium">
-        <nb-card-header>Votes Pie</nb-card-header>
-        <nb-card-body>
-          <chart type="pie" [data]="dataPie" [options]="optionsPie"></chart>
-        </nb-card-body>
-      </nb-card>
-    </div>
-<!--
-    <div class="col-lg-6">
-      <nb-card size="medium">
-        <nb-card-header>Difference in voting </nb-card-header>
-        <nb-card-body>
-          <chart type="bar" [data]="dataBar" [options]="optionsBar"></chart>
-        </nb-card-body>
-      </nb-card>
-    </div>
-    
-    <div class="col-lg-12">
-      <nb-card size="medium">
-        <nb-card-header>Continuous flow of voting</nb-card-header>
-        <nb-card-body>
-          <chart type="line" [data]="dataLine" [options]="optionsLine"></chart>
-        </nb-card-body>
-      </nb-card>
-    </div>
-   -->
-   
-  
-</div>
-
 <div class="row" *ngIf="!ended" class="col-lg-6 mx-auto">
   
-  <nb-card >
+  <nb-card  [nbSpinner]="loading" nbSpinnerSize="giant" nbSpinnerStatus="warning" >
     <nb-card-body>
       <nb-card-header>
         <h1 class="timer text-center">{{timerData}}</h1>
@@ -97,4 +65,37 @@
   </div>
   -->
 </div>
+<div class="row justify-content-center" *ngIf="ended">
+    <div class="col-lg-6">
+      <nb-card size="medium" >
+        <nb-card-header>Votes Pie</nb-card-header>
+        <nb-card-body>
+          <chart type="pie" [data]="dataPie" [options]="optionsPie"></chart>
+        </nb-card-body>
+      </nb-card>
+    </div>
+<!--
+    <div class="col-lg-6">
+      <nb-card size="medium">
+        <nb-card-header>Difference in voting </nb-card-header>
+        <nb-card-body>
+          <chart type="bar" [data]="dataBar" [options]="optionsBar"></chart>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    
+    <div class="col-lg-12">
+      <nb-card size="medium">
+        <nb-card-header>Continuous flow of voting</nb-card-header>
+        <nb-card-body>
+          <chart type="line" [data]="dataLine" [options]="optionsLine"></chart>
+        </nb-card-body>
+      </nb-card>
+    </div>
+   -->
+   
+  
+</div>
+
+
   

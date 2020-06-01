@@ -165,10 +165,11 @@ export class CandidacyComponent implements OnInit {
         }
         clearInterval(x);
         this.hasEnded =true  
+      }else{
+        this.timer_data =  `Candidacy ends in ${days}d ${hours}h ${minutes}m ${seconds}s`
       }
       
-      this.timer_data =  `Candidacy ends in ${days}d ${hours}h ${minutes}m ${seconds}s`
-    
+      
       }, 1000);
     }
   }

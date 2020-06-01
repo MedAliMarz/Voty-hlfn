@@ -88,8 +88,8 @@
         "action": "deny"
       },
       {
-        "resource": "getCurrentStanding",
-        "methods": ["GET"],
+        "resource": "standing",
+        "methods": ["POST"],
         "action": "allow"
       }
     ]
@@ -168,8 +168,8 @@
         "action": "allow"
       },
       {
-        "resource": "getCurrentStanding",
-        "methods": ["GET"],
+        "resource": "standing",
+        "methods": ["POST"],
         "action": "allow"
       }
     ]
@@ -248,8 +248,8 @@
         "action": "deny"
       },
       {
-        "resource": "getCurrentStanding",
-        "methods": ["GET"],
+        "resource": "standing",
+        "methods": ["POST"],
         "action": "deny"
       }
     ]
