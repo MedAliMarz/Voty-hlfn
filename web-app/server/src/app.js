@@ -42,6 +42,7 @@ let aclConfigObject = {
   baseUrl: '/',
   // will search for the role in req.user.role
   roleSearchPath: 'user.role',
+  defaultRole: 'anonymous',
   denyCallback: (res) => {
     return res.status(403).json({
       status: 'Access Denied',
@@ -54,6 +55,10 @@ let aclConfigObject = {
 acl.config(aclConfigObject);
 
 const accessTokenSecret = 'ptROYMOE3Hb$LWw&4u+[rp14l&OSf#';
+//swagger ui to interact with swagger through our server
+const swaggerUi = require('swagger-ui-express');
+// openApi config for swagger
+const openApiDocumentation = require('./openApiDocumentation.js');
 
 // we'll put here all the invalidated tokens, we'll need a way to clean up the old tokens
 let blackListedTokens = [];
@@ -111,6 +116,9 @@ authenticateJWT.unless = unless;
  
 // integrate the jwt authentication function
 app.use(authenticateJWT.unless({
+  custom: req => {
+    return req.url.search('.(swagger|api-docs).') != -1;
+  },
   path: [
     '/login',
     { url: '/', methods: ['GET', 'PUT']  },
@@ -122,6 +130,7 @@ app.use(acl.authorize.unless(
   { path: [
     '/login', 
     '/logout',
+    '/api-docs',
     { url: '/superadmin', methods: ['POST']  } // at the end we'll remove this line}
    ] 
   }));
@@ -514,6 +523,7 @@ app.post('/superadmin', async (req, res) => {
         // first we create the admin then enrollhim
         // it may be the wrong way but we need the random generated id to use it for registration
         let response = await network.invoke(networkObj, false, 'createSuperAdmin', [JSON.stringify({firstName,lastName,email})] );
+        console.log("response => ", response);
         let newAdmin = await JSON.parse(response);
         if(newAdmin.error){
             return res.status(500).json(newAdmin);
@@ -538,6 +548,7 @@ app.post('/superadmin', async (req, res) => {
           return res.status(200).json(newAdmin);
         }
       }catch(e){
+	console.log(e);
         return res.status(500).json({error:'Problem in transaction execution'});
       }
   }
@@ -941,6 +952,9 @@ app.post('/queryByKey', async (req, res) => {
   }
 });
 */
+//integrate swagger with our openApi Documentation, it'll serve at /api-docs endpoint
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
+
 app.get('/', async(req,res)=>{
   res.status(200).json({"result":"Voty API web server running"})
 })

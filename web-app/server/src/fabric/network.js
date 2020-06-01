@@ -82,9 +82,10 @@ exports.connectToNetwork = async function (credentials) {
     //console.log('before gateway.connect: ');
 
     await gateway.connect(ccp, { wallet, identity: credentials, discovery: gatewayDiscovery });
-
+    console.log(gateway);
     // Connect to our local fabric
     const network = await gateway.getNetwork('mychannel');
+    console.log(network);
 
     //console.log('Connected to mychannel. ');
     // Get the contract we have installed on the peer

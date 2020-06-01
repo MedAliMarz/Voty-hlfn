@@ -91,6 +91,11 @@
         "resource": "standing",
         "methods": ["POST"],
         "action": "allow"
+      },
+      {
+        "resource": "api-docs",
+        "methods": ["GET"],
+        "action": "allow"
       }
     ]
   },
@@ -170,6 +175,11 @@
       {
         "resource": "standing",
         "methods": ["POST"],
+        "action": "allow"
+      },
+      {
+        "resource": "api-docs",
+        "methods": ["GET"],
         "action": "allow"
       }
     ]
@@ -251,6 +261,26 @@
         "resource": "standing",
         "methods": ["POST"],
         "action": "deny"
+      },
+      {
+        "resource": "api-docs",
+        "methods": ["GET"],
+        "action": "allow"
+      }
+    ]
+  },
+  {
+    "group": "anonymous",
+    "permissions": [
+      {
+        "resource": "api-docs",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "api-docs/*",
+        "methods": "*",
+        "action": "allow"
       }
     ]
   }
