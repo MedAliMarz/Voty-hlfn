@@ -1,37 +1,37 @@
 {
-    "certificateAuthorities": {
-        "Org1CA": {
-            "caName": "ca",
-            "url": "http://localhost:17070"
-        }
-    },
+    "name": "Voty Fabric Net_gw",
+    "version": "1.0.0",
     "client": {
+        "organization": "Org1MSP",
         "connection": {
             "timeout": {
-                "orderer": "300",
                 "peer": {
                     "endorser": "300"
-                }
+                },
+                "orderer": "300"
             }
-        },
-        "organization": "Org1MSP"
+        }
     },
-    "name": "Org1",
     "organizations": {
         "Org1MSP": {
-            "certificateAuthorities": [
-                "Org1CA"
-            ],
             "mspid": "Org1MSP",
             "peers": [
-                "Org1Peer1"
+                "peer0.org1.example.com"
+            ],
+            "certificateAuthorities": [
+                "ca.example.com"
             ]
         }
     },
     "peers": {
-        "Org1Peer1": {
-            "url": "grpc://localhost:17071"
+        "peer0.org1.example.com": {
+            "url": "grpc://localhost:7051"
         }
     },
-    "version": "1.0.0"
+    "certificateAuthorities": {
+        "ca.example.com": {
+            "url": "http://localhost:7054",
+            "caName": "ca.example.com"
+        }
+    }
 }
