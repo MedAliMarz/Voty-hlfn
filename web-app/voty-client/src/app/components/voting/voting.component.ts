@@ -5,6 +5,7 @@ import { Voter } from 'src/app/models/voter.model';
 import {VoterService} from 'src/app/services/voter.service';
 import {ElectionService} from 'src/app/services/election.service';
 import {AuthService} from 'src/app/services/auth.service';
+import { Election } from 'src/app/models/election.model';
 
 @Component({
   selector: 'app-voting',
@@ -21,6 +22,7 @@ export class VotingComponent implements OnInit {
   voteForm:FormGroup
   isSpinner:boolean = false
   candidates:Voter[];
+  election:Election
   timer_data = null;
   hasEnded:boolean=false;
   hasStarted:boolean=false;
@@ -96,6 +98,7 @@ export class VotingComponent implements OnInit {
     this.electionService.getElection(this.loggedUser.electionId)
       .subscribe(
         election=>{
+          this.election = election;
           let start = election.voting_startDate;
           let end = election.voting_endDate;
           this.initTimers(start,end)
@@ -120,7 +123,7 @@ export class VotingComponent implements OnInit {
       this.timer_data = `Election will start in ${days}d ${hours}h ${minutes}m ${seconds}s`
     }else{
       this.hasStarted = true;
-    var x = setInterval(() => {
+      var x = setInterval(() => {
       var now = new Date().getTime();
       var distance = countDownDate - now;
 
@@ -133,9 +136,11 @@ export class VotingComponent implements OnInit {
         this.timer_data = "Election Phase Has Ended!";
         clearInterval(x);
         this.hasEnded =true  
+      }else{
+        this.timer_data =  `Election ends in ${days}d ${hours}h ${minutes}m ${seconds}s`
+
       }
       
-      this.timer_data =  `Election ends in ${days}d ${hours}h ${minutes}m ${seconds}s`
     
       }, 1000);
     }

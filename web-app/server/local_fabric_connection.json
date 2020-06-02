@@ -26,12 +26,12 @@
     },
     "peers": {
         "peer0.org1.example.com": {
-            "url": "grpc://localhost:17071"
+            "url": "grpc://localhost:7051"
         }
     },
     "certificateAuthorities": {
         "ca.org1.example.com": {
-            "url": "http://localhost:17070",
+            "url": "http://localhost:7054",
             "caName": "ca.org1.example.com"
         }
     }

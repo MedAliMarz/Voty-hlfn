@@ -251,8 +251,6 @@ class MyAssetContract extends Contract {
    * @param args.organisation - the election year
    * @returns - nothing - but updates the world state with a voter
    */
-
-
   async updateElection(ctx, args) {
     args = JSON.parse(args);
     console.log(ctx);
@@ -281,7 +279,39 @@ class MyAssetContract extends Contract {
       return response;
     }
   }
+  /**
+   *
+   * validateElection
+   *
+   * change the state of election from created --> validated (by the superadmin)
+   *  
+   * @param args.candidateId - the election id
+   * @returns - nothing - but updates the world state with a voter
+   */
+  async validateElection(ctx, args) {
+    args = JSON.parse(args);
 
+    let electionId = args.electionId;
+    let electionExists = await this.myAssetExists(ctx, electionId);
+    // check the existance of the election
+    if (electionExists) {
+      let electionAsBytes = await ctx.stub.getState(electionId);
+      let election = await JSON.parse(electionAsBytes);
+      console.log("election before validating" ,election)
+      election.state="validated";
+      console.log("election after validating" ,election)
+      // update state with new election
+      await ctx.stub.putState(election.electionId, Buffer.from(JSON.stringify(election)));
+
+      //let response = `A new election with id: ${newElection.electionId} is created (updated in the world state)`;
+      return election;
+    }else{
+      let response = {
+        error:'Election not found!'
+      }
+      return response;
+    }
+  }
   /**
   *
   * updateAdmin
@@ -538,7 +568,7 @@ async readMyAsset(ctx, myAssetId) {
     let electionEnd = await Date.parse(election.voting_endDate);
     let currentTime = await new Date();
     let parsedCurrentTime = await Date.parse(currentTime);
-    if (parsedCurrentTime >= electionStart && parsedCurrentTime < electionEnd) {
+    if (parsedCurrentTime >= electionStart && parsedCurrentTime < electionEnd && election.state=="validated") {
       // change the status of the voter
       voter.hasVoted = true;
       // update voter state
@@ -547,10 +577,7 @@ async readMyAsset(ctx, myAssetId) {
       candidate.votes += 1
       // update candidate state
       await ctx.stub.putState(candidate.voterId, Buffer.from(JSON.stringify(candidate)));
-      // add the vote to the election
-      election.votes +=1
-      // update the election state
-      await ctx.stub.putState(election.electionId, Buffer.from(JSON.stringify(election)));
+
 
       let response  = 'A vote has been updated in world state';
       return response
@@ -572,6 +599,7 @@ async readMyAsset(ctx, myAssetId) {
    * 
    * @param electionId - the electionId of the election we want to vote in
    * @param voterId - the id of the voter who wants to vote
+   * @param data - the id of the voter who wants to vote
    * @returns none. 
    */
   async candidature(ctx, args) {
@@ -579,7 +607,6 @@ async readMyAsset(ctx, myAssetId) {
 
     let voter_id = args.voterId;
     let electionId = args.electionId;
-    
     let electionExists = await this.myAssetExists(ctx, electionId);
     let voterExists  = await this.myAssetExists(ctx,voter_id);
     // check the existance of the election
@@ -591,7 +618,7 @@ async readMyAsset(ctx, myAssetId) {
       let candidacyEnd = await Date.parse(election.candidacy_endDate);
       let currentTime = await new Date();
       let parsedCurrentTime = await Date.parse(currentTime);
-      if(parsedCurrentTime >= candidacyStart && parsedCurrentTime < candidacyEnd){
+      if(parsedCurrentTime >= candidacyStart && parsedCurrentTime < candidacyEnd && election.state=="validated"){
         // check the existance of the voter
         if (voterExists){
         
@@ -599,7 +626,7 @@ async readMyAsset(ctx, myAssetId) {
           let voter = await JSON.parse(voterAsBytes);
           // check if the voter is in the correct election
           if(voter.electionId == electionId){
-  
+            voter.data = args.data
             voter.isCandidate = true;
             voter.isActive = true;
             voter.votes=0;
@@ -660,7 +687,7 @@ async readMyAsset(ctx, myAssetId) {
       let candidacyEnd = await Date.parse(election.candidacy_endDate);
       let currentTime = await new Date();
       let parsedCurrentTime = await Date.parse(currentTime);
-      if(parsedCurrentTime >= candidacyStart && parsedCurrentTime < candidacyEnd){
+      if(parsedCurrentTime >= candidacyStart && parsedCurrentTime < candidacyEnd && election.state=="validated"){
         if (voterExists){
           
           let voterAsBytes = await ctx.stub.getState(args.voterId);

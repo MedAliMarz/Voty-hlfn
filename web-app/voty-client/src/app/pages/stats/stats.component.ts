@@ -14,6 +14,7 @@ export class StatsComponent implements OnInit,OnDestroy {
   ended:boolean = false;
   timerData:string='loading';
   timerMessage:string ='';
+  loading:Boolean;
   // charts data and options
   dataPie:any;optionsPie:any;
   dataBar:any;optionsBar:any;
@@ -26,6 +27,7 @@ export class StatsComponent implements OnInit,OnDestroy {
     private electionService:ElectionService,) { }
 
   ngOnInit(): void {
+    this.loading = true;
     this.loadResult()
     
   }
@@ -376,6 +378,7 @@ export class StatsComponent implements OnInit,OnDestroy {
       var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      this.timerData =  days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
     if (distance < 0) {
         clearInterval(x);
         this.timerData = "Election Phase Has Ended!";
@@ -383,7 +386,7 @@ export class StatsComponent implements OnInit,OnDestroy {
         this.ended = true;
     }
     // Display the result in the element with id="demo"
-    this.timerData =  days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+    
     // If the count down is finished, write some text
     
     }, 1000);
@@ -391,27 +394,32 @@ export class StatsComponent implements OnInit,OnDestroy {
 
   loadResult(){
     let electionId = JSON.parse(localStorage.getItem('loggedUser')).electionId
-    this.electionService.getElection(electionId)
-      .subscribe(election=>{
-        this.initTimer(election.voting_endDate)
-        this.electionService.getElectionVoters(election.electionId)
-          .subscribe(voters=>{
-            let candidates = voters.filter(voter=>(voter.isCandidate && voter.isActive)).sort((v1,v2)=> v1.votes - v2.votes)
-            let votes_number =candidates.map(voter=>voter.votes).reduce((a,b)=>a+b,0)
-            let voters_number = voters.length
-            this.timerMessage = `${votes_number} / ${voters_number} Have voted !`
-            this.initPie(
-              candidates.map(voter=>`${voter.firstName} ${voter.lastName}`),
-              candidates.map(candidate=>candidate.votes),
-              )
-          },
-          err=>{
-            console.log("Error in loading candidates")
-          })
-          
+    this.electionService.getStanding(electionId)
+      .subscribe(result=>{
+        this.initTimer(result.election.voting_endDate)
+        this.ended = Date.parse(result.election.voting_endDate) < Date.now()
+        console.log("has ended ? ",this.ended);
+        
+        if(this.ended && result.candidates){
+          console.log("here in the final state")
+          let candidates = result.candidates.sort((v1,v2)=> v1.votes - v2.votes)
+          let votes_number =candidates.map(voter=>voter.votes).reduce((a,b)=>a+b,0)
+          let voters_number = result.election.votersNumber
+          this.timerMessage = `${votes_number} / ${voters_number} Have voted !`
+          this.initPie(
+            candidates.map(voter=>`${voter.firstName} ${voter.lastName}`),
+            candidates.map(candidate=>candidate.votes),
+            )
+            
+        }else{
+          this.timerMessage = `${result.votes} / ${result['election'].votersNumber} Have voted !`
+        }
+        this.loading = false;
       },
       error=>{
         console.log("Error in loading election")
+        this.timerData = "A problem has occured please refresh the page"
+        this.loading = false;
       })
   }
 }

@@ -42,6 +42,7 @@ let aclConfigObject = {
   baseUrl: '/',
   // will search for the role in req.user.role
   roleSearchPath: 'user.role',
+  defaultRole: 'anonymous',
   denyCallback: (res) => {
     return res.status(403).json({
       status: 'Access Denied',
@@ -54,6 +55,10 @@ let aclConfigObject = {
 acl.config(aclConfigObject);
 
 const accessTokenSecret = 'ptROYMOE3Hb$LWw&4u+[rp14l&OSf#';
+//swagger ui to interact with swagger through our server
+const swaggerUi = require('swagger-ui-express');
+// openApi config for swagger
+const openApiDocumentation = require('./openApiDocumentation.js');
 
 // we'll put here all the invalidated tokens, we'll need a way to clean up the old tokens
 let blackListedTokens = [];
@@ -82,7 +87,6 @@ function token_exists(black_list, token) {
 
 // Express middleware that handles the authentication process
 const authenticateJWT = (req, res, next) => {
-  console.log('================authejxt')
   cleanBlackList();
   const authHeader = req.headers.authorization;
 
@@ -112,6 +116,9 @@ authenticateJWT.unless = unless;
  
 // integrate the jwt authentication function
 app.use(authenticateJWT.unless({
+  custom: req => {
+    return req.url.search('.(swagger|api-docs).') != -1;
+  },
   path: [
     '/login',
     { url: '/', methods: ['GET', 'PUT']  },
@@ -123,6 +130,7 @@ app.use(acl.authorize.unless(
   { path: [
     '/login', 
     '/logout',
+    '/api-docs',
     { url: '/superadmin', methods: ['POST']  } // at the end we'll remove this line}
    ] 
   }));
@@ -289,6 +297,21 @@ app.put('/election/:id' , async (req, res) => {
   }
 });
 
+app.put('/activateElection' ,async (req,res)=>{
+  let {electionId}= req.body
+  if(!req.body || ! electionId){
+    return res.status(400).json({error:'Bad request , election id missing'});
+  }else{
+    try{
+      let networkObj = await network.connectToNetwork(appSuperAdmin);
+      let response = await network.invoke(networkObj, false, 'validateElection', [JSON.stringify({electionId})]);
+      let parsedResponse = await JSON.parse(response);
+      return res.status(200).send(parsedResponse);
+      }catch(e){
+        return res.status(500).json({error:'Problem in transaction execution'});
+      }
+  }
+})
 // get voter by id
 app.get('/voter/:id', async (req, res) => {
   if(!req.params.id){
@@ -500,6 +523,7 @@ app.post('/superadmin', async (req, res) => {
         // first we create the admin then enrollhim
         // it may be the wrong way but we need the random generated id to use it for registration
         let response = await network.invoke(networkObj, false, 'createSuperAdmin', [JSON.stringify({firstName,lastName,email})] );
+        console.log("response => ", response);
         let newAdmin = await JSON.parse(response);
         if(newAdmin.error){
             return res.status(500).json(newAdmin);
@@ -524,6 +548,7 @@ app.post('/superadmin', async (req, res) => {
           return res.status(200).json(newAdmin);
         }
       }catch(e){
+	console.log(e);
         return res.status(500).json({error:'Problem in transaction execution'});
       }
   }
@@ -663,15 +688,15 @@ app.get("/candidate", async (req, res)=> {
 
 // become a candidate, needs auth
 app.post("/candidate", async (req, res) => {
-  let {voterId,electionId} = req.body
-  if(!req.body || !voterId || !electionId ){
+  let {voterId,electionId,data} = req.body
+  if(!req.body || !voterId || !electionId || !data ){
     return res.status(400).json({error:'You must supply all needed attributs'});
   }else{
     
     
       try{
       let networkObj = await network.connectToNetwork(appSuperAdmin);
-      let response = await network.invoke(networkObj, false, 'candidature', [JSON.stringify({voterId,electionId})]);
+      let response = await network.invoke(networkObj, false, 'candidature', [JSON.stringify({voterId,electionId,data})]);
       let parsedResponse = await JSON.parse(response);
       if(parsedResponse.error){
         return res.status(500).json(parsedResponse);
@@ -748,13 +773,56 @@ app.get('/queryAll', async (req, res) => {
 
 });
 */
-app.get('/getCurrentStanding', async (req, res) => {
+app.post('/standing', async (req, res) => {
+  // if election has ended we return all result
+  // else we return only ratio votes/voters  
+  let {electionId} = req.body
+  if(!req.body || !electionId) {
+    return res.status(400).json({error:'Supply the election id'})
+  }else{
+    try{
 
-  let networkObj = await network.connectToNetwork(appSuperAdmin);
-  let response = await network.invoke(networkObj, true, 'queryByObjectType', 'votableItem');
-  let parsedResponse = await JSON.parse(response);
-  console.log(parsedResponse);
-  res.send(parsedResponse);
+    
+      let networkObj = await network.connectToNetwork(appSuperAdmin);
+      let check = await network.invoke(networkObj, true, 'myAssetExists', electionId);
+      check = await JSON.parse(check.toString());
+      
+      if(!check){
+        return res.status(404).json({error:'Election not found'})
+      }else{
+        
+        networkObj = await network.connectToNetwork(appSuperAdmin);
+        let response = await network.invoke(networkObj, true, 'readMyAsset', electionId);
+        let election = await JSON.parse(response)
+        //networkObj = await network.connectToNetwork(appSuperAdmin);
+        response = await network.invoke(networkObj, true, 'queryByObjectType', 'voter');
+        
+        let parsedResponse = await JSON.parse(response)
+        let candidates = JSON.parse(parsedResponse)
+          .filter(voter=>voter['Record'].electionId==electionId)
+          .map(voter=>voter['Record'])
+          .filter(v=>(v.isCandidate==true && v.isActive==true))
+          
+        if(Date.parse(election.voting_endDate)<Date.now()){
+          // election has ended we return every information
+          // get the election candidates and return their data
+          return res.status(200).json({election,candidates})
+        }else{
+          // election is still occuring we reveal only the number of votes/voters
+          // get the election candidates , calculate the votes number
+          return res.status(200).json({
+            election,
+            votes: candidates.map(c=> c.votes).reduce((a,b)=>a+b,0)
+          })
+        }
+      }
+    }catch(e){
+      return res.status(500).json({error:"Server problem",e})
+    }
+    
+    
+  }
+  
 
 });
 
@@ -884,6 +952,9 @@ app.post('/queryByKey', async (req, res) => {
   }
 });
 */
+//integrate swagger with our openApi Documentation, it'll serve at /api-docs endpoint
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
+
 app.get('/', async(req,res)=>{
   res.status(200).json({"result":"Voty API web server running"})
 })

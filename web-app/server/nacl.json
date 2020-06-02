@@ -33,6 +33,11 @@
         "action": "allow"
       },
       {
+        "resource": "activateElection",
+        "methods": "*",
+        "action": "deny"
+      },
+      {
         "resource": "voter/:id",
         "methods": ["GET"],
         "action": "deny"
@@ -83,7 +88,12 @@
         "action": "deny"
       },
       {
-        "resource": "getCurrentStanding",
+        "resource": "standing",
+        "methods": ["POST"],
+        "action": "allow"
+      },
+      {
+        "resource": "api-docs",
         "methods": ["GET"],
         "action": "allow"
       }
@@ -123,6 +133,11 @@
         "action": "allow"
       },
       {
+        "resource": "activateElection",
+        "methods": "*",
+        "action": "deny"
+      },
+      {
         "resource": "voter/:id",
         "methods": ["GET"],
         "action": "allow"
@@ -158,7 +173,12 @@
         "action": "allow"
       },
       {
-        "resource": "getCurrentStanding",
+        "resource": "standing",
+        "methods": ["POST"],
+        "action": "allow"
+      },
+      {
+        "resource": "api-docs",
         "methods": ["GET"],
         "action": "allow"
       }
@@ -181,6 +201,11 @@
         "resource": "election",
         "methods": "*",
         "action": "deny"
+      },
+      {
+        "resource": "activateElection",
+        "methods": ["PUT"],
+        "action": "allow"
       },
       {
         "resource": "election/*",
@@ -233,9 +258,29 @@
         "action": "deny"
       },
       {
-        "resource": "getCurrentStanding",
-        "methods": ["GET"],
+        "resource": "standing",
+        "methods": ["POST"],
         "action": "deny"
+      },
+      {
+        "resource": "api-docs",
+        "methods": ["GET"],
+        "action": "allow"
+      }
+    ]
+  },
+  {
+    "group": "anonymous",
+    "permissions": [
+      {
+        "resource": "api-docs",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "api-docs/*",
+        "methods": "*",
+        "action": "allow"
       }
     ]
   }

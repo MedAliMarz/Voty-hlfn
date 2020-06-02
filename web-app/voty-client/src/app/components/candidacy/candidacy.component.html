@@ -1,59 +1,68 @@
-<h3 class="text-center" *ngIf="timer_data!=null" id="timer">{{timer_data}}</h3>
 
-<nb-card  class="col-6 col-md-4 mx-auto my-auto" *ngIf="!loggedUser.isCandidate" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
-  <nb-card-header>
-    <h3 class="mx-auto">Become a candidate !</h3>
-  </nb-card-header>
-  <nb-card-body>
-    
-    <form [formGroup]="candidateForm" >
-      
-      
-      <div class="form-group mb-2">
-        <label for="data" class="label">Provide some career informations</label>
-        <textarea nbInput id="data" [status]="candidateForm.get('data').invalid && candidateForm.get('data').touched?'danger':'basic'" formControlName="data" fullWidth placeholder="3 years Researcher at X" type="text"></textarea>
-      </div>
-          <input  [disabled]="candidateForm.invalid" (click)="createCandidate()" status="primary" fullWidth nbButton type="button" value="Save" >
+  <nb-alert class="col-6 col-md-4 mx-auto my-auto" *ngIf="election.state!='validated'" status="warning" >
+    This election is not approved yet ! 
+  </nb-alert>
 
-    </form>  
-      
-    </nb-card-body>
-  </nb-card>
-  
-<nb-card *ngIf="loggedUser.isCandidate" class="col-6 col-md-4 mx-auto my-auto" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
+<div *ngIf="election.state=='validated'" class="text-center">  
+  <h3  *ngIf="timer_data!=null" id="timer">{{timer_data}}</h3>
+  <a  [routerLink]="['/voting']" nbButton status="primary" *ngIf="hasEnded">
+    Check voting phase !
+  </a>
+  <nb-card  class="col-6 col-md-4 mx-auto my-auto" *ngIf="!loggedUser.isCandidate && !hasEnded" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
     <nb-card-header>
-      <h3 class="mx-auto">You are already a candidate</h3>
+      <h3 class="mx-auto">Become a candidate !</h3>
     </nb-card-header>
-    <nb-card-body >
-
-      <!--
-      <div class="form-group mb-2">
-        <label for="data" class="label">You can change your status</label>
-        <textarea nbInput id="data" formControlName="data" fullWidth placeholder="3 years Researcher at X" type="text">
-          {{loggedUser.data}}
-        </textarea>
-      </div>
-    -->
-    <form [formGroup]="candidateUpdateForm" >
+    <nb-card-body>
       
-      
-      <div class="form-group mb-2">
-        <label for="data" class="label">Provide some career informations</label>
-        <textarea nbInput id="data" [status]="candidateUpdateForm.get('data').invalid && candidateUpdateForm.get('data').touched?'danger':'basic'" formControlName="data" fullWidth placeholder="3 years Researcher at X" type="text"></textarea>
-      </div>
-      <div class="form-group mb-2">
+      <form [formGroup]="candidateForm" >
         
-        <label for="toggle" class="label">Switch {{candidateUpdateForm.value.isActive ?'Off ':'On '}}your candidacy</label>
+        
+        <div class="form-group mb-2">
+          <label for="data" class="label">Provide some career informations</label>
+          <textarea nbInput id="data" [status]="candidateForm.get('data').invalid && candidateForm.get('data').touched?'danger':'basic'" formControlName="data" fullWidth placeholder="3 years Researcher at X" type="text"></textarea>
+        </div>
+            <input  [disabled]="candidateForm.invalid" (click)="createCandidate()" status="primary" fullWidth nbButton type="button" value="Save" >
 
-        <nb-toggle fullWidth id="toggle" formControlName="isActive" labelPosition="start"> {{' '}}</nb-toggle>
-      </div>
-          <input  [disabled]="candidateUpdateForm.invalid" (click)="updateCandidate()" status="primary" fullWidth nbButton type="button" value="Save" >
+      </form>  
+        
+      </nb-card-body>
+    </nb-card>
+    
+  <nb-card *ngIf="loggedUser.isCandidate && !hasEnded" class="col-6 col-md-4 mx-auto my-auto" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
+      <nb-card-header>
+        <h3 class="mx-auto">You are already a candidate</h3>
+      </nb-card-header>
+      <nb-card-body >
 
-    </form>  
-      
+        <!--
+        <div class="form-group mb-2">
+          <label for="data" class="label">You can change your status</label>
+          <textarea nbInput id="data" formControlName="data" fullWidth placeholder="3 years Researcher at X" type="text">
+            {{loggedUser.data}}
+          </textarea>
+        </div>
+      -->
+      <form [formGroup]="candidateUpdateForm" >
+        
+        
+        <div class="form-group mb-2">
+          <label for="data" class="label">Provide some career informations</label>
+          <textarea nbInput id="data" [status]="candidateUpdateForm.get('data').invalid && candidateUpdateForm.get('data').touched?'danger':'basic'" formControlName="data" fullWidth placeholder="3 years Researcher at X" type="text"></textarea>
+        </div>
+        <div class="form-group mb-2">
+          
+          <label for="toggle" class="label">Switch {{candidateUpdateForm.value.isActive ?'Off ':'On '}}your candidacy</label>
 
-    </nb-card-body>
-  </nb-card>
+          <nb-toggle fullWidth id="toggle" formControlName="isActive" labelPosition="start"> {{' '}}</nb-toggle>
+        </div>
+            <input  [disabled]="candidateUpdateForm.invalid" (click)="updateCandidate()" status="primary" fullWidth nbButton type="button" value="Save" >
+
+      </form>  
+        
+
+      </nb-card-body>
+    </nb-card>
+</div>
 <ng-template #dialog let-data let-ref="dialogRef">
     <nb-card>
       <nb-card-header><h5>Continue ?</h5></nb-card-header>

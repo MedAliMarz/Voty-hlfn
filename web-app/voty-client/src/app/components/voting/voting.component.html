@@ -1,26 +1,35 @@
-<h3 class="text-center" *ngIf="timer_data!=null" id="timer">{{timer_data}}</h3>
-<nb-card class="col-6 col-md-4 mx-auto my-auto" *ngIf="!loggedUser.hasVoted" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
-    <nb-card-header>
-        <h4>Choose your candidate</h4>
+<nb-alert class="col-6 col-md-4 mx-auto my-auto" *ngIf="election.state!='validated'" status="warning" >
+  This election is not approved yet ! 
+</nb-alert>
+
+<div *ngIf="election.state=='validated'" class="text-center">
+
+  <h3  *ngIf="timer_data!=null" id="timer">{{timer_data}}</h3>
+  <a  *ngIf="hasEnded" [routerLink]="['/stats']" status="success" nbButton>Check Results !</a>
+
+  <nb-card class="col-6 col-md-4 mx-auto my-auto" *ngIf="!loggedUser.hasVoted && !hasEnded" [nbSpinner]="isSpinner" nbSpinnerSize="giant" nbSpinnerStatus="warning">
+      <nb-card-header>
+          <h4>Choose your candidate</h4>
+      </nb-card-header>
+      <nb-card-body>
+          <form [formGroup]="voteForm">
+              <nb-select fullWidth [status]="voteForm.get('candidateId').invalid && voteForm.get('candidateId').touched?'danger':'basic'" formControlName="candidateId" placeholder="Who ?" class="mb-3">  
+                <nb-option *ngFor="let candidate of candidates" [value]="candidate.voterId">{{candidate.firstName}} {{candidate.lastName}}</nb-option>
+                </nb-select>
+                <input [disabled]="voteForm.invalid" (click)="vote()" status="primary" fullWidth nbButton type="button" value="Vote" >
+          </form>
+      </nb-card-body>
+  </nb-card>
+  <nb-card class="col-6 col-md-4 mx-auto my-auto" *ngIf="loggedUser.hasVoted && !hasEnded" >
+    <nb-card-header *ngIf="loggedUser.hasVoted && !hasEnded">
+        <h4 class="text-center">You have already voted !</h4>
     </nb-card-header>
     <nb-card-body>
-        <form [formGroup]="voteForm">
-            <nb-select fullWidth [status]="voteForm.get('candidateId').invalid && voteForm.get('candidateId').touched?'danger':'basic'" formControlName="candidateId" placeholder="Who ?" class="mb-3">  
-              <nb-option *ngFor="let candidate of candidates" [value]="candidate.voterId">{{candidate.firstName}} {{candidate.lastName}}</nb-option>
-              </nb-select>
-              <input [disabled]="voteForm.invalid" (click)="vote()" status="primary" fullWidth nbButton type="button" value="Vote" >
-        </form>
+      <a  [routerLink]="['/stats']" status="success" fullWidth nbButton>Check Parital results !</a>
+
     </nb-card-body>
-</nb-card>
-<nb-card class="col-6 col-md-4 mx-auto my-auto" *ngIf="loggedUser.hasVoted || hasEnded" >
-  <nb-card-header *ngIf="loggedUser.hasVoted && !hasEnded">
-      <h4 class="text-center">You have already voted !</h4>
-  </nb-card-header>
-  <nb-card-body>
-      
-      <a  [routerLink]="['/stats']" status="success" fullWidth nbButton>Check results !</a>
-  </nb-card-body>
-</nb-card>
+  </nb-card>
+</div>
 <ng-template #dialog let-data let-ref="dialogRef">
     <nb-card>
       <nb-card-header><h5>Continue ?</h5></nb-card-header>
