@@ -5,7 +5,7 @@
   "appSuperAdmin": "admin",
   "appSuperAdminSecret": "adminpw",
   "orgMSPID": "Org1MSP",
-  "caName": "http://localhost:17070",
+  "caName": "https://localhost:17054",
   "userName": "V1",
   "gatewayDiscovery": { "enabled": true, "asLocalhost": true }
 }
