@@ -12,16 +12,6 @@
             }
         }
     },
-    "channels": {
-        "mychannel": {
-            "orderers": [
-                "orderer.example.com"
-            ],
-            "peers": {
-                "peer0.org1.example.com": {}
-            }
-        }
-    },
     "organizations": {
         "Org1": {
             "mspid": "Org1MSP",
@@ -33,14 +23,16 @@
             ]
         }
     },
-    "orderers": {
-        "orderer.example.com": {
-            "url": "grpc://localhost:7050"
-        }
-    },
     "peers": {
         "peer0.org1.example.com": {
-            "url": "grpc://localhost:7051"
+            "url": "grpcs://localhost:7051",
+            "tlsCACerts": {
+               "pem":"-----BEGIN CERTIFICATE-----\nMIICVzCCAf2gAwIBAgIQKSw6oKF75+VCdkaUBtTEHzAKBggqhkjOPQQDAjB2MQsw\nCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy\nYW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEfMB0GA1UEAxMWdGxz\nY2Eub3JnMS5leGFtcGxlLmNvbTAeFw0yMDA1MDIxNzA4MDBaFw0zMDA0MzAxNzA4\nMDBaMHYxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQH\nEw1TYW4gRnJhbmNpc2NvMRkwFwYDVQQKExBvcmcxLmV4YW1wbGUuY29tMR8wHQYD\nVQQDExZ0bHNjYS5vcmcxLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0D\nAQcDQgAEGrXo89/WRWsxV9TECOmN8eXYhlOeCAcmCwdS2ybEapyW+CpikYrKfsLa\n3U2jbLEi2GiMB8gYLanfxmn8rN8IMqNtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1Ud\nJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1Ud\nDgQiBCBrwtluPy+YY/5E3cbkRipywchdBkTZp1K/BNd0IOoN3jAKBggqhkjOPQQD\nAgNIADBFAiEArXoAv9Wu4kYC21AS0GFMoYHIroGJae1xbRk1yeuDnH0CIDKtdC5B\n60TPvdvxyEvxmc0r0c+VaxAQhXnFpKUOcVc1\n-----END CERTIFICATE-----"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.org1.example.com",
+                "hostnameOverride": "peer0.org1.example.com"
+            }
         }
     },
     "certificateAuthorities": {

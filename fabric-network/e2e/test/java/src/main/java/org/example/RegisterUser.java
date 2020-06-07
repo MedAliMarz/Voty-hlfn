@@ -12,7 +12,7 @@ import java.util.Set;
 import org.hyperledger.fabric.gateway.Wallet;
 import org.hyperledger.fabric.gateway.Wallet.Identity;
 import org.hyperledger.fabric.sdk.Enrollment;
-import org.hyperledger.fabric.sdk.IdemixEnrollment;
+// import org.hyperledger.fabric.sdk.IdemixEnrollment;
 import org.hyperledger.fabric.sdk.User;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;
 import org.hyperledger.fabric.sdk.security.CryptoSuiteFactory;
@@ -104,8 +104,8 @@ public class RegisterUser {
 		registrationRequest.setEnrollmentID("user1");
 		String enrollmentSecret = caClient.register(registrationRequest, admin);
 		Enrollment enrollment = caClient.enroll("user1", enrollmentSecret);
-		IdemixEnrollment idemixEnrollment = caClient.idemixEnroll(enrollment, "idemixMSPID1");
-		Identity user = Identity.createIdentity("Org1MSP", idemixEnrollment.getCert(), idemixEnrollment.getKey());
+//		IdemixEnrollment idemixEnrollment = caClient.idemixEnroll(enrollment, "idemixMSPID1");
+		Identity user = Identity.createIdentity("Org1MSP", enrollment.getCert(), idemixEnrollment.getKey());
 		wallet.put("user1", user);
 		System.out.println("Successfully enrolled user \"user1\" and imported it into the wallet");
 	}
