@@ -396,15 +396,15 @@ export class StatsComponent implements OnInit,OnDestroy {
     let electionId = JSON.parse(localStorage.getItem('loggedUser')).electionId
     this.electionService.getStanding(electionId)
       .subscribe(result=>{
-        this.initTimer(result.election.voting_endDate)
-        this.ended = Date.parse(result.election.voting_endDate) < Date.now()
+        this.initTimer(result['election'].voting_endDate)
+        this.ended = Date.parse(result['election'].voting_endDate) < Date.now()
         console.log("has ended ? ",this.ended);
         
-        if(this.ended && result.candidates){
+        if(this.ended && result['candidates']){
           console.log("here in the final state")
-          let candidates = result.candidates.sort((v1,v2)=> v1.votes - v2.votes)
+          let candidates = result['candidates'].sort((v1,v2)=> v1.votes - v2.votes)
           let votes_number =candidates.map(voter=>voter.votes).reduce((a,b)=>a+b,0)
-          let voters_number = result.election.votersNumber
+          let voters_number = result['election'].votersNumber
           this.timerMessage = `${votes_number} / ${voters_number} Have voted !`
           this.initPie(
             candidates.map(voter=>`${voter.firstName} ${voter.lastName}`),
@@ -412,7 +412,7 @@ export class StatsComponent implements OnInit,OnDestroy {
             )
             
         }else{
-          this.timerMessage = `${result.votes} / ${result['election'].votersNumber} Have voted !`
+          this.timerMessage = `${result['votes']} / ${result['election'].votersNumber} Have voted !`
         }
         this.loading = false;
       },
