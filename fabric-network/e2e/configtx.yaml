@@ -43,6 +43,17 @@ Organizations:
             # encoded in the genesis block in the Application section context
             - Host: peer0.org1.example.com
               Port: 7051
+     
+    - &Org1Idemix
+        # defaultorg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        name: idemixMSP1
+
+        # id to load the msp definition as
+        id: idemixMSPID1
+
+        msptype: idemix
+        mspdir: crypto-config/peerOrganizations/org1.example.com
 
 ################################################################################
 #

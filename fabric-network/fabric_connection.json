@@ -1,22 +1,25 @@
 [
     {
         "name": "peer0.org1.example.com",
-        "api_url": "grpc://localhost:7051",
+        "api_url": "grpcs://localhost:7051",
         "type": "fabric-peer",
-        "msp_id": "Org1MSP"
+        "msp_id": "Org1MSP",
+        "pem":"MIICVzCCAf2gAwIBAgIQKSw6oKF75+VCdkaUBtTEHzAKBggqhkjOPQQDAjB2MQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEfMB0GA1UEAxMWdGxzY2Eub3JnMS5leGFtcGxlLmNvbTAeFw0yMDA1MDIxNzA4MDBaFw0zMDA0MzAxNzA4MDBaMHYxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4gRnJhbmNpc2NvMRkwFwYDVQQKExBvcmcxLmV4YW1wbGUuY29tMR8wHQYDVQQDExZ0bHNjYS5vcmcxLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEGrXo89/WRWsxV9TECOmN8eXYhlOeCAcmCwdS2ybEapyW+CpikYrKfsLa3U2jbLEi2GiMB8gYLanfxmn8rN8IMqNtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1UdDgQiBCBrwtluPy+YY/5E3cbkRipywchdBkTZp1K/BNd0IOoN3jAKBggqhkjOPQQDAgNIADBFAiEArXoAv9Wu4kYC21AS0GFMoYHIroGJae1xbRk1yeuDnH0CIDKtdC5B60TPvdvxyEvxmc0r0c+VaxAQhXnFpKUOcVc1"
     },
     {
         "name": "orderer.example.com",
-        "api_url": "grpc://localhost:7050",
+        "api_url": "grpcs://localhost:7050",
         "type": "fabric-orderer",
-        "msp_id": "OrdererMSP"
+        "msp_id": "OrdererMSP",
+        "pem":"MIICRDCCAeqgAwIBAgIRAMKHgV6/4nNG25KmGjDSmYswCgYIKoZIzj0EAwIwbDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28xFDASBgNVBAoTC2V4YW1wbGUuY29tMRowGAYDVQQDExF0bHNjYS5leGFtcGxlLmNvbTAeFw0yMDA1MDIxNzA4MDBaFw0zMDA0MzAxNzA4MDBaMGwxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4gRnJhbmNpc2NvMRQwEgYDVQQKEwtleGFtcGxlLmNvbTEaMBgGA1UEAxMRdGxzY2EuZXhhbXBsZS5jb20wWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAQNt6ayXXjXVOwHUHAuoTUaWsmRag2N2q9jVviyLLijpYxydBBAialhyjOCskyBjhaKWIjE0rV4cb/ISHqlVGhLo20wazAOBgNVHQ8BAf8EBAMCAaYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMA8GA1UdEwEB/wQFMAMBAf8wKQYDVR0OBCIEIMjyPn5z3ta6mc0IGrMzdjxS72SH5Rh8wfFrNjwNCFfkMAoGCCqGSM49BAMCA0gAMEUCIQDzTKggA1psTAtwhuMF4ni0q7UH+YZ63w6Yr+X4d5GTDAIgbQTUefkY9upHVXgkLWvPX4mVum1+BPGe0R6N+GJE+lo="
     },
     {
-	"name": "ca.example.com",
-	"api_url": "http://localhost:7054",
-	"type": "fabric-ca",
-	"ca_name": "ca.example.com",
-	"enroll_id":"admin",
-	"enroll_secret":"adminpw"
+        "name": "ca.example.com",
+        "api_url": "https://localhost:7054",
+        "type": "fabric-ca",
+        "ca_name": "ca.example.com",
+        "enroll_id":"admin",
+        "enroll_secret":"adminpw",
+        "pem":"MIICUjCCAfigAwIBAgIRAOvWMdQDwV48nbcWifJkB5UwCgYIKoZIzj0EAwIwczELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28xGTAXBgNVBAoTEG9yZzEuZXhhbXBsZS5jb20xHDAaBgNVBAMTE2NhLm9yZzEuZXhhbXBsZS5jb20wHhcNMjAwNTAyMTcwODAwWhcNMzAwNDMwMTcwODAwWjBzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEcMBoGA1UEAxMTY2Eub3JnMS5leGFtcGxlLmNvbTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABKLcqo5wb/aaZlwaZHI2UKgwb7S1nKxaSD9Ic0QqAUP7FI1//OZD3TeEbE3SSZXXW7U+sr8bgysfHzJz8eIZbL6jbTBrMA4GA1UdDwEB/wQEAwIBpjAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwEwDwYDVR0TAQH/BAUwAwEB/zApBgNVHQ4EIgQgn52aQnAaABLfK6kpjk/TvVvWlWZZ4ckiwWrPTdB+ZWswCgYIKoZIzj0EAwIDSAAwRQIhAIK2ZC1TAA1ARKN7ynnlUR9zoMJdZqGF4+3tpY7siYB8AiAg/ZPKFDomJa+w2JYfibsjI2H5sWwT/7a2fJjgRuYlxg=="
     }
 ]
